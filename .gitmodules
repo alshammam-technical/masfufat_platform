@@ -1,0 +1,3 @@
+[submodule "app"]
+	path = app
+	url = https://Alshammam@dev.azure.com/Alshammam/Masfufat/_git/masfufat_app_folder

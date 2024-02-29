@@ -1,0 +1,97 @@
+@extends('admin-views.education.frontend.user.layouts.auth')
+@section('title', \App\CPU\Helpers::translate(Complete registration', 'user'))
+@section('content')
+    <div class="vr__sign__form vr__register">
+        <div class="vr__sign__header text-center">
+            <p class="h3 mb-1">{{ \App\CPU\Helpers::translate(Complete registration', 'user') }}</p>
+            <p class="mb-0">
+                {{ \App\CPU\Helpers::translate(We need a little more information to complete your registration.', 'user') }}</p>
+        </div>
+        <div class="vr__avatar text-center mb-3">
+            <img src="{{ $data['avatar'] }}" width="100" height="100" class="rounded-circle">
+        </div>
+        <div class="sign-body">
+            <form action="{{ route('complete.registration', $token) }}" method="POST">
+                @csrf
+                <div class="row row-cols-1 row-cols-sm-2 g-3 mb-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input id="firstname" type="firstname" name="firstname" class="form-control"
+                                placeholder="{{ \App\CPU\Helpers::translate(First Name', 'forms') }}" maxlength="50"
+                                value="{{ $data['firstname'] ?? old('firstname') }}" required>
+                            <label>{{ \App\CPU\Helpers::translate(First Name', 'forms') }}</label>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-floating">
+                            <input id="lastname" type="lastname" name="lastname" class="form-control"
+                                placeholder="{{ \App\CPU\Helpers::translate(Last Name', 'forms') }}" maxlength="50"
+                                value="{{ $data['lastname'] ?? old('lastname') }}" required>
+                            <label>{{ \App\CPU\Helpers::translate(Last Name', 'forms') }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input id="username" type="username" name="username" class="form-control"
+                        placeholder="{{ \App\CPU\Helpers::translate(Username', 'forms') }}" minlength="6" maxlength="50"
+                        value="{{ old('username') }}" required>
+                    <label>{{ \App\CPU\Helpers::translate(Username', 'forms') }}</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <select id="country" name="country" class="form-select" required>
+                        @foreach ($countries as $country)
+                            <option data-code="{{ $country->code }}" data-id="{{ $country->id }}"
+                                value="{{ $country->id }}" @if ($country->id == old('country')) selected @endif>{{ $country->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    <label>{{ \App\CPU\Helpers::translate(Country', 'forms') }}</label>
+                </div>
+                <div class="form-number mb-3">
+                    <select id="mobile_code" name="mobile_code" class="form-select flex-shrink-0 w-auto">
+                        @foreach ($countries as $country)
+                            <option data-code="{{ $country->code }}" data-id="{{ $country->id }}"
+                                value="{{ $country->id }}" @if ($country->id == old('mobile_code')) selected @endif>{{ $country->code }}
+                                ({{ $country->phone }})</option>
+                        @endforeach
+                    </select>
+                    <div class="form-floating w-full">
+                        <input id="mobile" type="tel" name="mobile" class="form-control"
+                            placeholder="{{ \App\CPU\Helpers::translate(Phone Number', 'forms') }}" value="{{ old('mobile') }}" required>
+                        <label>{{ \App\CPU\Helpers::translate(Phone Number', 'forms') }}</label>
+                    </div>
+                </div>
+                <div class="form-floating mb-3">
+                    <input id="email" type="email" name="email" class="form-control"
+                        placeholder="{{ \App\CPU\Helpers::translate(Email address', 'forms') }}"
+                        value="{{ $data['email'] ?? old('email') }}" required>
+                    <label>{{ \App\CPU\Helpers::translate(Email address', 'forms') }}</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input id="password" type="password" name="password" class="form-control"
+                        placeholder="{{ \App\CPU\Helpers::translate(Password', 'forms') }}" minlength="8" required>
+                    <label>{{ \App\CPU\Helpers::translate(Password', 'forms') }}</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input id="password_confirmation" type="password" name="password_confirmation" class="form-control"
+                        placeholder="{{ \App\CPU\Helpers::translate(Confirm password', 'forms') }}" minlength="8" required>
+                    <label>{{ \App\CPU\Helpers::translate(Confirm password', 'forms') }}</label>
+                </div>
+                @if ($settings['terms_of_service_link'])
+                    <div class="form-check mb-3">
+                        <input id="terms" name="terms" class="form-check-input" type="checkbox" @if (old('terms')) checked @endif
+                            required>
+                        <label class="form-check-label">
+                            {{ \App\CPU\Helpers::translate(I agree to the', 'user') }} <a href="{{ $settings['terms_of_service_link'] }}"
+                                class="vr__link__color">{{ \App\CPU\Helpers::translate(terms of service', 'user') }}</a>
+                        </label>
+                    </div>
+                @endif
+                {!! app('captcha')->display() !!}
+                <div class="d-flex">
+                    <button class="btn btn-primary btn-lg w-full">{{ \App\CPU\Helpers::translate(Continue', 'user') }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+@endsection

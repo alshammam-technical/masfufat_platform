@@ -1,0 +1,300 @@
+/*---------------------------- Main color------------------------------------------------ */
+/*---------------------------- color code : #007fb8 ---------------------------------*/
+a.block-language:hover {
+    color: #007fb8;
+
+}
+a.block-language:focus {
+    color: #007fb8;
+}
+.block-language-wrapper .dropdown-menu {
+	border-bottom: 3px solid #007fb8;
+}
+.block-language-wrapper .dropdown-menu a:hover {
+	color: #007fb8;
+}
+.block-currency-wrapper .dropdown-menu {
+	border-bottom: 3px solid #007fb8;
+}
+.block-currency-wrapper .dropdown-menu a:hover {
+	color: #007fb8;
+}
+.toplinks div.links div a:hover {
+    color: #007fb8;
+}
+.search-btn-bg {
+    background-color: #007fb8;
+}
+.top-cart-contain .product-details .price {
+	color: #007fb8;
+}
+.mini-cart {
+
+	background: linear-gradient(to bottom, #007fb8 1%, #6ebad5 3%, #007fb8 7%, #007fb8 100%);
+}
+.mini-cart .actions .btn-checkout {
+	background: #007fb8;
+	border: 1px solid #007fb8;
+}
+nav {
+    background: #007fb8;
+}
+#nav .level0-wrapper, #nav.classic .parent > ul {
+	border-bottom: 5px #007fb8 solid;
+}
+a.btn-button-st:hover {
+	background: #007fb8;
+	border: 1px solid #007fb8;
+}
+#nav li.drop-menu ul {
+	border-bottom: 5px #007fb8 solid;
+}
+.new-label {
+	background: #007fb8;
+
+}
+.col-item .actions-links .add-to-links a.magik-btn-quickview:hover {
+	background: #007fb8;
+}
+.col-item .actions-links .add-to-links a.link-wishlist:hover {
+	background: #007fb8;
+
+}
+.col-item .actions-links .add-to-links a.link-compare:hover {
+	background: #007fb8;
+}
+.col-item .info .info-inner .item-title a:hover {
+	color: #007fb8;
+}
+.special-price .price {
+    color: #007fb8;
+}
+.actions button.button.btn-cart {
+    background: #007fb8;
+}
+.blog-img a.info {
+	background: #007fb8;
+}
+#toTop:hover {
+	background-color: #007fb8;
+}
+#mobile-menu ul.navmenu ul.submenu {
+    border-bottom: 5px solid #007fb8;
+
+}
+.block-tags .actions a.view-all:hover {
+	color: #007fb8;
+}
+.block-account .block-title {
+	background-color: #007fb8;
+}
+.block-company .block-title {
+	background-color: #007fb8;
+
+}
+.btn-edit:hover {
+	color: #007fb8;
+}
+.edit-bnt:hover {
+	color: #007fb8;
+}
+.button:hover {
+	border: 1px solid #007fb8;
+	background: #007fb8;
+}
+#sort-by li li a:hover {
+	color: #007fb8
+}
+
+#sort-by li li:hover {
+	color: #007fb8;
+}
+#limiter li li a:hover {
+	color: #007fb8;
+}
+.toolbar span.button-active.button-grid {
+	background-color: #007fb8;
+	border: 1px #007fb8 solid;
+}
+.toolbar span.button-active.button-list {
+	background-color: #007fb8;
+}
+.products-list .actions .add-to-links a.link-wishlist:hover {
+	background-color: #007fb8;
+	border: 1px solid #007fb8;
+
+}
+.products-list .actions .add-to-links a.link-compare:hover {
+	background-color: #007fb8;
+	border: 1px solid #007fb8;
+}
+#products-list .product-shop .btn-cart:hover {
+	background: #007fb8;
+	border: 1px solid #007fb8;
+}
+.product-view .product-shop .add-to-box .btn-cart {
+	background: #007fb8;
+	}
+	.product-view .product-shop .product-options-bottom .btn-cart {
+	background: #007fb8;
+}
+.product-view .product-shop .add-to-links .link-wishlist:hover {
+	color: #007fb8;
+
+}
+.product-view .product-shop .add-to-links .link-compare:hover {
+	color: #007fb8;
+}
+.email-friend a:hover {
+	color: #007fb8;
+}
+.button.view-all:hover {
+	background: #007fb8;
+	border: 1px solid #007fb8;
+}
+.form-add-tags button.button:hover {
+	background: #007fb8;
+	border: 1px #007fb8 solid;
+}
+.data-table .price {
+	color: #007fb8
+}
+.availability.out-of-stock {
+	background: #007fb8;
+}
+.custom button.items-count:hover {
+	background-color: #007fb8;
+	border: 1px #007fb8 solid;
+}
+.product-next-prev .product-prev:hover {
+	color: #fff;
+	background: #007fb8;
+}
+.product-next-prev .product-next:hover {
+	background: #007fb8;
+}
+
+.block-progress .block-title {
+	background-color: #007fb8;
+}
+.one-page-checkout .active .step-title h3 {
+	color: #007fb8;
+}
+.one-page-checkout .active .step-title .number {
+	background: none repeat scroll 0 0 #007fb8;
+	border: 1px solid #007fb8;
+}
+#shopping-cart-totals-table .price {
+	color: #007fb8;
+}
+#shopping-cart-table a.remove-item:hover {
+	color: #007fb8;
+}
+button.button.btn-proceed-checkout {
+	background: #007fb8;
+}
+#wishlist-table a.remove-item:hover {
+	color: #007fb8;
+}
+#wishlist-table button.button.remove-item:hover {
+	background: none repeat scroll 0 0 #007fb8;
+}
+#wishlist-table button.button.btn-cart:hover {
+	color: #007fb8;
+}
+.checkout-progress li.active {
+	border-bottom: 1px solid #007fb8;
+	color: #007fb8;
+}
+#multiship-addresses-table .btn-remove:hover {
+	color: #007fb8;
+}
+.account .last a:hover {
+	background: #007fb8;
+}
+#magik-verticalmenu .nav-title {
+    background: linear-gradient(to bottom, #007fb8 1%, #6ebad5 3%, #007fb8 7%, #007fb8 100%) !important;
+}
+span.round-tab:hover {
+	color: #007fb873;
+    border: 3px solid #007fb873;
+}
+table.simple-table th {
+    background: #007fb8;
+}
+.actions a.button.btn-cart {
+    background: #007fb8;
+}
+.card-header {
+	color: #007fb8;
+}
+
+
+
+
+
+
+/*---------------------------- second color------------------------------------------------ */
+/*---------------------------- color code : #fdd922 ---------------------------------*/
+.glyphicon-shopping-cart:before
+ {
+	color: #fdd922;
+ }
+.mini-cart .actions .view-cart 
+{
+	background: #fdd922;
+}
+.new_title {
+    border-bottom: 3px solid #fdd922;
+}
+.side-nav-categories .block-title {
+	background: #fdd922;
+}
+button.subscribe {
+	background: #fdd922;
+
+}
+.add-icon:before {
+	color: #fdd922;
+
+}
+.email-icon:before {
+	color: #fdd922;
+
+}
+.phone-icon:before {
+	color: #fdd922;
+}
+.coppyright a{
+    color: #fdd922;
+}
+.account .last a {
+    background: #fdd922;
+}
+.payment-accept h4 {
+	color: #fdd922;
+}
+ .bg-ctg {
+    width: 200px;
+    color: #525252 !important;
+    background: #fdd922 !important;
+    font-size: 18px !important;
+    border-right: 1px solid #fdd922 !important;
+	font-family: 'roboto-regular' !important;
+	cursor: pointer;
+ }
+
+
+/* footer color 1 */
+.footer-top {
+    background-color: #06253e;
+}
+.footer-bottom {
+    background: none repeat scroll 0 0 #041c2f;
+}
+
+
+/*footer color 2*/
+.footer {
+    background: none repeat scroll 0 0 #0a3151;
+}

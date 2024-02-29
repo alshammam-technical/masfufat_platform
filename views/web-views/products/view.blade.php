@@ -306,7 +306,6 @@
                                 </button>
                                 <input name="data_from" value="search" hidden>
                                 <input name="page" value="1" hidden>
-
                             </div>
                         <!-- end Search-->
                     </div>

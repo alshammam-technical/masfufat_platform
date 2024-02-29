@@ -18,7 +18,6 @@
 
 @section('content')
 
-
 @php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
 @php($customer = \App\User::find($storeId))
 <!-- Page Content-->

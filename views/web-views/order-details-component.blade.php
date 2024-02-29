@@ -111,7 +111,6 @@
 
     <tbody>
 
-
     @php($seller = (isset($order->details[0]->seller) ? $order->details[0]->seller : null))
     @foreach($order->details as $key=>$detail)
         @if($detail->product || $detail->product_details)
@@ -356,7 +355,6 @@ if ($order['extra_discount_type'] == 'percent') {
     $extra_discount = $order['extra_discount'];
 }
 ?>
-
 
 @if($order->order_note !=null)
     <div class="p-2">

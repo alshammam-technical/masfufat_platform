@@ -859,7 +859,6 @@
             })
             table[0].draw();
 
-
             table[1].on('draw',function(){
                 deldef()
                 dataTables_scrollBody_height = $(".dataTables_scrollBody").css('height');

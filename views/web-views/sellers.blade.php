@@ -1,6 +1,6 @@
 @extends('layouts.front-end.app')
 
-@section('title',\App\CPU\Helpers::translate('All Seller Page'))
+@section('title',Helpers::translate('All Seller Page'))
 
 @push('css_or_js')
     <meta property="og:image" content="{{asset('storage/app/public/company')}}/{{$web_config['web_logo']->value}}"/>

@@ -197,7 +197,7 @@
                             @endif
 
                             @php($config=\App\CPU\Helpers::get_business_settings('bank_transfer'))
-                            @if((count($config) ?? null))
+                            @if((count($config ?? []) ?? null))
                             @php($sh = Helpers::get_business_settings('payment_methods_img')['bank_transfer'] ?? null)
                             <img title="{{ Helpers::translate('bank_transfer') }}" class="mx-2 mb-2 footer-logos" src="{{ asset('storage/app/public/landing/img/payment_methods/'.($sh)) }}" alt="" >
                             @endif

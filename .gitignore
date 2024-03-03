@@ -1,2 +1,3 @@
 lang
 views/layouts/landing/partials/_header.blade.php
+views/customer-view/auth/login.blade.php

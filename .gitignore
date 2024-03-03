@@ -1,1 +1,2 @@
 lang
+views/layouts/landing/partials/_header.blade.php

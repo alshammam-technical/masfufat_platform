@@ -244,7 +244,7 @@
                                     <div class="d-flex">
                                         <span class="title-color">{{\App\CPU\Helpers::translate('order status in Masfufat platform')}} : </span>
 
-                                        @if($order['order_status']=='pending')
+                                        @if(in_array($order['order_status'],['pending','new']))
                                         <span class="badge badge-soft-info fz-12">
                                             {{Helpers::translate($order['order_status'])}}
                                         </span>
@@ -281,7 +281,7 @@
                                         </strong>
                                     </div>
                                     @endif
-                                    @if ($order['order_status'] == "pending")
+                                    @if (in_array($order['order_status'],['pending','new']))
                                     <div class="d-flex">
                                         <span class="title-color">{{\App\CPU\Helpers::translate('Reason for suspending the order')}} : </span>
                                         <strong>
@@ -448,7 +448,7 @@
                         {{--  ext info  --}}
                         @include('web-views.order-details-component')
                         @php($ps = $order->payment_status ?? null)
-                        @if($ps !== "paid" && $order->order_status == 'pending')
+                        @if($ps !== "paid" && in_array($order->order_status , ['pending','new']))
                         @if (\App\CPU\Helpers::store_module_permission_check('order.sync.payment_completion'))
                         <a role="button" href="{{ route('home') }}/checkout-complete-by-customer/{{ $order['id'] }}" class="btn btn-primary w-full">
                             {{ Helpers::translate('Payment completion') }}

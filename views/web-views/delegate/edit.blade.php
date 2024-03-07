@@ -109,6 +109,22 @@
                             </div>
                         </div>
                         <!-- End Form Group -->
+                        <!-- Form Group -->
+                        <div class="row form-group">
+                            <label for="email"
+                                   class="col-sm-3 col-form-label input-label "> {{\App\CPU\Helpers::translate('is Chief Commissioner')}} </label>
+
+                            <div class="col-sm-9">
+                                <div class="text-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}">
+                                    <span class=""><label class="switcher mt-1 d-inline-block">
+                                        <input type="checkbox" class="is_chief switcher_input"
+                                        name="is_chief"  value="{{ $delegate->is_chief }}"  @if(\App\CPU\Helpers::hasEmployeeTypeforstores('is_chief')) disabled @endif  {{ $delegate['is_chief'] == 1?'checked':''}}>
+                                        <span class="switcher_control"></span>
+                                    </label></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Form Group -->
 
 
                     <!-- End Form -->
@@ -279,6 +295,13 @@
                     $('.add_from').hide();
                     $('.perm').show();
                     $('.div_foldable_section').css('max-height', '45rem');
+                }
+            });
+            $('.is_chief').change(function() {
+                if($(this).is(':checked')) {
+                    $(this).val(1);
+                } else {
+                    $(this).val(0);
                 }
             });
         });

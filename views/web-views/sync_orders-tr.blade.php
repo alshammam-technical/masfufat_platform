@@ -53,7 +53,7 @@
                 @php($ps = $order->payment_status ?? null)
                 @php($d = $order->external_order->details ?? null)
                 @if(isset($d['data']) && $d['data']['status']['name'] !== "ملغي")
-                @if($ps !== "paid" && ($order->order_status == 'pending' || $order->order_status == 'new'))
+                @if($ps !== "paid" && in_array($order->order_status , ['pending','new']))
                 <a role="button" target="_blank" href="{{ route('home') }}/checkout-complete-by-customer/{{ $order->id ?? null  }}" class="btn btn-primary col-auto">
                     {{ Helpers::translate('Payment completion') }}
                 </a>

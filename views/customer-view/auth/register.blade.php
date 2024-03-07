@@ -122,7 +122,7 @@
                             <div id="register-step-two" style="display: none;">
 
                                 <div class="row">
-                                    <div class="col-md-6">
+                                    {{--  <div class="col-md-6">
                                         <div class="form-group">
                                             <label class="font-weight-bold">{{\App\CPU\Helpers::translate('delegates_name')}} : </label>
                                             <input tabindex="1" name="delegate_name" class="form-control"/>
@@ -134,7 +134,7 @@
                                             <label class="font-weight-bold">{{\App\CPU\Helpers::translate('delegates_phone')}} : </label>
                                             <input tabindex="3" name="delegate_phone" class="form-control phoneInput text-left" dir="ltr" value="{{old('phone') ?? '+966'}}" />
                                         </div>
-                                    </div>
+                                    </div>  --}}
 
                                     <div class="col-md-12">
                                         <div class="form-group">

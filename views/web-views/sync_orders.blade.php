@@ -407,7 +407,7 @@
                                             @php($ps = $order->payment_status ?? null)
                                             @php($d = $order->external_order->details ?? null)
                                             @if(isset($d['data']) && $d['data']['status']['name'] !== "ملغي")
-                                            @if($ps !== "paid" && $order->order_status == 'pending')
+                                            @if($ps !== "paid" && in_array($order->order_status , ['pending','new']))
                                             @if (\App\CPU\Helpers::store_module_permission_check('order.sync.payment_completion'))
                                             <a role="button" target="_blank" href="{{ route('home') }}/checkout-complete-by-customer/{{ $order->id ?? null  }}" class="btn btn-primary col-auto">
                                                 {{ Helpers::translate('Payment completion') }}

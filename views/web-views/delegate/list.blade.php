@@ -57,6 +57,7 @@
                             <div class="py-2"><span
                                     class="d-block spandHeadO ">{{\App\CPU\Helpers::translate('phone')}}</span></div>
                         </td>
+
                         @if (\App\CPU\Helpers::store_module_permission_check('my_account.employees.enabled'))
                         <td class="tdBorder text-center">
                             <div class="py-2">
@@ -66,6 +67,10 @@
                             </div>
                         </td>
                         @endif
+                        <td class="tdBorder text-center">
+                            <div class="py-2"><span
+                                    class="d-block spandHeadO ">{{\App\CPU\Helpers::translate('delegate')}}</span></div>
+                        </td>
 
                         <td class="tdBorder text-center">
                             <div class="py-2"><span
@@ -97,9 +102,15 @@
                                         id="{{$ds['id']}}" {{$ds->status == 1?'checked':''}}>
                                 <span class="switcher_control"></span>
                             </label></span></td>
+                            <td class="bodytr text-center py-3"><span class=""><label class="switcher mt-1 d-inline-block">
+                                <input type="checkbox" class="is_chief switcher_input"
+                                        id="{{$ds['id']}}" {{$ds->is_chief == 1?'checked':''}}>
+                                <span class="switcher_control"></span>
+                            </label></span></td>
                             @endif
                             @endif
                             @endif
+
 
 
                             <td class="bodytr text-center">
@@ -172,6 +183,32 @@
                 },
                 success: function (data) {
                     toastr.success('{{\App\CPU\Helpers::translate('Status updated successfully')}}');
+                }
+            });
+        });
+
+        $(document).on('change', '.is_chief', function () {
+            var id = $(this).attr("id");
+            if ($(this).prop("checked") == true) {
+                var is_chief = 1;
+            } else if ($(this).prop("checked") == false) {
+                var is_chief = 0;
+            }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{route('delegates.is_chief-update')}}",
+                method: 'POST',
+                data: {
+                    id: id,
+                    is_chief: is_chief
+                },
+                success: function (data) {
+                    toastr.success('{{\App\CPU\Helpers::translate('Status updated successfully')}}');
+                    location.reload();
                 }
             });
         });

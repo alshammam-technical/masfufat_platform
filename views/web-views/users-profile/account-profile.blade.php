@@ -957,7 +957,7 @@
                                         <div class="form-group">
                                             <label>{{\App\CPU\Helpers::translate('delegates_name')}} : </label>
                                             <p>
-                                                {{($store['delegate_name'] ?? '')}}
+                                                {{($store->ChiefCommissioner->name ?? '')}}
                                             </p>
                                         </div>
                                     </div>
@@ -965,7 +965,7 @@
                                         <div class="form-group">
                                             <label>{{\App\CPU\Helpers::translate('delegates_phone')}} : </label>
                                             <p>
-                                                {{$store['delegate_phone'] ?? ''}}
+                                                {{$store->ChiefCommissioner->phone ?? ''}}
                                             </p>
                                         </div>
                                     </div>

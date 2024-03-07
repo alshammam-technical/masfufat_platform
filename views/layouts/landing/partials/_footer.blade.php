@@ -1,5 +1,5 @@
-<div id="footer1" class="footer bg-black mx-0 mb-0 px-5 pb-3" dir="{{session()->get('direction') ?? 'rtl'}}" style="position: absolute;z-index: 1034;/*margin-top: 40%;*/background-color: black;line-height: 50px;width: 100%;left: 0;">
-    <div class="w-full text-start mt-2">
+<div class="footer bg-black mx-0 mb-0 px-5 pb-3" dir="{{session()->get('direction') ?? 'rtl'}}" style="position: absolute;z-index: 1032;/*margin-top: 40%;*/background-color: black;line-height: 50px;width: 100%;left: 0;">
+    <div class="w-100 text-start mt-2">
         <img src="{{asset("storage/app/public/company")."/".$web_config['shop_fav_icon_footer']->value}}" alt="" class="footer-logo my-3"
         onerror="this.src='{{asset('public/assets/back-end/img/900x400/img1.jpg')}}'"
         style="width:137px" />
@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-2 col-6">
+        <div class="col-md-2">
             <ul style="list-style-type: none;line-height: 50px" class="mt-0">
                 <li class="mb-2 text-light text-start h4 font-weight-bolder">
                     <a href="{{route('terms')}}" class="text-light text-start h6 font-weight-bolder">
@@ -87,37 +87,25 @@
                 </li>
             </ul>
         </div>
-        <div class="col-md-2 col-6">
+        <div class="col-md-2">
             <ul style="list-style-type: none;line-height: 50px" class="mt-0">
                 <li class="mb-2 text-light text-start h4 font-weight-bolder">
                     <a href="{{route('user-account')}}" class="text-white text-start h6 font-weight-bolder">
                         {{\App\CPU\Helpers::translate('My account')}}
                     </a>
                 </li>
-                @if((auth('customer')->check() || auth('delegatestore')->check()))
-                @if (\App\CPU\Helpers::store_module_permission_check('my_account.support_ticket.view'))
-                <li class="mb-2 text-light text-start h4 font-weight-bolder">
-                    <a href="{{ route('account-tickets') }}" class="text-white text-start h6 font-weight-bolder">
-                        {{\App\CPU\Helpers::translate('Technical support tickets')}}
-                    </a>
-                </li>
-                @endif
-                @else
-                <li class="mb-2 text-light text-start h4 font-weight-bolder">
-                    <a href="{{ route('account-tickets') }}" class="text-white text-start h6 font-weight-bolder">
-                        {{\App\CPU\Helpers::translate('Technical support tickets')}}
-                    </a>
-                </li>
-                @endif
 
-                @if(\App\CPU\Helpers::get_business_settings('order_tracking_status'))
+                <li class="mb-2 text-light text-start h4 font-weight-bolder">
+                    <a href="{{ route('account-tickets') }}" class="text-white text-start h6 font-weight-bolder">
+                        {{\App\CPU\Helpers::translate('Technical support tickets')}}
+                    </a>
+                </li>
+
                 <li class="mb-2 text-light text-start h4 font-weight-bolder">
                     <a href="{{route('track-order.index')}}" class="text-white text-start h6 font-weight-bolder">
                         {{\App\CPU\Helpers::translate('Order tracking')}}
                     </a>
                 </li>
-                @endif
-
                 <li class="mb-2 text-light text-start h4 font-weight-bolder">
                     <a href="{{route('contacts')}}" class="text-white text-start h6 font-weight-bolder">
                         {{\App\CPU\Helpers::translate('Contact us')}}
@@ -129,19 +117,19 @@
             @php($ios = \App\CPU\Helpers::get_business_settings('download_app_apple_stroe'))
             @php($android = \App\CPU\Helpers::get_business_settings('download_app_google_stroe'))
             @if($android['status'] || $ios['status'])
-            <p class="h5 text-white w-full text-start mb-5">
+            <p class="h5 text-white w-100 text-start mb-5">
                 {{ Helpers::translate('Download the app now:') }}
             </p>
             <div class="row text-start px-0 mx-0">
                 @if($ios['status'])
                 <div class="col-4 px-0">
-                    <a href="{{$ios['link']}}"><img src="{{asset('/public/assets/landing/img/appstore.png')}}" alt="" style="width:182px;"></a>
+                    <img src="{{asset('/public/assets/landing/img/appstore.png')}}" alt="" style="width:182px;">
                 </div>
                 @endif
 
                 @if($android['status'])
                 <div class="col-4 px-0">
-                    <a href="{{$android['link']}}"><img src="{{asset('/public/assets/landing/img/playstore.png')}}" alt="" style="width:182px;"></a>
+                    <img src="{{asset('/public/assets/landing/img/playstore.png')}}" alt="" style="width:182px;">
                 </div>
                 @endif
             </div>
@@ -150,33 +138,36 @@
     </div>
 
     <div class="row">
-        <div class="col-md-8 col-12 sm:px-2 px-0">
+        <div class="col-md-8">
             <div class="ht-85p">
-                <ul style="list-style-type: none" class="mt-2 ps-0 sm:ps-5">
-                    <li class="sm:flex block px-0 text-secondary text-start h4 font-weight-bolder">
+                <ul style="list-style-type: none" class="mt-2">
+                    <li class="d-flex px-0 text-secondary text-start h4 font-weight-bolder">
                         <p class="text-white text-start h5 mt-1 font-weight-bolder wd-150">
                             {{\App\CPU\Helpers::translate('Shipping options')}}
                         </p>
-                        <div class="sm:px-3 d-flex flex-wrap">
+                        <div class="px-3 d-flex flex-wrap">
                             @foreach (Helpers::get_business_settings('shipping_companies') as $sh)
                             @if($sh !== "None")
-                            <img title="{{ Helpers::translate($sh) }}" class="mx-1 mb-2 footer-logos" src="{{asset('storage/app/public/landing/img/shipping/'.(Helpers::get_business_settings('shipping_company_img')[$sh] ?? null))}}" alt="" >
+                            <img title="{{ Helpers::translate($sh) }}" class="mx-2 mb-2 footer-logos" src="{{asset('storage/app/public/landing/img/shipping/'.(Helpers::get_business_settings('shipping_company_img')[$sh] ?? null))}}" alt="" >
                             @endif
                             @endforeach
                         </div>
                     </li>
 
-                    <li class="sm:flex block pb-0 pt-3 text-secondary text-start h4 font-weight-bolder">
+                    <li class="d-flex pb-0 pt-3 text-secondary text-start h4 font-weight-bolder">
                         <p class="text-white text-start h5 mt-1 font-weight-bolder wd-150">
                             {{\App\CPU\Helpers::translate('Payment options')}}
                         </p>
-                        @php($digital_payment = \App\addonSetting::whereIn('settings_type', ['payment_config'])->where('is_active',1)->get())
-                        <div class="sm:px-3 d-flex flex-wrap">
-                            @foreach (Helpers::getMyFatoorahMethods(true) as $payment)
-                            @php($additional_data = $payment['additional_data'] != null ? json_decode($payment['additional_data']) : [])
-                            <img title="{{str_replace('_',' ',$payment->key_name)}}" class="mx-1 mb-2 footer-logos" src="{{asset('storage/app/public/payment_modules/gateway_image')}}/{{$additional_data != null ? ($additional_data->gateway_image ?? null) : ''}}" alt="" >
+                        @php($digital_payment=\App\CPU\Helpers::get_business_settings('digital_payment'))
+                        <div class="px-3 d-flex flex-wrap">
+                            @if (($digital_payment['status'] ?? null)==1)
+                            @foreach (Helpers::getMyFatoorahMethods(true) as $pm)
+                            @if($pm->PaymentMethodEn !== "Apple Pay (Mada)")
+                            @php($sh = Helpers::get_business_settings('payment_methods_img')[$pm->PaymentMethodCode.$pm->PaymentMethodId] ?? null)
+                            <img title="{{ Helpers::translate($pm->PaymentMethodEn) }}" class="mx-2 mb-2 footer-logos" src="{{ asset('storage/app/public/landing/img/payment_methods/'.($sh)) }}" alt="" >
+                            @endif
                             @endforeach
-
+                            @endif
 
                             @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'cash_on_delivery'))
                             @if(($config['status'] ?? null))
@@ -184,10 +175,12 @@
                             <img title="{{ Helpers::translate('cash on dellivery') }}" class="mx-2 mb-2 footer-logos" src="{{ asset('storage/app/public/landing/img/payment_methods/'.($sh)) }}" alt="" >
                             @endif
 
+                            @if (($digital_payment['status'] ?? null)==1)
                             @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'wallet_status'))
                             @if($config==1)
                             @php($sh = Helpers::get_business_settings('payment_methods_img')['wallet'] ?? null)
                             <img title="{{ Helpers::translate('customer_wallet') }}" class="mx-2 mb-2 footer-logos" src="{{ asset('storage/app/public/landing/img/payment_methods/'.($sh)) }}" alt="" >
+                            @endif
                             @endif
 
                             @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'delayed'))
@@ -197,7 +190,7 @@
                             @endif
 
                             @php($config=\App\CPU\Helpers::get_business_settings('bank_transfer'))
-                            @if((count($config ?? []) ?? null))
+                            @if((count($config) ?? null))
                             @php($sh = Helpers::get_business_settings('payment_methods_img')['bank_transfer'] ?? null)
                             <img title="{{ Helpers::translate('bank_transfer') }}" class="mx-2 mb-2 footer-logos" src="{{ asset('storage/app/public/landing/img/payment_methods/'.($sh)) }}" alt="" >
                             @endif
@@ -254,52 +247,37 @@
 
         var mini = true;
 
-        function toggleSidebar(minii) {
-            if (minii) {
+        function toggleSidebar() {
+            if (mini) {
+                document.getElementById("mySidebar").style.width = "300px";
                 document.getElementById("mySidebar").style.zIndex = "1033";
-                if($('body').width() >= 640){
-                    document.getElementById("mySidebar").classList.add("sm:w-80");
-                    document.getElementById("mySidebar").classList.remove('w-0')
-                    document.getElementById("mySidebar").classList.remove('sm:w-20')
-                    document.getElementById("mySidebar").classList.add('expanded');
-                    if($("#download-app-section").length){
-                        document.getElementById("download-app-section").style.display = "block";
-                    }
-                    @if((session('direction') ?? 'rtl') == 'ltr')
-                    //document.getElementById("main").style.marginLeft = "250px";
-                    @else
-                    //document.getElementById("main").style.marginRight = "250px";
-                    @endif
-                }else{
-                    document.getElementById("mySidebar").classList.add('w-full')
-                    document.getElementById("mySidebar").classList.remove('w-0')
-                    //document.getElementById("mySidebar").style.display = "block";
-                }
+                document.getElementById("mySidebar").classList.add('expanded');
+                @if((session('direction') ?? 'rtl') == 'ltr')
+                //document.getElementById("main").style.marginLeft = "250px";
+                @else
+                //document.getElementById("main").style.marginRight = "250px";
+                @endif
                 this.mini = false;
             } else {
-                document.getElementById("mySidebar").style.zIndex = "1034";
-                if($('body').width() >= 640){
-                    document.getElementById("mySidebar").classList.add("sm:w-20");
-                    document.getElementById("mySidebar").classList.remove("sm:w-80");
-                    document.getElementById("mySidebar").classList.add('w-0')
-                    document.getElementById("mySidebar").classList.remove('expanded');
-                    if($("#download-app-section").length){
-                        document.getElementById("download-app-section").style.display = "none";
-                    }
-                    @if((session('direction') ?? 'rtl') == 'ltr')
-                    //document.getElementById("main").style.marginLeft = "85px";
-                    @else
-                    //document.getElementById("main").style.marginRight = "85px";
-                    @endif
-                }else{
-                    document.getElementById("mySidebar").classList.remove('w-full')
-                    document.getElementById("mySidebar").classList.add('w-0')
-                    //document.getElementById("mySidebar").style.display = "none";
-                }
+                document.getElementById("mySidebar").style.width = "85px";
+                document.getElementById("mySidebar").style.zIndex = "1032";
+                document.getElementById("mySidebar").classList.remove('expanded');
+                @if((session('direction') ?? 'rtl') == 'ltr')
+                document.getElementById("main").style.marginLeft = "85px";
+                @else
+                document.getElementById("main").style.marginRight = "85px";
+                @endif
                 this.mini = true;
             }
         }
 
     </script>
+
+    @auth('customer')
+    @else
+    <script>
+        AOS.init();
+    </script>
+    @endauth
 
 

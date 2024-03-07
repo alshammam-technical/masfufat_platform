@@ -33,7 +33,7 @@
 
                         <div class="form-group row mb-0">
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn bg-primaryColor btn-primary bg-primaryColor">
+                                <button type="submit" class="btn btn--primary btn-primary">
                                     {{ \App\CPU\Helpers::translate('Send Password Reset Link') }}
                                 </button>
                             </div>

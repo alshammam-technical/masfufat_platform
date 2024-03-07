@@ -34,7 +34,7 @@
 @endpush
 
 @section('content')
-    <div class="container for-container rtl" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+    <div class="container for-container rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <h2 class="text-center mt-3 headerTitle">{{\App\CPU\Helpers::translate('warranty policy')}}</h2>
         <div class="for-padding">
             @php($lang = session()->get('local'))

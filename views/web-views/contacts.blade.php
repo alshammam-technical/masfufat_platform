@@ -61,7 +61,7 @@
     </div>
 
     <!-- Split section: Map + Contact form-->
-    <div class="container rtl" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+    <div class="container rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row no-gutters">
             <div class="col-lg-6 iframe-full-height-wrap ">
                 <img style="" class="for-contac-image" src="{{asset("public/assets/front-end/png/contact.png")}}" alt="">
@@ -132,7 +132,7 @@
                             </div>
                         @endif
                         <div class=" ">
-                          <button class="btn bg-primaryColor text-light" type="submit" >{{\App\CPU\Helpers::translate('send')}}</button>
+                          <button class="btn btn--primary text-light" type="submit" >{{\App\CPU\Helpers::translate('send')}}</button>
                       </div>
                     </form>
             </div>

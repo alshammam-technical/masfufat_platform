@@ -45,7 +45,7 @@
                                     .
                                 </div>
                             </div>
-                            <button class="btn bg-primaryColor btn-primary bg-primaryColor"
+                            <button class="btn btn--primary btn-primary"
                                     type="submit">{{\App\CPU\Helpers::translate('Get new password')}}</button>
                         </form>
                     </div>
@@ -61,7 +61,7 @@
                                     class="invalid-feedback">{{\App\CPU\Helpers::translate('Please provide valid phone number')}}
                                 </div>
                             </div>
-                            <button class="btn bg-primaryColor btn-primary bg-primaryColor"
+                            <button class="btn btn--primary btn-primary"
                                     type="submit">{{\App\CPU\Helpers::translate('proceed')}}</button>
                         </form>
                     </div>

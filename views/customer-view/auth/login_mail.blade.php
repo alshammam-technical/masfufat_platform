@@ -38,7 +38,7 @@
 @endpush
 @section('content')
     <div class="container py-4 py-lg-5 my-4"
-         style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card border-0 box-shadow">
@@ -53,7 +53,7 @@
                                 <label for="si-email">{{\App\CPU\Helpers::translate('email_address')}}
                                     / {{\App\CPU\Helpers::translate('phone')}}</label>
                                 <input class="form-control" type="text" name="user_id" id="si-email"
-                                       style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};"
+                                       style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};"
                                        value="{{old('user_id')}}"
                                        placeholder="{{\App\CPU\Helpers::translate('Enter_email_address_or_phone_number')}}"
                                        required>
@@ -66,7 +66,7 @@
                                 <label for="si-password">{{\App\CPU\Helpers::translate('password')}}</label>
                                 <div class="password-toggle">
                                     <input class="form-control" name="password" type="password" id="si-password"
-                                           style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};"
+                                           style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};"
                                            required>
                                     <label class="password-toggle-btn">
                                         <input class="custom-control-input" type="checkbox"><i
@@ -79,7 +79,7 @@
 
                                 <div class="form-group">
                                     <input type="checkbox"
-                                           class="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-1' : 'mr-1'}}"
+                                           class="{{Session::get('direction') === "rtl" ? 'ml-1' : 'mr-1'}}"
                                            name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
 
                                     <label class="" for="remember">{{\App\CPU\Helpers::translate('remember_me')}}</label>
@@ -107,17 +107,17 @@
                                     </div>
                                 </div>
                             @endif
-                            <button class="btn bg-primaryColor btn-primary btn-block btn-shadow"
+                            <button class="btn btn--primary btn-primary btn-block btn-shadow"
                                     type="submit">{{\App\CPU\Helpers::translate('sign_in')}}</button>
                         </form>
                     </div>
                     <div class="card-footer">
                         <div class="row">
                             <div class="col-12 flex-between row p-0" style="direction: {{ Session::get('direction') }}">
-                                <div class="mb-3 {{(Session::get('direction') ?? 'rtl') === "rtl" ? '' : 'ml-2'}}">
+                                <div class="mb-3 {{Session::get('direction') === "rtl" ? '' : 'ml-2'}}">
                                     <h6>{{ \App\CPU\Helpers::translate('no_account_Sign_up_now') }}</h6>
                                 </div>
-                                <div class="mb-3 {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-2' : ''}}">
+                                <div class="mb-3 {{Session::get('direction') === "rtl" ? 'ml-2' : ''}}">
                                     <a class="btn btn-outline-primary"
                                        href="{{route('customer.auth.sign-up')}}">
                                         <i class="fa fa-user-circle"></i> {{\App\CPU\Helpers::translate('sign_up')}}
@@ -127,7 +127,7 @@
                             @foreach (\App\CPU\Helpers::get_business_settings('social_login') as $socialLoginService)
                                 @if (isset($socialLoginService) && $socialLoginService['status']==true)
                                     <div class="col-sm-6 text-center mb-1">
-                                        <a class="whitespace-normal btn btn-outline-primary"
+                                        <a class="btn btn-outline-primary"
                                            href="{{route('customer.auth.service-login', $socialLoginService['login_medium'])}}"
                                            style="width: 100%">
                                             <i class="czi-{{ $socialLoginService['login_medium'] }} mr-2 ml-n1"></i>{{\App\CPU\Helpers::translate('sign_in_with_'.$socialLoginService['login_medium'])}}

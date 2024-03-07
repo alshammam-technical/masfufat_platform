@@ -52,7 +52,7 @@
 
         @media (max-width: 600px) {
             .orderId {
-                margin- {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}: 91px;
+                margin- {{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 91px;
             }
 
             .p-5 {
@@ -80,14 +80,12 @@
 @endpush
 
 @section('content')
-@php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
-@php($user = \App\User::find($storeId))
     <div class="container mt-5 mb-5 rtl"
-         style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row d-flex justify-content-center">
             <div class="col-md-10 col-lg-10">
                 <div class="card">
-                    @if((auth('customer')->check() || auth('delegatestore')->check()))
+                    @if(auth('customer')->check())
                         <div class=" p-5">
                             <div class="row">
                                 <div class="col-md-6">
@@ -104,19 +102,19 @@
                                 </div>
                             </div>
 
-                            <span class="font-weight-bold d-block mt-4" style="font-size: 17px;">{{\App\CPU\Helpers::translate('Hello')}}, {{$user->f_name}}</span>
+                            <span class="font-weight-bold d-block mt-4" style="font-size: 17px;">{{\App\CPU\Helpers::translate('Hello')}}, {{auth('customer')->user()->f_name}}</span>
                             <span>{{\App\CPU\Helpers::translate('You order has been confirmed and will be shipped according to the method you selected!')}}</span>
 
                             <div class="row mt-4">
                                 <div class="col-6">
-                                    <a href="{{route('home')}}" class="btn bg-primaryColor text-light">
+                                    <a href="{{route('home')}}" class="btn btn--primary text-light">
                                         {{\App\CPU\Helpers::translate('go_to_shopping')}}
                                     </a>
                                 </div>
 
                                 <div class="col-6">
                                     <a href="{{route('orders')}}"
-                                       class="btn btn-secondary pull-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}">
+                                       class="btn btn-secondary pull-{{Session::get('direction') === "rtl" ? 'left' : 'right'}}">
                                         {{\App\CPU\Helpers::translate('check_orders')}}
                                     </a>
                                 </div>

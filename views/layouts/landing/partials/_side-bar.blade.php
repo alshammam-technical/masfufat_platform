@@ -1,5 +1,5 @@
 <div id="sidebarMain" class="d-none">
-<aside style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};"
+<aside style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};"
         class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-bordered bg-dark" dir="{{Session::get('direction')}}">
         <div class="navbar-vertical-container">
             <div class="navbar-vertical-footer-offset pb-0">
@@ -33,7 +33,7 @@
                     </div>
                     <!-- <div class="input-group">
                         <diV class="card search-card" id="search-card"
-                                style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}">
+                                style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}}">
                             <div class="card-body search-result-box" id="search-result-box">
 
                             </div>
@@ -41,7 +41,7 @@
                     </div> -->
                     <!-- End Search Form -->
 
-                    <ul class="navbar-nav" dir="{{Session::get('direction')}}" style="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'padding-right: 0px' : ''}}">
+                    <ul class="navbar-nav" dir="{{Session::get('direction')}}" style="{{Session::get('direction') === "rtl" ? 'padding-right: 0px' : ''}}">
                         <li class="nav-item dropdown {{request()->is('/')?'active':''}}">
                             <a class="nav-link" href="{{route('home')}}">{{ \App\CPU\Helpers::translate('Home')}}</a>
                         </li>
@@ -50,8 +50,8 @@
                             <a class="nav-link dropdown-toggle" href="#">
                                 {{ \App\CPU\Helpers::translate('brand') }}
                             </a>
-                            <ul class="bg-dark trfgv text-light border-0 dropdown-menu dropdown-menu-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}} scroll-bar"
-                                style="min-width: 200px !important;max-width:200px;width:200px;text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+                            <ul class="bg-dark trfgv text-light border-0 dropdown-menu dropdown-menu-{{Session::get('direction') === "rtl" ? 'right' : 'left'}} scroll-bar"
+                                style="min-width: 200px !important;max-width:200px;width:200px;text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
                                 @foreach(\App\CPU\BrandManager::get_brands() as $brand)
                                     <li style="display:flex; justify-content:space-between; ">
                                         <div>
@@ -96,11 +96,11 @@
                                     <div class="dropdown">
                                         <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton"
                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                                style="color: white;margin-top: 5px; padding-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}: 0" onclick="$('.qwfg').toggle();">
+                                                style="color: white;margin-top: 5px; padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 0" onclick="$('.qwfg').toggle();">
                                             {{ \App\CPU\Helpers::translate('Seller zone')}}
                                         </button>
                                         <div class="bg-dark text-light dropdown-menu border-0 qwfg" aria-labelledby="dropdownMenuButton"
-                                            style="margin-top: 0px !important;min-width: 200px !important;max-width:200px;width:200px; text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+                                            style="margin-top: 0px !important;min-width: 200px !important;max-width:200px;width:200px; text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
                                             <a class="dropdown-item text-light border-0" href="{{route('shop.apply')}}">
                                                 {{ \App\CPU\Helpers::translate('Become a Seller')}}
                                             </a>
@@ -205,7 +205,7 @@
               body.classList.add('footer-offset');
               var _header2 = document.getElementsByClassName('navbar')[0],
                 fisrtElement = _header2.firstElementChild;
-              fisrtElement.innerHTML = '<div class="navbar-dark w-full"> <div class="container">' + fisrtElement.firstElementChild.innerHTML + '</div> </div>';
+              fisrtElement.innerHTML = '<div class="navbar-dark w-100"> <div class="container">' + fisrtElement.firstElementChild.innerHTML + '</div> </div>';
               _header2.innerHTML = fisrtElement.innerHTML + ' <div class="container">' + _header2.lastElementChild.innerHTML + '</div>';
               addContainer();
 

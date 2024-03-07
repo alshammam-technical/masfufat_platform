@@ -26,7 +26,7 @@
 @section('content')
 
     <!-- Page Content-->
-    <div class="container pb-5 mb-2 mb-md-4 rtl" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+    <div class="container pb-5 mb-2 mb-md-4 rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row">
             <div class="col-md-12 p-3 feature_header">
                 <span>{{\App\CPU\Helpers::translate('Brands')}}</span>

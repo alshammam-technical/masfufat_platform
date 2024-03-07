@@ -96,7 +96,7 @@
                                 @for($i=0;$i<$first;$i++)
                                     <div>
                                         <div class="card-header p-1 tx-medium my-auto tx-white bg-primary">
-                                            <div class="d-flex btn text-white w-full" onclick="$(this).closest('.card-header').next('.foldable-section').slideToggle();$(this).closest('.card-header').find('.toggleAngle').toggle()">
+                                            <div class="d-flex btn text-white w-100" onclick="$(this).closest('.card-header').next('.foldable-section').slideToggle();$(this).closest('.card-header').find('.toggleAngle').toggle()">
                                                 <h4 class="ml-2 mr-2 pt-2 text-white">
                                                     <i class="fa fa-angle-down toggleAngle" style=""></i>
                                                     <i class="fa fa-angle-up toggleAngle" style="display:none"></i>
@@ -105,10 +105,10 @@
                                             </div>
                                         </div>
                                         <div id="collapseTwo{{ $helps[$i]['id'] }}" class="foldable-section"
-                                        style="display: none;text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}"
+                                        style="display: none;text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}}"
                                         dir="{{(session()->get('direction') == 'ltr') ? 'ltr' : 'rtl'}}">
                                             <div class="card-body">
-                                                <textarea readonly class="form-control border-0 w-full bg-white" cols="5" rows="5">{{ $helps[$i]['answer'] }}</textarea>
+                                                <textarea readonly class="form-control border-0 w-100 bg-white" cols="5" rows="5">{{ $helps[$i]['answer'] }}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -117,7 +117,7 @@
                                 @for($i=$first;$i<$length;$i++)
                                     <div>
                                         <div class="card-header p-1 tx-medium my-auto tx-white bg-primary">
-                                            <div class="d-flex btn text-white w-full" onclick="$(this).closest('.card-header').next('.foldable-section').slideToggle();$(this).closest('.card-header').find('.toggleAngle').toggle()">
+                                            <div class="d-flex btn text-white w-100" onclick="$(this).closest('.card-header').next('.foldable-section').slideToggle();$(this).closest('.card-header').find('.toggleAngle').toggle()">
                                                 <h4 class="ml-2 mr-2 pt-2 text-white">
                                                     <i class="fa fa-angle-down toggleAngle" style=""></i>
                                                     <i class="fa fa-angle-up toggleAngle" style="display:none"></i>
@@ -126,10 +126,10 @@
                                             </div>
                                         </div>
                                         <div id="collapseTwo{{ $helps[$i]['id'] }}" class="foldable-section"
-                                        style="display: none;text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}"
+                                        style="display: none;text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}}"
                                         dir="{{(session()->get('direction') == 'ltr') ? 'ltr' : 'rtl'}}">
                                             <div class="card-body">
-                                                <textarea readonly class="form-control border-0 w-full bg-white" cols="5" rows="5">{{ $helps[$i]['answer'] }}</textarea>
+                                                <textarea readonly class="form-control border-0 w-100 bg-white" cols="5" rows="5">{{ $helps[$i]['answer'] }}</textarea>
                                             </div>
                                         </div>
                                     </div>

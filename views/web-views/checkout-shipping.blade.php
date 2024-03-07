@@ -4,14 +4,8 @@
 
 @push('css_or_js')
     <link rel="stylesheet" href="{{ asset('public/assets/front-end/css/bootstrap-select.min.css') }}">
+    {{--  <script src="{{ asset('public/assets/front-end/js/bootstrap-select.min.js') }}"></script>  --}}
 
-    @if(env('APP_DEBUG'))
-    <script src="https://demo.myfatoorah.com/cardview/v1/session.js"></script>
-    @elseif (($country_code ?? 'SA') == 'SA')
-        <script src="https://portal.myfatoorah.com/cardview/v1/session.js"></script>
-    @else
-        <script src="https://sa.myfatoorah.com/cardview/v1/session.js"></script>
-    @endif
 
     <style>
         .btn-outline {
@@ -33,7 +27,7 @@
             border-color: {{$web_config['primary_color']}}    !important;
         }
 
-        #location_map_canvas,.location_map_canvas {
+        #location_map_canvas {
             height: 100%;
         }
 
@@ -61,7 +55,7 @@
 
         @media only screen and (max-width: 768px) {
             /* For mobile phones: */
-            #location_map_canvas,.location_map_canvas {
+            #location_map_canvas {
                 height: 200px;
             }
         }
@@ -69,19 +63,13 @@
         .address-item.selected .card{
             border: solid thin {{ Helpers::get_business_settings('colors')['primary'] }};
         }
-
-        #content{
-            min-height: 500px;
-        }
     </style>
 @endpush
+
 @section('content')
-@php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
 @php($billing_input_by_customer=\App\CPU\Helpers::get_business_settings('billing_input_by_customer'))
-@php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
-@php($customre = \App\User::find($storeId))
     <div class="container pb-5 mb-2 mb-md-4 rtl"
-         style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row">
             <section class="col-lg-12 col-md-12">
                 <div class="card box-shadow-sm">
@@ -89,30 +77,24 @@
                         <div class="row">
                             <div class="col-lg-12 col-md-12  d-flex justify-content-between overflow-hidden">
                                 <div class="col-sm-4">
-                                    <p class="sm:text-2xl text-xl font-weight-bold pt-2 mb-0 folot-left headerTitle">
-                                        {{\App\CPU\Helpers::translate('choose_shipping_address')}}</p>
+                                    <h1 class="h3  mb-0 folot-left headerTitle">
+                                        {{\App\CPU\Helpers::translate('choose_shipping_address')}}</h1>
                                 </div>
                                 <div class="mt-2 col-sm-4" style="text-align: end">
-                                    <button type="submit" class="btn bg-primaryColor" data-toggle="modal"
-                                        data-target="#exampleModal"
+                                    <button type="submit" class="btn btn--primary" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal"
                                         id="add_new_address">{{\App\CPU\Helpers::translate('add_new_address')}}
                                     </button>
                                 </div>
                             </div>
-                            @if(request('shipping_method_id') && \App\Model\ShippingAddress::where('customer_id',$storeId)->where('id',request('shipping_method_id'))->where('is_billing',0)->first())
+                            @if(request('shipping_method_id'))
                             @php(session()->put('address_id',request('shipping_method_id')))
                             @php(session()->put('billing_address_id',request('shipping_method_id')))
-                            @else
-                                @php($shad = \App\Model\ShippingAddress::where('customer_id',$storeId)->where('address_type','permanent')->where('is_billing',0)->first()->id ?? null)
-                                @if($shad)
-                                @php(session()->put('address_id',$shad))
-                                @php(session()->put('billing_address_id',$shad))
-                                @endif
                             @endif
                             @php($default_location=\App\CPU\Helpers::get_business_settings('default_location'))
                             @if($physical_product_view)
-                            @php($shipping_addresses=\App\Model\ShippingAddress::where('customer_id',$storeId)->where('is_billing',0)->get())
-                            <form method="get" action="" id="address-form" class="sm:flex" style="flex-flow: wrap">
+                            @php($shipping_addresses=\App\Model\ShippingAddress::where('customer_id',auth('customer')->id())->where('is_billing',0)->get())
+                            <form method="get" action="" id="address-form" class="row">
                                 @php($permanented = 0)
                                 @foreach($shipping_addresses as $shippingAddress)
                                     @if($shippingAddress['address_type'] !== 'permanent' && !$permanented)
@@ -136,7 +118,7 @@
 
 
                                         <div class="card-body mt-3"
-                                            style="padding: {{(Session::get('direction') ?? 'rtl') === "rtl" ? '0 13px 15px 15px' : '0 15px 15px 13px'}};">
+                                            style="padding: {{Session::get('direction') === "rtl" ? '0 13px 15px 15px' : '0 15px 15px 13px'}};">
 
                                             <div class="d-flex justify-content-between" style="padding: 5px;">
                                                 <div>
@@ -187,7 +169,7 @@
                                                     {{ \App\CPU\Helpers::translate('Country')}}:
                                                 </strong>
                                                 <div class="col-6 text-end form-control border-0 py-0">
-                                                    <select name="country" disabled id="" data-live-search="true"
+                                                    <select name="country" disabled id="" data-bs-live-search="true"
                                                         required
                                                         style="color: black;border: none;text-align-last: end;border: none;background-blend-mode: hue;width: 95px;float: left;text-align-last:end;height:32px;margin-top:-10px" class="p-0 form-control bg-white">
                                                         <option></option>
@@ -210,7 +192,7 @@
                                                 </strong>
                                                 <div class="col-6 text-end form-control border-0 py-0">
                                                     <select disabled name="area_id" id="area_id{{$shippingAddress->id}}"
-                                                        data-live-search="true" required
+                                                        data-bs-live-search="true" required
                                                         style="color: black;border: none;text-align-last: end;border: none;background-blend-mode: hue;width: 95px;float: left;text-align-last:end;height:32px;margin-top:-10px" class="p-0 form-control bg-white"></select>
                                                     <span class="text-warning area_id"
                                                         id="area_id_loading{{$shippingAddress->id}}">{{ Helpers::translate('Please wait') }}</span>
@@ -254,8 +236,6 @@
                 </div>
             </section>
 
-            @php($amount = 0)
-            @if(session('address_id'))
             <section class="col-lg-12 mt-5">
                 <div class="checkout_details mt-3 card bg-light border-11">
                     <!-- Payment methods accordion-->
@@ -267,58 +247,109 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row w-full mx-0">
+                    <div class="row w-100 mx-0">
                         @php($digital_payment=\App\CPU\Helpers::get_user_paymment_methods(null,'digital_payment'))
                         @php($myfatoorahS=\App\CPU\Helpers::get_user_paymment_methods(null,'myfatoorah'))
-                        @php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
-                        @php($user = \App\User::find($storeId))
-                        @if (($digital_payment['status'] ?? null)==1 || 1 == 1)
-                        @if((($myfatoorahS['status'] ?? null) == "1") || 1 == 1)
-                        @if ($digital_payment['status']==1 || 1 == 1)
-                            @foreach ($payment_gateways_list as $payment_gateway)
-                                <div class="col-md-4 mb-4" id="cod-for-cart" style="cursor: pointer">
-                                    <div class="card">
-                                        <div class="card-body min-h-40" onclick="$(this).closest('.card').find('.ok-b').slideToggle()">
-                                            <form id="{{($payment_gateway->key_name)}}_form" action="{{ route('customer.web-payment-request') }}" method="post" class="needs-validation d-grid text-center" onsubmit="ajsub(event)">
-                                                @csrf
-                                                <input type="hidden" name="user_id" value="{{ (auth('customer')->check() || auth('delegatestore')->check()) ? $storeId : session('guest_id') }}">
-                                                <input type="hidden" name="customer_id" value="{{ (auth('customer')->check() || auth('delegatestore')->check()) ? $storeId : session('guest_id') }}">
-                                                <input type="hidden" name="payment_method" value="{{ $payment_gateway->key_name }}">
-                                                <input type="hidden" name="payment_platform" value="web">
-
-                                                @if ($payment_gateway->mode == 'live' && isset($payment_gateway->live_values['callback_url']))
-                                                    <input type="hidden" name="callback" value="{{ $payment_gateway->live_values['callback_url'] }}">
-                                                @elseif ($payment_gateway->mode == 'test' && isset($payment_gateway->test_values['callback_url']))
-                                                    <input type="hidden" name="callback" value="{{ $payment_gateway->test_values['callback_url'] }}">
-                                                @else
-                                                    <input type="hidden" name="callback" value="">
-                                                @endif
-
-                                                <input type="hidden" name="external_redirect_link" value="{{ url('/').'/web-payment' }}">
-
-                                                <div class="btn btn-block click-if-alone grid justify-content-center pb-3" style="place-items: center">
-                                                    <img width="120" src="{{asset('storage/app/public/payment_modules/gateway_image')}}/{{(json_decode($payment_gateway->additional_data)->gateway_image) != null ? (json_decode($payment_gateway->additional_data)->gateway_image) : ''}}">
-                                                    <p>
-                                                        <strong>
-                                                            {{ json_decode($payment_gateway->additional_data)->gateway_title }}
-                                                        </strong>
-                                                    </p>
+                        @if (($digital_payment['status'] ?? null)==1)
+                        @if(($myfatoorahS['status'] ?? null) == "1")
+                        @foreach ($myFatoorahMethods as $pm)
+                        @if($pm->ImageUrl == "https://sa.myfatoorah.com/imgs/payment-methods/ap.png" && !$mac_device)
+                        @else
+                        <div class="col-md-4 mb-4" style="cursor: pointer">
+                            <div class="card">
+                                <form class="needs-validation d-grid text-center" method="POST" id="payment-form"
+                                    action="{{route('pay-myfatoorah',['paymentMethodId' => $pm->PaymentMethodId])}}">
+                                    <div class="card-body" style="height: auto">
+                                        {{ csrf_field() }}
+                                        <div class="btn btn-block click-if-alone d-block"
+                                            onclick="$(this).next().slideToggle()">
+                                            <img width="80" src="{{ $pm->ImageUrl }}" />
+                                            <p>
+                                                <strong>
+                                                    {{ session()->get('local') == 'sa' ? $pm->PaymentMethodAr : $pm->PaymentMethodEn }}
+                                                </strong>
+                                            </p>
+                                        </div>
+                                        @if($pm->ImageUrl !== "https://sa.myfatoorah.com/imgs/payment-methods/ap.png")
+                                        <div style="display: none">
+                                            <div class="row">
+                                                <div class="col-12 pt-1">
+                                                    <div class="form-group">
+                                                        <label for="cardNumber">
+                                                            {{ Helpers::translate('cardNumber') }}
+                                                        </label>
+                                                        <input class="form-control mx-0 w-100" type="text"
+                                                            name="cardNumber" placeholder="">
+                                                    </div>
                                                 </div>
-                                            </form>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-4 pt-1 text-center">
+                                                    <div class="form-group">
+                                                        <label for="expiryMonth">
+                                                            {{ Helpers::translate('expiryMonth') }}
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 border-right border-left pt-1 text-center">
+                                                    <div class="form-group">
+                                                        <label for="expiryYear">
+                                                            {{ Helpers::translate('expiryYear') }}
+                                                        </label>
+                                                        <strong
+                                                            title="{{ Helpers::translate('(last two numbers, ex: 23 instead of 2023)') }}">
+                                                            <i class="fa fa-info" style="font-size: 14px"></i>
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 pt-1 text-center">
+                                                    <div class="form-group">
+                                                        <label for="securityCode" style="font-size: 12px">
+                                                            {{ Helpers::translate('securityCode') }}
+                                                        </label>
+                                                        <strong
+                                                            title="{{ Helpers::translate('((It consists of 3 numbers))') }}">
+                                                            <i class="fa fa-info" style="font-size: 14px"></i>
+                                                        </strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="form-group pt-1 text-center">
+                                                        <input class="form-control mx-0 w-100" type="number" max="12"
+                                                            autocomplete="off" name="expiryMonth" placeholder="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-4 border-right border-left pt-1 text-center">
+                                                    <div class="form-group">
+                                                        <input class="form-control mx-0 w-100" max="99" type="number"
+                                                            autocomplete="off" name="expiryYear" placeholder="">
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group pt-1 text-center">
+                                                        <input class="form-control mx-0 w-100" type="text"
+                                                            autocomplete="off" name="securityCode" placeholder="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="p-0 m-0 w-100">
+                                                <button class="btn btn-success w-100"
+                                                    type="submit">{{ Helpers::translate('ok') }}</button>
+                                            </div>
                                         </div>
-                                        <div class="p-0 m-0 w-full ok-b card-footer" style="display: none">
-                                            <button class="btn btn-primary bg-primaryColor w-full" type="submit" onclick="$('#{{($payment_gateway->key_name)}}_form').submit()">
-                                                {{ Helpers::translate('Pay Now') }}
-                                            </button>
-                                        </div>
+                                        @endif
                                     </div>
-                                </div>
-                            @endforeach
+                                </form>
+                            </div>
+                        </div>
                         @endif
+                        @endforeach
                         @endif
                         @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'bank_transfer'))
                         @php($banks=\App\CPU\Helpers::get_user_paymment_methods(null,'bank_transfer'))
-                        @php($banks_=\App\CPU\Helpers::get_user_paymment_methods($storeId,'bank_transfer'))
+                        @php($banks_=\App\CPU\Helpers::get_user_paymment_methods(auth('customer')->id(),'bank_transfer'))
                         @php($banksCnt = 0)
                         @foreach ($banks as $index=>$bank)
                             @if(($bank['status'] ?? null) && ($banks_[$index]['status']))
@@ -333,7 +364,7 @@
                                         class="needs-validation d-grid text-center" enctype="multipart/form-data">
                                         @csrf
                                         <input type="hidden" name="payment_method" value="bank_transfer">
-                                        <div class="text-center py-5 justify-center grid" onclick="$(this).next().slideToggle()">
+                                        <div class="text-center py-5" onclick="$(this).next().slideToggle()">
                                             <img width="66.3"
                                                 src="{{asset('public/assets/front-end/img/bank-transfer-icon.png')}}" />
                                             <p>
@@ -345,10 +376,10 @@
                                         <div style="display: none">
                                             <div class="h-100 p-2">
                                                 @php($banks=\App\CPU\Helpers::get_user_paymment_methods(null,'bank_transfer'))
-                                                @php($banks_=\App\CPU\Helpers::get_user_paymment_methods($storeId,'bank_transfer'))
+                                                @php($banks_=\App\CPU\Helpers::get_user_paymment_methods(auth('customer')->id(),'bank_transfer'))
                                                 @php($item_index = 0)
                                                 @php($conf['environment'] = $conf['environment']??'sandbox')
-                                                <div class="w-full text-center p-3 rounded"
+                                                <div class="w-100 text-center p-3 rounded"
                                                     style="background-color: #f2f2f2;">
                                                     <div class="form-group">
                                                         <select name="bank" id="bank" class="form-control"
@@ -395,7 +426,7 @@
                                                     <label for="attachment">
                                                         {{ Helpers::translate('Please attach the receipt image') }}
                                                     </label>
-                                                    <input class="form-control mx-0 w-full h-full" type="file"
+                                                    <input class="form-control mx-0 w-100" type="file"
                                                         accept=".docx,.pdf,.png,.jpg" name="attachment" placeholder="">
                                                 </div>
 
@@ -403,13 +434,13 @@
                                                     <label for="holder_name">
                                                         {{ Helpers::translate('Account Holder Name') }}
                                                     </label>
-                                                    <input class="form-control mx-0 w-full" type="text"
+                                                    <input class="form-control mx-0 w-100" type="text"
                                                         name="holder_name" placeholder="">
                                                 </div>
                                                 @php($item_index++)
                                                 @php($config['environment'] = $config['environment']??'sandbox')
-                                                <div class="p-0 m-0 w-full">
-                                                    <button class="btn btn-primary bg-primaryColor w-full" type="submit">{{ Helpers::translate('pay now') }}</button>
+                                                <div class="p-0 m-0 w-100">
+                                                    <button class="btn btn-success w-100" type="submit">Ok</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -426,9 +457,11 @@
                         @if(($config['status'] ?? null))
                         <div class="col-md-6 mb-4" style="cursor: pointer">
                             <div class="card">
-                                <div class="card-body min-h-40">
-                                    <button class="btn btn-block click-if-alone grid justify-content-center pb-3" type="button"
+                                <div class="card-body" style="height: 175px">
+                                    <button class="btn btn-block click-if-alone d-block" type="button"
                                         id="checkout-button">
+                                        {{-- <i class="czi-card"></i> {{\App\CPU\Helpers::translate('Credit / Debit card ( Stripe )')}}
+                                        --}}
                                         <img width="150" src="{{asset('public/assets/front-end/img/stripe.png')}}" />
                                         <p>
                                             <strong>
@@ -475,24 +508,24 @@
 
                         <div class="col-md-6 mb-4" style="cursor: pointer">
                             <div class="card">
-                                <div class="card-body min-h-40">
+                                <div class="card-body" style="height: 175px">
                                     <form action="{!!route('payment-razor')!!}" method="POST">
                                         @csrf
                                         <!-- Note that the amount is in paise = 50 INR -->
                                         <!--amount need to be in paisa-->
                                         <script src="https://checkout.razorpay.com/v1/checkout.js"
-                                            data-key="{{ \Illuminate\Support\Facades\Config::get('razor.razor_key') }}"
-                                            data-amount="{{(round(\App\CPU\Convert::usdToinr($amount)))*100}}"
-                                            data-buttontext="Pay {{(\App\CPU\Convert::usdToinr($amount))*100}} INR"
-                                            data-name="{{\App\Model\BusinessSetting::where(['type'=>'company_name'])->first()->value}}"
-                                            data-description=""
-                                            data-image="{{asset('storage/app/public/company/'.\App\Model\BusinessSetting::where(['type'=>'company_web_logo'])->first()->value)}}"
-                                            data-prefill.name="{{$customre->f_name}}"
-                                            data-prefill.email="{{$customre->email}}"
-                                            data-theme.color="#ff7529">
+                                            data-bs-key="{{ \Illuminate\Support\Facades\Config::get('razor.razor_key') }}"
+                                            data-bs-amount="{{(round(\App\CPU\Convert::usdToinr($amount)))*100}}"
+                                            data-bs-buttontext="Pay {{(\App\CPU\Convert::usdToinr($amount))*100}} INR"
+                                            data-bs-name="{{\App\Model\BusinessSetting::where(['type'=>'company_name'])->first()->value}}"
+                                            data-bs-description=""
+                                            data-bs-image="{{asset('storage/app/public/company/'.\App\Model\BusinessSetting::where(['type'=>'company_web_logo'])->first()->value)}}"
+                                            data-bs-prefill.name="{{auth('customer')->user()->f_name}}"
+                                            data-bs-prefill.email="{{auth('customer')->user()->email}}"
+                                            data-bs-theme.color="#ff7529">
                                         </script>
                                     </form>
-                                    <button class="btn btn-block click-if-alone grid justify-content-center pb-3" type="button"
+                                    <button class="btn btn-block click-if-alone d-block" type="button"
                                         onclick="$('.razorpay-payment-button').click()">
                                         <img width="150" src="{{asset('public/assets/front-end/img/razor.png')}}" />
                                         <p>
@@ -510,7 +543,7 @@
                         @if(($config['status'] ?? null))
                         <div class="col-md-6 mb-4" style="cursor: pointer">
                             <div class="card">
-                                <div class="card-body min-h-40">
+                                <div class="card-body" style="height: 175px">
                                     @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'paystack'))
                                     @php($order=\App\Model\Order::find(session('order_id')))
                                     <form method="POST" action="{{ route('paystack-pay') }}" accept-charset="UTF-8"
@@ -519,7 +552,7 @@
                                         <div class="row">
                                             <div class="col-md-8 col-md-offset-2">
                                                 <input type="hidden" name="email"
-                                                    value="{{$customre->email}}"> {{-- required --}}
+                                                    value="{{auth('customer')->user()->email}}"> {{-- required --}}
                                                 <input type="hidden" name="orderID"
                                                     value="{{session('cart_group_id')}}">
                                                 <input type="hidden" name="amount"
@@ -540,7 +573,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                    <button class="btn btn-block click-if-alone grid justify-content-center pb-3" type="button"
+                                    <button class="btn btn-block click-if-alone d-block" type="button"
                                         onclick="$('.paystack-payment-button').click()">
                                         <img width="100" src="{{asset('public/assets/front-end/img/paystack.png')}}" />
                                     </button>
@@ -555,10 +588,9 @@
                         @if(isset($myr) && isset($usd) && ($config['status'] ?? null))
                         <div class="col-md-6 mb-4" style="cursor: pointer">
                             <div class="card">
-                                <div class="card-body min-h-40">
+                                <div class="card-body" style="height: 175px">
                                     @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'senang_pay'))
-                                    @php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
-                                    @php($user = \App\User::find($storeId))
+                                    @php($user=auth('customer')->user())
                                     @php($secretkey = $config['secret_key'])
                                     @php($data = new \stdClass())
                                     @php($data->merchantId = $config['merchant_id'])
@@ -582,7 +614,7 @@
                                         <input type="hidden" name="hash" value="{{$data->hashed_string}}">
                                     </form>
 
-                                    <button class="btn btn-block click-if-alone grid justify-content-center pb-3" type="button"
+                                    <button class="btn btn-block click-if-alone d-block" type="button"
                                         onclick="document.order.submit()">
                                         <img width="100" src="{{asset('public/assets/front-end/img/senangpay.png')}}" />
                                     </button>
@@ -595,11 +627,11 @@
                         @if(($config['status'] ?? null))
                         <div class="col-md-6 mb-4" style="cursor: pointer">
                             <div class="card">
-                                <div class="card-body min-h-40">
+                                <div class="card-body" style="height: 175px">
                                     <form class="needs-validation d-grid text-center" method="POST"
                                         id="payment-form-paymob" action="{{route('paymob-credit')}}">
                                         {{ csrf_field() }}
-                                        <button class="btn btn-block click-if-alone grid justify-content-center pb-3" type="submit">
+                                        <button class="btn btn-block click-if-alone d-block" type="submit">
                                             <img width="150"
                                                 src="{{asset('public/assets/front-end/img/paymob.png')}}" />
                                             <p>
@@ -618,8 +650,8 @@
                         @if(isset($config) && ($config['status'] ?? null))
                         <div class="col-md-6 mb-4" style="cursor: pointer">
                             <div class="card">
-                                <div class="card-body min-h-40">
-                                    <button class="btn btn-block click-if-alone grid justify-content-center pb-3" id="bKash_button"
+                                <div class="card-body" style="height: 175px">
+                                    <button class="btn btn-block click-if-alone d-block" id="bKash_button"
                                         onclick="BkashPayment()">
                                         <img width="100" src="{{asset('public/assets/front-end/img/bkash.png')}}" />
                                     </button>
@@ -632,8 +664,8 @@
                         @if(isset($config) && ($config['status'] ?? null))
                         <div class="col-md-6 mb-4" style="cursor: pointer">
                             <div class="card">
-                                <div class="card-body min-h-40">
-                                    <button class="btn btn-block click-if-alone grid justify-content-center pb-3"
+                                <div class="card-body" style="height: 175px">
+                                    <button class="btn btn-block click-if-alone d-block"
                                         onclick="location.href='{{route('paytabs-payment')}}'"
                                         style="margin-top: -11px">
                                         <img width="150" src="{{asset('public/assets/front-end/img/paytabs.png')}}" />
@@ -648,226 +680,243 @@
                         </div>
                         @endif
 
-
-                        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'mercadopago'))
-                        @if(isset($config) && ($config['status'] ?? null))
-                        <div class="col-md-6 mb-4" style="cursor: pointer">
-                            <div class="card">
-                                <div class="card-body min-h-40">
-                                    <a class="btn btn-block click-if-alone grid justify-content-center pb-3" href="{{route('mercadopago.index')}}">
-                                        <img width="150" src="{{asset('public/assets/front-end/img/MercadoPago_(Horizontal).svg')}}" />
-                                        <p>
-                                            <strong>
-                                                {{ Helpers::translate('mercadopago') }}
-                                            </strong>
-                                        </p>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-
-                        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'flutterwave'))
-                        @if(isset($config) && ($config['status'] ?? null))
-                        <div class="col-md-6 mb-4" style="cursor: pointer">
-                            <div class="card">
-                                <div class="card-body pt-2" style="height: 144px">
-                                    <form method="POST" action="{{ route('flutterwave_pay') }}">
-                                        {{ csrf_field() }}
-
-                                        <button class="btn btn-block click-if-alone grid justify-content-center pb-3" type="submit">
-                                            <img width="200" src="{{asset('public/assets/front-end/img/fluterwave.png')}}" />
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-
-                        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'paytm'))
-                        @if(isset($config) && ($config['status'] ?? null))
-                        <div class="col-md-6 mb-4" style="cursor: pointer">
-                            <div class="card">
-                                <div class="card-body min-h-40">
-                                    <a class="btn btn-block click-if-alone grid justify-content-center pb-3" href="{{route('paytm-payment')}}">
-                                        <img style="max-width: 144px; margin-top: -10px"
-                                            src="{{asset('public/assets/front-end/img/paytm.png')}}" />
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-
-                        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'liqpay'))
-                        @if(isset($config) && ($config['status'] ?? null))
-                        <div class="col-md-6 mb-4" style="cursor: pointer">
-                            <div class="card">
-                                <div class="card-body min-h-40">
-                                    <a class="btn btn-block click-if-alone grid justify-content-center pb-3" href="{{route('liqpay-payment')}}">
-                                        <img style="max-width: 144px; margin-top: 0px"
-                                            src="{{asset('public/assets/front-end/img/liqpay4.png')}}" />
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-                        {{--  </div>  --}}
-                        @endif
-
-                        {{--  <div class="row w-full mx-0">  --}}
-                        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'cash_on_delivery'))
-                        @if(!$cod_not_show && ($config['status'] ?? null))
-                        <div class="col-md-4 mb-4" id="cod-for-cart" style="cursor: pointer" onclick="$(this).find('.ok-b').slideToggle()">
-                            <div class="card">
-                                <div class="card-body min-h-40">
-                                    <form action="{{route('checkout-complete')}}" method="get"
-                                        class="needs-validation d-grid text-center">
-                                        <input type="hidden" name="payment_method" value="cash_on_delivery">
-                                        <div class="btn btn-block click-if-alone grid justify-content-center pb-3">
-                                            <img width="120" style="margin-top: -10px"
-                                                src="{{asset('public/assets/front-end/img/cod.png')}}" />
-                                            <p>
-                                                <strong>
-                                                    {{ Helpers::translate('cash_on_delivery') }}
-                                                </strong>
-                                            </p>
-                                        </div>
-                                        <div class="p-0 m-0 w-full ok-b" style="display: none">
-                                            <button class="btn btn-primary bg-primaryColor w-full" type="submit">{{ Helpers::translate('pay now') }}</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-
-                        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'delayed'))
-                        @if(!$cod_not_show && ($config['status'] ?? null))
-                        <div class="col-md-4 mb-4" id="cod-for-cart" style="cursor: pointer" onclick="$(this).find('.ok-b').slideToggle()">
-                            <div class="card">
-                                <div class="card-body min-h-40">
-                                    <form action="{{route('checkout-complete')}}" method="get"
-                                        class="needs-validation d-grid text-center">
-                                        <input type="hidden" name="payment_method" value="delayed">
-                                        <div class="btn btn-block click-if-alone grid justify-content-center pb-3">
-                                            <img width="70" src="{{asset('public/assets/front-end/img/delayed.jpg')}}" />
-                                            <p>
-                                                <strong>
-                                                    {{ Helpers::translate('delayed payment') }}
-                                                </strong>
-                                            </p>
-                                        </div>
-                                        <div class="p-0 m-0 w-full ok-b" style="display: none">
-                                            <button class="btn btn-primary bg-primaryColor w-full" type="submit">{{ Helpers::translate('pay now') }}</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-
-
-                        @if (($digital_payment['status'] ?? null)==1)
-                        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'customer_wallet')['wallet_status'])
-                        @if($config==1)
-                        <div class="col-md-4 mb-4" style="cursor: pointer">
-                            <div class="card">
-                                <div class="card-body d-grid text-center" style="height: 144px">
-                                    <button class="btn btn-block click-if-alone grid justify-content-center pb-3" type="submit" data-toggle="modal" data-target="#wallet_submit_button">
-
-                                        <img width="50" style="margin-top: -10px"
-                                            src="{{asset('public/assets/front-end/img/wallet.jpg')}}" />
-                                        <p>
-                                            <strong>
-                                                {{ Helpers::translate('wallet') }}
-                                            </strong>
-                                        </p>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-                        @endif
-
-                        @php($config=\App\CPU\Helpers::get_business_settings('offline_payment'))
-                        @if(isset($config) && $config['status'])
-                        <div class="col-sm-4" id="cod-for-cart">
-                            <div class="card cursor-pointer">
-                                <div class="card-body __h-100px">
-                                    <form action="{{route('offline-payment-checkout-complete')}}" method="get"
-                                        class="needs-validation d-grid text-center">
-                                        <span class="btn btn-block click-if-alone grid justify-content-center pb-3" data-toggle="modal"
-                                            data-target="#offline_payment_submit_button">
-                                            <img width="150" class="__mt-n-10"
-                                                src="{{asset('public/assets/front-end/img/pay-offline.png')}}" />
-                                        </span>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-
-                        @php($coupon_discount = session()->has('coupon_discount') ? session('coupon_discount') : 0)
-                        @php($amount = \App\CPU\CartManager::cart_grand_total() - $coupon_discount)
-
-
-
-                        @if (($digital_payment['status'] ?? null)==1)
-
-                        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'ssl_commerz_payment'))
-                        @if(($config['status'] ?? null))
-                        <div class="col-md-6 mb-4" style="cursor: pointer">
-                            <div class="card">
-                                <div class="card-body min-h-40">
-                                    <form action="{{ url('/pay-ssl') }}" method="POST" class="needs-validation d-grid text-center">
-                                        <input type="hidden" value="{{ csrf_token() }}" name="_token" />
-                                        <button class="btn btn-block click-if-alone grid justify-content-center pb-3" type="submit">
-                                            <img width="150" src="{{asset('public/assets/front-end/img/sslcomz.png')}}" />
-                                            <p>
-                                                <strong>
-                                                    {{ Helpers::translate('sslcomz') }}
-                                                </strong>
-                                            </p>
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-                        </div>
-                        <div class="row">
-                            @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'paypal'))
-                            @if(($config['status'] ?? null))
-                            <div class="col-md-6 mb-4" style="cursor: pointer">
-                                <div class="card">
-                                    <div class="card-body min-h-40">
-                                        <form class="needs-validation d-grid text-center" method="POST" id="payment-form"
-                                            action="{{route('pay-paypal')}}">
-                                            {{ csrf_field() }}
-                                            <button class="btn btn-block click-if-alone grid justify-content-center pb-3" type="submit">
-                                                <img width="150" src="{{asset('public/assets/front-end/img/paypal.png')}}" />
-                                                <p>
-                                                    <strong>
-                                                        {{ Helpers::translate('paypal') }}
-                                                    </strong>
-                                                </p>
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                            @endif
-                        </div>
-                        @endif
+                        {{--@php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'fawry_pay'))
+                            @if(isset($config)  && ($config['status'] ?? null))
+                                <div class="col-md-6 mb-4" style="cursor: pointer">
+                                    <div class="card">
+                                        <div class="card-body" style="height: 175px">
+                                            <button class="btn btn-block" onclick="location.href='{{route('fawry')}}'"
+                        style="margin-top: -11px">
+                        <img width="150" src="{{asset('public/assets/front-end/img/fawry.svg')}}" />
+                        </button>
+                    </div>
                 </div>
-            </section>
+        </div>
+        @endif--}}
+
+        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'mercadopago'))
+        @if(isset($config) && ($config['status'] ?? null))
+        <div class="col-md-6 mb-4" style="cursor: pointer">
+            <div class="card">
+                <div class="card-body" style="height: 175px">
+                    <a class="btn btn-block click-if-alone d-block" href="{{route('mercadopago.index')}}">
+                        <img width="150" src="{{asset('public/assets/front-end/img/MercadoPago_(Horizontal).svg')}}" />
+                        <p>
+                            <strong>
+                                {{ Helpers::translate('mercadopago') }}
+                            </strong>
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'flutterwave'))
+        @if(isset($config) && ($config['status'] ?? null))
+        <div class="col-md-6 mb-4" style="cursor: pointer">
+            <div class="card">
+                <div class="card-body pt-2" style="height: 175px">
+                    <form method="POST" action="{{ route('flutterwave_pay') }}">
+                        {{ csrf_field() }}
+
+                        <button class="btn btn-block click-if-alone d-block" type="submit">
+                            <img width="200" src="{{asset('public/assets/front-end/img/fluterwave.png')}}" />
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'paytm'))
+        @if(isset($config) && ($config['status'] ?? null))
+        <div class="col-md-6 mb-4" style="cursor: pointer">
+            <div class="card">
+                <div class="card-body" style="height: 175px">
+                    <a class="btn btn-block click-if-alone d-block" href="{{route('paytm-payment')}}">
+                        <img style="max-width: 175px; margin-top: -10px"
+                            src="{{asset('public/assets/front-end/img/paytm.png')}}" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'liqpay'))
+        @if(isset($config) && ($config['status'] ?? null))
+        <div class="col-md-6 mb-4" style="cursor: pointer">
+            <div class="card">
+                <div class="card-body" style="height: 175px">
+                    <a class="btn btn-block click-if-alone d-block" href="{{route('liqpay-payment')}}">
+                        <img style="max-width: 175px; margin-top: 0px"
+                            src="{{asset('public/assets/front-end/img/liqpay4.png')}}" />
+                    </a>
+                </div>
+            </div>
+        </div>
+        @endif
+        {{--  </div>  --}}
+        @endif
+
+        {{--  <div class="row w-100 mx-0">  --}}
+        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'cash_on_delivery'))
+        @if(!$cod_not_show && ($config['status'] ?? null))
+        <div class="col-md-4 mb-4" id="cod-for-cart" style="cursor: pointer" onclick="$(this).find('.ok-b').slideToggle()">
+            <div class="card">
+                <div class="card-body" style="height: 175px">
+                    <form action="{{route('checkout-complete')}}" method="get"
+                        class="needs-validation d-grid text-center">
+                        <input type="hidden" name="payment_method" value="cash_on_delivery">
+                        <div class="btn btn-block click-if-alone d-block">
+                            <img width="120" style="margin-top: -10px"
+                                src="{{asset('public/assets/front-end/img/cod.png')}}" />
+                            <p>
+                                <strong>
+                                    {{ Helpers::translate('cash_on_delivery') }}
+                                </strong>
+                            </p>
+                        </div>
+                        <div class="p-0 m-0 w-100 ok-b" style="display: none">
+                            <button class="btn btn-success w-100" type="submit">Ok</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'delayed'))
+        @if(!$cod_not_show && ($config['status'] ?? null))
+        <div class="col-md-4 mb-4" id="cod-for-cart" style="cursor: pointer" onclick="$(this).find('.ok-b').slideToggle()">
+            <div class="card">
+                <div class="card-body" style="height: 175px">
+                    <form action="{{route('checkout-complete')}}" method="get"
+                        class="needs-validation d-grid text-center">
+                        <input type="hidden" name="payment_method" value="delayed">
+                        <div class="btn btn-block click-if-alone d-block">
+                            <img width="70" src="{{asset('public/assets/front-end/img/delayed.jpg')}}" />
+                            <p>
+                                <strong>
+                                    {{ Helpers::translate('delayed payment') }}
+                                </strong>
+                            </p>
+                        </div>
+                        <div class="p-0 m-0 w-100 ok-b" style="display: none">
+                            <button class="btn btn-success w-100" type="submit">Ok</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endif
+
+
+        @if (($digital_payment['status'] ?? null)==1)
+        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'customer_wallet')['wallet_status'])
+        @if($config==1)
+        <div class="col-md-4 mb-4" style="cursor: pointer">
+            <div class="card">
+                <div class="card-body d-grid text-center" style="height: 175px">
+                    <button class="btn btn-block click-if-alone d-block" type="submit" data-bs-toggle="modal"
+                        data-bs-target="#wallet_submit_button">
+
+                        <img width="50" style="margin-top: -10px"
+                            src="{{asset('public/assets/front-end/img/wallet.jpg')}}" />
+                        <p>
+                            <strong>
+                                {{ Helpers::translate('wallet') }}
+                            </strong>
+                        </p>
+                    </button>
+                </div>
+            </div>
+        </div>
+        @endif
+        @endif
+
+        @php($config=\App\CPU\Helpers::get_business_settings('offline_payment'))
+        @if(isset($config) && $config['status'])
+        <div class="col-sm-4" id="cod-for-cart">
+            <div class="card cursor-pointer">
+                <div class="card-body __h-100px">
+                    <form action="{{route('offline-payment-checkout-complete')}}" method="get"
+                        class="needs-validation d-grid text-center">
+                        <span class="btn btn-block click-if-alone d-block" data-bs-toggle="modal"
+                            data-bs-target="#offline_payment_submit_button">
+                            <img width="150" class="__mt-n-10"
+                                src="{{asset('public/assets/front-end/img/pay-offline.png')}}" />
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        @php($coupon_discount = session()->has('coupon_discount') ? session('coupon_discount') : 0)
+        @php($amount = \App\CPU\CartManager::cart_grand_total() - $coupon_discount)
+
+
+
+        @if (($digital_payment['status'] ?? null)==1)
+
+        @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'ssl_commerz_payment'))
+        @if(($config['status'] ?? null))
+        <div class="col-md-6 mb-4" style="cursor: pointer">
+            <div class="card">
+                <div class="card-body" style="height: 175px">
+                    <form action="{{ url('/pay-ssl') }}" method="POST" class="needs-validation d-grid text-center">
+                        <input type="hidden" value="{{ csrf_token() }}" name="_token" />
+                        <button class="btn btn-block click-if-alone d-block" type="submit">
+                            <img width="150" src="{{asset('public/assets/front-end/img/sslcomz.png')}}" />
+                            <p>
+                                <strong>
+                                    {{ Helpers::translate('sslcomz') }}
+                                </strong>
+                            </p>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        @endif
+        </div>
+        <div class="row">
+            @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'paypal'))
+            @if(($config['status'] ?? null))
+            <div class="col-md-6 mb-4" style="cursor: pointer">
+                <div class="card">
+                    <div class="card-body" style="height: 175px">
+                        <form class="needs-validation d-grid text-center" method="POST" id="payment-form"
+                            action="{{route('pay-paypal')}}">
+                            {{ csrf_field() }}
+                            <button class="btn btn-block click-if-alone d-block" type="submit">
+                                <img width="150" src="{{asset('public/assets/front-end/img/paypal.png')}}" />
+                                <p>
+                                    <strong>
+                                        {{ Helpers::translate('paypal') }}
+                                    </strong>
+                                </p>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
             @endif
+        </div>
+
+        @endif
+
+        </div>
+        <!-- Navigation (desktop)-->
+        </div>
+        </section>
 
 
         </div>
     </div>
 
-    <div class="modal fade rtl" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog  modal-lg" role="document" style="margin-top: 100px">
             <div class="modal-content">
@@ -879,7 +928,7 @@
                 <div class="modal-body">
                     <form action="{{route('address-store')}}" method="post">
                         @csrf
-                        @php($store = $customre->store_informations)
+                        @php($store = auth('customer')->user()->store_informations)
                         <!-- Tab panes -->
                         <div class="form-row mb-1">
                             <div class="form-group col-md-6">
@@ -891,7 +940,7 @@
                             <div class="form-group col-md-6">
                                 <label for="person_name">{{\App\CPU\Helpers::translate('contact_person_name')}}</label>
                                 <input class="form-control" type="text" id="person_name"
-                                    value="{{ $store['company_name'] ?? null }}"
+                                    value="{{ $store['company_name'] }}"
                                     name="name"
                                     required>
                             </div>
@@ -901,7 +950,7 @@
                                 <label for="exampleInputEmail1">{{ \App\CPU\Helpers::translate('The receiving person mobile number')}}
                                 <span
                                 style="color: red">*</span></label>
-                                <div class="form-group  w-full col-lg-12">
+                                <div class="form-group  w-100 col-lg-12">
                                     <input tabindex="3" name="phone" class="form-control phoneInput text-left" dir="ltr" value="{{ $store['phone'] ?? '+966'}}" />
                                 </div>
                             </div>
@@ -913,11 +962,11 @@
                                         for="exampleInputEmail1">{{ \App\CPU\Helpers::translate('Country')}}
                                         <span
                                             style="color: red">*</span></label>
-                                    <select name="country" id="" class="form-control SumoSelect-custom" data-live-search="true" required
+                                    <select name="country" id="" class="form-control SumoSelect-custom" data-bs-live-search="true" required
                                     onchange="$('#area_id').attr('disabled',1);$('#area_id_loading').show();$.get('{{route('get-shipping-areas')}}?code='+$(this).val()).then(d=>{$('#area_id,.area_id').html(d);$('#area_id,.area_id').removeAttr('disabled');$('#area_id_loading').hide();$('#area_id').SumoSelect().sumo.reload()})">
-                                        <option disabled selected></option>
+                                        <option></option>
                                         @foreach (\App\CPU\Helpers::getCountries() as $country)
-                                            <option @if(($store['country'] ?? null) == $country['id'])  @endif value="{{ $country->code }}" icon="{{ $country->photo }}">
+                                            <option @if($store['country'] == $country['id']) selected @endif value="{{ $country->code }}" icon="{{ $country->photo }}">
                                                 {{ \App\CPU\Helpers::getItemName('countries','name',$country->id) }}
                                             </option>
                                         @endforeach
@@ -930,7 +979,7 @@
                                     <label
                                         for="exampleInputEmail1">{{ \App\CPU\Helpers::translate('Governorate')}}
                                         <span style="color: red">*</span></label>
-                                    <select name="area_id" id="area_id" class="form-control SumoSelect-custom" data-live-search="true" required></select>
+                                    <select name="area_id" id="area_id" class="form-control SumoSelect-custom" data-bs-live-search="true" required></select>
                                     <span class="text-warning" id="area_id_loading" style="display: none;">{{ Helpers::translate('Please wait') }}</span>
                                     <input type="hidden" id="area_id_hidden" >
                                 </div>
@@ -938,7 +987,15 @@
 
                             <div class="form-group col-md-6">
                                 <label for="zip_code">{{\App\CPU\Helpers::translate('zip_code')}}</label>
-                                <input class="form-control" type="text" pattern="\d*" t="number" id="zip_code" name="zip" required>
+                                @if($zip_restrict_status)
+                                    <select name="zip" class="form-control selectpicker" data-bs-live-search="true" id="" required>
+                                        @foreach($delivery_zipcodes ?? [] as $zip)
+                                            <option value="{{ $zip->zipcode }}" >{{ $zip->zipcode }}</option>
+                                        @endforeach
+                                    </select>
+                                @else
+                                    <input class="form-control" type="number" id="zip_code" name="zip" required>
+                                @endif
                             </div>
                             <div class="col-md-6">
 
@@ -954,10 +1011,23 @@
                             </div>
 
                         </div>
-                        <div class="modal-footer">
-                            <a type="button" class="btn btn-secondary" data-dismiss="modal">{{\App\CPU\Helpers::translate('close')}}</a>
-                            <button type="submit" class="btn bg-primaryColor text-light">{{\App\CPU\Helpers::translate('Add')}}</button>
+                        @if(1==2)
+                        <div class="form-row mb-1">
+                            <div class="form-group col-md-12">
+                                <label for="own_address">{{\App\CPU\Helpers::translate('address')}}</label>
+                                <textarea class="form-control" id="address"
+                                    type="text"  name="address" required>{{$shippingAddress->address}}</textarea>
+                            </div>
+                            <div class="form-group col-md-12">
+                                <input id="pac-input" class="controls rounded" style="height: 3em;width:fit-content;" title="{{\App\CPU\Helpers::translate('search_your_location_here')}}" type="text" placeholder="{{\App\CPU\Helpers::translate('search_here')}}"/>
+                                <div style="height: 200px;" id="location_map_canvas"></div>
+                            </div>
                         </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{\App\CPU\Helpers::translate('close')}}</button>
+                            <button type="submit" class="btn btn--primary text-light">{{\App\CPU\Helpers::translate('Add')}}</button>
+                        </div>
+                        @endif
                     </form>
                 </div>
             </div>
@@ -971,7 +1041,7 @@
             <div class="modal-header">
               <h5 class="modal-title" id="exampleModalLongTitle">{{\App\CPU\Helpers::translate('wallet_payment')}}</h5>
             </div>
-            @php($customer_balance = $customre->wallet_balance)
+            @php($customer_balance = auth('customer')->user()->wallet_balance)
             @php($remain_balance = $customer_balance - $amount)
             <form action="{{route('checkout-complete-wallet')}}" method="get" class="needs-validation d-grid text-center">
                 @csrf
@@ -1001,8 +1071,8 @@
 
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">{{\App\CPU\Helpers::translate('close')}}</button>
-                <button type="submit" onclick="alert_wait()" class="btn bg-primaryColor btn-primary bg-primaryColor" {{$remain_balance>0? '':'disabled'}}>{{\App\CPU\Helpers::translate('submit')}}</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{\App\CPU\Helpers::translate('close')}}</button>
+                <button type="submit" onclick="alert_wait()" class="btn btn--primary btn-primary" {{$remain_balance>0? '':'disabled'}}>{{\App\CPU\Helpers::translate('submit')}}</button>
                 </div>
             </form>
           </div>
@@ -1012,10 +1082,6 @@
 
 @push('script')
     <script>
-        $(document).ready(function(){
-            $(".address-item.selected")
-        })
-
         function anotherAddress() {
             $('#sh-0').prop('checked', true);
             //$("#collapseThree").collapse();
@@ -1043,14 +1109,14 @@
     <script>
         function initAutocomplete() {
             var myLatLng = {
-                lat: {{$default_location?($default_location['lat'] ?? '-33.8688'):'-33.8688'}},
-                lng: {{$default_location?($default_location['lng'] ?? '151.2195'):'151.2195'}}
+                lat: {{$default_location?$default_location['lat']:'-33.8688'}},
+                lng: {{$default_location?$default_location['lng']:'151.2195'}}
             };
 
             const map = new google.maps.Map(document.getElementById("location_map_canvas"), {
                 center: {
-                    lat: {{$default_location?($default_location['lat'] ?? '-33.8688'):'-33.8688' ?? '-33.8688'}},
-                    lng: {{$default_location?($default_location['lng'] ?? '151.2195'):'151.2195' ?? '151.2195'}}
+                    lat: {{$default_location?$default_location['lat']:'-33.8688'}},
+                    lng: {{$default_location?$default_location['lng']:'151.2195'}}
                 },
                 zoom: 13,
                 mapTypeId: "roadmap",
@@ -1153,14 +1219,14 @@
     <script>
         function initAutocompleteBilling() {
             var myLatLng = {
-                lat: {{$default_location?($default_location['lat'] ?? '-33.8688'):'-33.8688'}},
-                lng: {{$default_location?($default_location['lng'] ?? '151.2195'):'151.2195'}}
+                lat: {{$default_location?$default_location['lat']:'-33.8688'}},
+                lng: {{$default_location?$default_location['lng']:'151.2195'}}
             };
 
             const map = new google.maps.Map(document.getElementById("location_map_canvas_billing"), {
                 center: {
-                    lat: {{$default_location?($default_location['lat'] ?? '-33.8688'):'-33.8688'}},
-                    lng: {{$default_location?($default_location['lng'] ?? '151.2195'):'151.2195'}}
+                    lat: {{$default_location?$default_location['lat']:'-33.8688'}},
+                    lng: {{$default_location?$default_location['lng']:'151.2195'}}
                 },
                 zoom: 13,
                 mapTypeId: "roadmap",
@@ -1350,111 +1416,3 @@
         getShippingAreas($("#country_select").val());
     </script>
 @endpush
-
-
-{{--    --}}
-@push('script')
-    <script>
-        setTimeout(function () {
-            $('.stripe-button-el').hide();
-            $('.razorpay-payment-button').hide();
-        }, 10)
-        $(function() {
-            $('.proceed_to_next_button').addClass('disabled');
-        });
-        const radioButtons = document.querySelectorAll('input[type="radio"]');
-        radioButtons.forEach(radioButton => {
-            radioButton.addEventListener('change', function() {
-                if (this.checked) {
-                    $('.proceed_to_next_button').removeClass('disabled');
-
-                    radioButtons.forEach(otherRadioButton => {
-                        if (otherRadioButton !== this) {
-                            otherRadioButton.checked = false;
-                        }
-                    });
-                    this.setAttribute('checked', 'true');
-                    const field_id = this.id;
-                    if(field_id == "pay_offline"){
-                        $('.pay_offline_card').removeClass('d-none')
-                        $('.proceed_to_next_button').addClass('disabled');
-
-                    }else{
-                        $('.pay_offline_card').addClass('d-none');
-                        $('.proceed_to_next_button').removeClass('disabled');
-
-                    }
-                }else{
-                }
-            });
-        });
-        function checkout(){
-            let checked_button_id = $('input[type="radio"]:checked').attr('id');
-            $('#' + checked_button_id + '_form').submit();
-        }
-
-    </script>
-
-    <script>
-        /* select pay offlline */
-        const buttons = document.querySelectorAll('.offline_payment_button');
-        const selectElement = document.getElementById('pay_offline_method');
-        buttons.forEach(button => {
-            button.addEventListener('click', function() {
-                const buttonId = this.id;
-                pay_offline_method_field(buttonId);
-                selectElement.value = buttonId;
-            });
-        });
-
-        $('#pay_offline_method').on('change', function () {
-            pay_offline_method_field(this.value);
-        });
-        function pay_offline_method_field(method_id){
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: "{{route('pay-offline-method-list')}}" + "?method_id=" + method_id,
-                data: {},
-                processData: false,
-                contentType: false,
-                type: 'get',
-                success: function (response) {
-                    $("#payement_method_field").html(response.methodHtml);
-                    $('#selectPaymentMethod').modal().show();
-                },
-                error: function () {
-
-                }
-            });
-        }
-
-        function ajsub(e)
-        {
-            alert_wait()
-            e.preventDefault()
-            var ths = $(e.target)
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            });
-            $.ajax({
-                type: "post",
-                url: "{{ route('customer.web-payment-request') }}",
-                data: ths.serialize(),
-                success: function (response){
-                    //location.replace(response)
-                    ths.closest('.card').find('.ok-b').html(response);
-                    Swal.close()
-                }
-            })
-        }
-    </script>
-
-@endpush
-{{--    --}}

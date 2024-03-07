@@ -107,7 +107,7 @@
         .namHad {
             color: #030303;
             position: absolute;
-            padding-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}: 13px;
+            padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 13px;
             padding-top: 8px;
         }
 
@@ -119,7 +119,7 @@
 
         .donate-now li {
             float: left;
-            margin: {{(Session::get('direction') ?? 'rtl') === "rtl" ? '0 0 0 5px' : '0 5px 0 0'}};
+            margin: {{Session::get('direction') === "rtl" ? '0 0 0 5px' : '0 5px 0 0'}};
             width: 100px;
             height: 40px;
             position: relative;
@@ -195,12 +195,12 @@
                 font-size: 19px;
             }
         }
-        #location_map_canvas,.location_map_canvas{
+        #location_map_canvas{
             height: 100%;
         }
         @media only screen and (max-width: 768px) {
             /* For mobile phones: */
-            #location_map_canvas,.location_map_canvas{
+            #location_map_canvas{
                 height: 200px;
             }
         }
@@ -208,7 +208,7 @@
 @endpush
 
 @section('content')
-<div class="container pb-5 mb-2 mb-md-4 mt-3 rtl" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+<div class="container pb-5 mb-2 mb-md-4 mt-3 rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
     <div class="row">
         <!-- Sidebar-->
     <section class="col-lg-12 mt-3 col-md-12">
@@ -249,7 +249,7 @@
                                     <label for="exampleInputEmail1">{{ \App\CPU\Helpers::translate('The receiving person mobile number')}}
                                     <span
                                     style="color: red">*</span></label>
-                                    <div class="form-group  w-full col-lg-12">
+                                    <div class="form-group  w-100 col-lg-12">
                                         <input tabindex="3" name="phone" class="form-control phoneInput text-left" dir="ltr" value="{{$shippingAddress->phone ?? '+966'}}" />
                                     </div>
                                 </div>
@@ -278,15 +278,7 @@
                                         <label
                                             for="exampleInputEmail1">{{ \App\CPU\Helpers::translate('Governorate')}}
                                             <span style="color: red">*</span></label>
-                                        <select name="area_id" id="area_id" class="form-control SumoSelect-custom" data-bs-live-search="true" required>
-                                            @if($shippingAddress->country == "SA")
-                                            @foreach(Helpers::get_sa_areas() as $key => $area)
-                                                <option value="{{ $area->id }}" @if($area->id == $shippingAddress->area_id) selected @endif>
-                                                    {{ Helpers::translate($area->name) }}
-                                                </option>
-                                            @endforeach
-                                            @endif
-                                        </select>
+                                        <select name="area_id" id="area_id" class="form-control SumoSelect-custom" data-bs-live-search="true" required></select>
                                         <span class="text-warning" id="area_id_loading" style="display: none;">{{ Helpers::translate('Please wait') }}</span>
                                         <input type="hidden" id="area_id_hidden" value="{{$shippingAddress->area_id ?? '0'}}">
                                     </div>
@@ -301,7 +293,7 @@
                                             @endforeach
                                         </select>
                                     @else
-                                        <input class="form-control" type="text" pattern="\d*" t="number" id="zip_code" name="zip" value="{{$shippingAddress->zip}}" required>
+                                        <input class="form-control" type="number" id="zip_code" name="zip" value="{{$shippingAddress->zip}}" required>
                                     @endif
                                 </div>
 
@@ -318,7 +310,7 @@
                                     <div class="form-group">
                                         <label for="a25" class="form-control mt-5">
                                             <div>
-                                                <div class="form-check" style="padding-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}: 1.25rem;">
+                                                <div class="form-check" style="padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 1.25rem;">
                                                     <input type="checkbox" class="address_type" id="a25" name="addressAs" value="permanent" {{ $shippingAddress->address_type == 'permanent' ? 'checked' : ''}} />
                                                     {{\App\CPU\Helpers::translate('permanent')}}
                                                 </div>
@@ -349,7 +341,8 @@
                                 name="longitude" class="form-control"
                                 placeholder="Ex : 103.344322" id="longitude" value="{{$shipping_longitude??0}}" required readonly>
                             <div class="modal-footer">
-                                <button type="submit" class="btn bg-primaryColor text-light">{{\App\CPU\Helpers::translate('update')}}  </button>
+                                <a href="{{ route('account-address') }}" class="closeB btn btn-secondary">{{\App\CPU\Helpers::translate('close')}}</a>
+                                <button type="submit" class="btn btn--primary text-light">{{\App\CPU\Helpers::translate('update')}}  </button>
                             </div>
                         </form>
                     </div>

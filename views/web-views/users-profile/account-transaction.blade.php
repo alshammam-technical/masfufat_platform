@@ -53,7 +53,7 @@
         }
 
         .tdBorder {
-            border-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}: 1px solid #f7f0f0;
+            border-{{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 1px solid #f7f0f0;
             text-align: center;
         }
 
@@ -72,7 +72,7 @@
         }
 
         .marl {
-            margin-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}: 7px;
+            margin-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 7px;
         }
 
         tr td{
@@ -99,16 +99,16 @@
 @endpush
 
 @section('content')
-    <div class="container rtl" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+    <div class="container rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row">
             <div class="col-md-3"></div>
             <div class="col-md-9 sidebar_heading">
-                <h1 class="h3  mb-0 float-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}} headerTitle">{{\App\CPU\Helpers::translate('purchase_statement')}}</h1>
+                <h1 class="h3  mb-0 float-{{Session::get('direction') === "rtl" ? 'right' : 'left'}} headerTitle">{{\App\CPU\Helpers::translate('purchase_statement')}}</h1>
             </div>
         </div>
     </div>
     <!-- Page Content-->
-    <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+    <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row">
             <!-- Sidebar-->
 
@@ -123,7 +123,7 @@
                                 <div class="py-2"><span class="d-block spandHeadO ">{{\App\CPU\Helpers::translate('Tranx ID')}}</span></div>
                             </td>
                             <td class="tdBorder">
-                                <div class="py-2 {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'mr-2' : 'ml-2'}}"><span class="d-block spandHeadO ">{{\App\CPU\Helpers::translate('payment_method')}}</span></div>
+                                <div class="py-2 {{Session::get('direction') === "rtl" ? 'mr-2' : 'ml-2'}}"><span class="d-block spandHeadO ">{{\App\CPU\Helpers::translate('payment_method')}}</span></div>
                             </td>
                             <td class="tdBorder">
                                 <div class="py-2"><span class="d-block spandHeadO">{{\App\CPU\Helpers::translate('Status')}} </span></div>

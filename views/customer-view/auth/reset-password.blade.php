@@ -55,7 +55,7 @@
                                 </div>
                             </div>
 
-                        <button class="btn bg-primaryColor btn-primary bg-primaryColor" type="submit">{{\App\CPU\Helpers::translate('Reset password')}}</button>
+                        <button class="btn btn--primary btn-primary" type="submit">{{\App\CPU\Helpers::translate('Reset password')}}</button>
                     </form>
                 </div>
             </div>

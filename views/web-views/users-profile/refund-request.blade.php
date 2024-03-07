@@ -9,10 +9,11 @@
 @endpush
 
 @section('content')
-<div class="container rtl" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+<div class="container rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
     <div class="row">
+        <div class="col-md-3"></div>
         <div class="col-md-9 sidebar_heading">
-            <h1 class="h3  mb-0 float-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}} headerTitle">
+            <h1 class="h3  mb-0 float-{{Session::get('direction') === "rtl" ? 'right' : 'left'}} headerTitle">
                 {{\App\CPU\Helpers::translate('refund_request')}}
             </h1>
         </div>
@@ -21,7 +22,7 @@
 
 <!-- Page Content-->
 <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl"
-     style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+     style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
     <div class="row">
         <!-- Sidebar-->
     <!-- Content  -->
@@ -37,7 +38,7 @@
                                 <div class="col-3 col-sm-2">
                                     <img class="d-block"
                                         onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
-                                        src="{{ Helpers::getImg('storage/app/public/product/'.$current_lang.'/'.(isset(json_decode($product['images'])->$current_lang) ? json_decode($product['images'])->$current_lang[0] ?? '' : ''),'241.625','241.625') }}"
+                                        src="{{asset("storage/app/public/product/$current_lang")}}/{{(isset(json_decode($product['images'])->$current_lang)) ? json_decode($product['images'])->$current_lang[0] ?? '' : ''}}"
                                         alt="VR Collection" width="60">
                                 </div>
                                 <div class="col-9 col-sm-7 text-left">
@@ -97,7 +98,7 @@
                                         </div>
 
                                     </div>
-                                    <button type="submit" class="btn bg-primaryColor text-light">{{\App\CPU\Helpers::translate('submit')}}</button>
+                                    <button type="submit" class="btn btn--primary text-light">{{\App\CPU\Helpers::translate('submit')}}</button>
 
                                 </form>
                             </div>

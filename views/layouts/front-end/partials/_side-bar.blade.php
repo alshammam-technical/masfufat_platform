@@ -1,69 +1,61 @@
 
-<div id="mySidebar" class="sidebar block sm:block sm:w-20 w-0" onmouseover="toggleSidebar(true)" onmouseout="toggleSidebar(false)">
+<div id="mySidebar" class="sidebar" onmouseover="toggleSidebar()" onmouseout="toggleSidebar()">
         <div class="navbar-vertical-container">
             <div class="navbar-vertical-footer-offset pb-0">
                 <!-- Content -->
                 <div class="navbar-vertical-content" style="background-color:black;">
 
-                    <ul class="navbar-nav" dir="{{Session::get('direction')}}" style="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'padding-right: 0px' : ''}}">
-                        @php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
-                        @php($user = \App\User::find($storeId))
-                        @if($user->is_active)
-                        @if (\App\CPU\Helpers::store_module_permission_check('store.home.view'))
-                        <a href="{{route('home')}}" class="{{ (Route::is('home')) ? ' active bg-black sm:bg-white ' : '' }}">
+                    <ul class="navbar-nav" dir="{{Session::get('direction')}}" style="{{Session::get('direction') === "rtl" ? 'padding-right: 0px' : ''}}">
+                        @if(auth('customer')->user()->is_active)
+
+                        <a href="{{route('home')}}" class="{{ (Route::is('home')) ? ' active ' : '' }}">
                             <span>
                                 <i style="min-width: 50px;display:inline-block" class="ri-home-5-fill"></i>
                                 <span class="icon-text">{{ \App\CPU\Helpers::translate('Home') }}</span>
                             </span>
                         </a><br />
-                        @endif
-                        @if (\App\CPU\Helpers::store_module_permission_check('store.products.view'))
-                        <a href="{{route('products',['data_from' => 'latest'])}}" class="{{ (Route::is('products')) ? ' active bg-black sm:bg-white ' : '' }}">
+
+                        <a href="{{route('products',['data_from' => 'latest'])}}" class="{{ (Route::is('products')) ? ' active ' : '' }}">
                             <span>
                                 <i style="min-width: 50px;display:inline-block" class="ri-box-3-fill"></i>
                                 <span class="icon-text">{{ \App\CPU\Helpers::translate('products') }}</span>
                             </span>
                         </a><br />
-                        @endif
-                        @if (\App\CPU\Helpers::store_module_permission_check('My_Shop.products.pending.view') || \App\CPU\Helpers::store_module_permission_check('My_Shop.products.sync.view') || \App\CPU\Helpers::store_module_permission_check('My_Shop.products.deleted.view'))
-                        <a href="{{route('linked-products-get')}}" class="{{ (Route::is('linked-products*')) ? ' active bg-black sm:bg-white ' : '' }}">
+
+                        <a href="{{route('linked-products-get')}}" class="{{ (Route::is('linked-products*')) ? ' active ' : '' }}">
                             <span>
                                 <i style="min-width: 50px;display:inline-block" class="fa fa-store"></i>
                                 <span class="icon-text">{{ \App\CPU\Helpers::translate('List of my products synced with my store')}}</span>
                             </span>
                         </a><br />
-                        @endif
-                        @if (\App\CPU\Helpers::store_module_permission_check('store.sellers.view'))
+
                         @php($business_mode=\App\CPU\Helpers::get_business_settings('business_mode'))
                         @if ($business_mode == 'multi' && (\App\Model\BusinessSetting::where('type','show_sellers_section')->first()->value ?? ''))
-                        <a href="{{route('sellers')}}" class="{{ (Route::is('sellers')) ? ' active bg-black sm:bg-white ' : '' }}">
+                        <a href="{{route('sellers')}}" class="{{ (Route::is('sellers')) ? ' active ' : '' }}">
                             <span>
                                 <i style="min-width: 50px;display:inline-block" class="fa fa-users"></i>
                                 <span class="icon-text">{{ \App\CPU\Helpers::translate('Sellers')}}</span>
                             </span>
                         </a><br />
                         @endif
-                        @endif
 
-                        @if (\App\CPU\Helpers::store_module_permission_check('order.sync.view') || \App\CPU\Helpers::store_module_permission_check('order.direct.view'))
-                        <a href="{{route('orders')}}" class="{{ (Route::is('orders')) ? ' active bg-black sm:bg-white ' : '' }}">
+
+                        <a href="{{route('orders')}}" class="{{ (Route::is('orders')) ? ' active ' : '' }}">
                             <span>
                                 <i style="min-width: 50px;display:inline-block" class="czi-basket"></i>
                                 <span class="icon-text">{{ \App\CPU\Helpers::translate('Orders')}}</span>
                             </span>
                         </a><br />
-                        @endif
 
                         @endif
-                        @if(\App\CPU\Helpers::store_module_permission_check('my_account.data.view') || \App\CPU\Helpers::store_module_permission_check('my_account.employees.view') || \App\CPU\Helpers::store_module_permission_check('my_account.my_wallet.view') || \App\CPU\Helpers::store_module_permission_check('my_account.my_loyalty_point.view') || \App\CPU\Helpers::store_module_permission_check('my_account.wish_list.view') || \App\CPU\Helpers::store_module_permission_check('my_account.support_ticket.view') || \App\CPU\Helpers::store_module_permission_check('my_account.chat_with_seller.view') || \App\CPU\Helpers::store_module_permission_check('my_account.chat_with_delivery_man.view') || \App\CPU\Helpers::store_module_permission_check('my_account.linking_store_API.view') || \App\CPU\Helpers::store_module_permission_check('my_account.subscriptions.view'))
-                        <a href="#" class="{{ (Route::is('user-account')) ? ' active bg-black sm:bg-white ' : '' }}" onclick="toggleHelpCenterLinkStyle(); $('#user-settings-menu').slideToggle()">
+
+                        <a href="#" class="{{ (Route::is('user-account')) ? ' active ' : '' }}" onclick="$('#user-settings-menu').slideToggle()">
                             <span>
                                 <i style="min-width: 50px;display:inline-block" class="fa fa-user"></i>
                                 <span class="icon-text">{{ \App\CPU\Helpers::translate('my account settings') }}</span>
                             </span>
                         </a><br />
                         <ul id="user-settings-menu" class="ms-5" style="display: {{ (Route::is('user-account')) ? 'block' : 'none' }}">
-                            @if (\App\CPU\Helpers::store_module_permission_check('my_account.data.view'))
                             <li>
                                 <a class="{{Request::is('user-account*')?'active-menu':''}} pt-0 mt-0"
                                     href="{{route('user-account')}}">
@@ -72,18 +64,6 @@
                                     </span>
                                 </a>
                             </li>
-                            @endif
-                            @if (\App\CPU\Helpers::store_module_permission_check('my_account.employees.view'))
-                            <li>
-                                <a class="{{Request::is('delegates*')?'active-menu':''}}"
-                                    href="{{route('delegates.list')}}">
-                                    <span style="font-size: 16px">
-                                        {{ \App\CPU\Helpers::translate('Employees') }}
-                                    </span>
-                                </a>
-                            </li>
-                            @endif
-                            {{--  @if (\App\CPU\Helpers::store_module_permission_check('my_account.my_wallet.view'))
                             <li>
                                 <a class="{{Request::is('wallet*') ? 'active-menu' :''}}"
                                     href="{{route('wallet') }} ">
@@ -92,8 +72,6 @@
                                     </span>
                                 </a>
                             </li>
-                            @endif  --}}
-                            @if (Helpers::get_business_settings('loyalty_point_status') && Helpers::store_module_permission_check('my_account.my_loyalty_point.view'))
                             <li>
                                 <a class="{{Request::is('wallet*') ? 'active-menu' :''}}"
                                     href="{{route('loyalty') }} ">
@@ -102,8 +80,6 @@
                                     </span>
                                 </a>
                             </li>
-                            @endif
-                            {{--  @if (\App\CPU\Helpers::store_module_permission_check('my_account.wish_list.view'))
                             <li>
                                 <a class="{{Request::is('wishlists*') ? 'active-menu' :''}}"
                                     href="{{route('wishlists') }} ">
@@ -112,8 +88,6 @@
                                     </span>
                                 </a>
                             </li>
-                            @endif  --}}
-                            @if (\App\CPU\Helpers::store_module_permission_check('my_account.support_ticket.view'))
                             <li>
                                 <a class="{{Request::is('account-tickets*') ? 'active-menu' :''}}"
                                     href="{{route('account-tickets') }} ">
@@ -122,9 +96,6 @@
                                     </span>
                                 </a>
                             </li>
-                            @endif
-                            @if (\App\CPU\Helpers::store_module_permission_check('my_account.chat_with_seller.view'))
-                            @if(Helpers::get_business_settings('chat_with_seller_status'))
                             <li>
                                 <a class="{{Request::is('chat/seller*') ? 'active-menu' :''}}"
                                     href="{{route('chat',['type'=>'seller'])}}">
@@ -133,10 +104,6 @@
                                     </span>
                                 </a>
                             </li>
-                            @endif
-                            @endif
-                            @if (\App\CPU\Helpers::store_module_permission_check('my_account.chat_with_delivery_man.view'))
-                            @if(Helpers::get_business_settings('chat_with_delivery_status'))
                             <li>
                                 <a class="{{Request::is('/chat/delivery-man*') ? 'active-menu' :''}}"
                                     href="{{route('chat',['type'=>'delivery-man'])}}">
@@ -145,9 +112,6 @@
                                     </span>
                                 </a>
                             </li>
-                            @endif
-                            @endif
-                            @if (\App\CPU\Helpers::store_module_permission_check('my_account.linking_store_API.view'))
                             <li>
                                 <a class="{{Request::is('linked-accounts') ? 'active-menu' :''}}"
                                     href="{{route('linked-accounts')}}">
@@ -156,8 +120,6 @@
                                     </span>
                                 </a>
                             </li>
-                            @endif
-                            @if (\App\CPU\Helpers::store_module_permission_check('my_account.subscriptions.view'))
                             <li>
                                 <a class="{{Request::is('linked-accounts') ? 'active-menu' :''}}" href="{{route('subscriptions')}}">
                                     <span style="font-size: 16px">
@@ -165,23 +127,16 @@
                                     </span>
                                 </a>
                             </li>
-                            @endif
                         </ul>
-                        @endif
-                        @if (\App\CPU\Helpers::store_module_permission_check('store.home.show_education'))
-                        <a href="{{route('education.home')}}" class="{{ (Route::is('education')) ? ' active bg-black sm:bg-white ' : '' }}" id="helpCenterLink" style="bottom: 30px;position: absolute;">
-                            <span>
-                                <i style="min-width: 50px;display:inline-block" class="fa fa-question"></i>
-                                <span class="icon-text">{{ \App\CPU\Helpers::translate('Help Center') }}</span>
-                            </span>
-                        </a>
 
                     </ul>
-                    @endif
                 </div>
                 <!-- End Content -->
             </div>
         </div>
+    <div hidden id="headerMain"></div>
+    <div hidden id="headerFluid"></div>
+    <div hidden id="headerDouble"></div>
 </div>
 
 @push('script')
@@ -189,9 +144,9 @@
         function HSDemo() {
 
             var settings = {
-              //headerMain: document.getElementById("headerMain").innerHTML,
-              //headerFluid: document.getElementById("headerFluid").innerHTML,
-              //headerDouble: document.getElementById("headerDouble").innerHTML,
+              headerMain: document.getElementById("headerMain").innerHTML,
+              headerFluid: document.getElementById("headerFluid").innerHTML,
+              headerDouble: document.getElementById("headerDouble").innerHTML,
               //sidebarMain: document.getElementById("sidebarMain").innerHTML,
             }
 
@@ -209,9 +164,7 @@
               headerMode = window.localStorage.getItem('hs-builder-header-mode') === null ? 'false' : window.localStorage.getItem('hs-builder-header-mode');
 
             var appendLayout = function appendLayout(str) {
-                if(typeof str !== 'undefined' && str){
-                    body.insertAdjacentHTML('afterbegin', str);
-                }
+              body.insertAdjacentHTML('afterbegin', str);
             };
 
             function addContainer() {
@@ -226,9 +179,7 @@
 
             if (headerMode == 'false') {
               if (!sidebarMode || sidebarMode === 'default') {
-                if(typeof settings.sidebarMain !== 'undefined' && settings.sidebarMain){
-                    appendLayout(settings.sidebarMain);
-                }
+                appendLayout(settings.sidebarMain);
               } else if (sidebarMode === 'navbar-vertical-aside-compact-mode') {
                 appendLayout(settings.sidebarCompact);
                 document.body.className += ' navbar-vertical-aside-compact-mode navbar-vertical-aside-compact-mini-mode';
@@ -269,7 +220,7 @@
               body.classList.add('footer-offset');
               var _header2 = document.getElementsByClassName('navbar')[0],
                 fisrtElement = _header2.firstElementChild;
-              fisrtElement.innerHTML = '<div class="navbar-dark w-full"> <div class="container">' + fisrtElement.firstElementChild.innerHTML + '</div> </div>';
+              fisrtElement.innerHTML = '<div class="navbar-dark w-100"> <div class="container">' + fisrtElement.firstElementChild.innerHTML + '</div> </div>';
               _header2.innerHTML = fisrtElement.innerHTML + ' <div class="container">' + _header2.lastElementChild.innerHTML + '</div>';
               addContainer();
 
@@ -408,9 +359,9 @@
               });
             });
 
-            //document.getElementById("headerMain").parentNode.removeChild(document.getElementById("headerMain"));
-            //document.getElementById("headerFluid").parentNode.removeChild(document.getElementById("headerFluid"));
-            //document.getElementById("headerDouble").parentNode.removeChild(document.getElementById("headerDouble"));
+            document.getElementById("headerMain").parentNode.removeChild(document.getElementById("headerMain"));
+            document.getElementById("headerFluid").parentNode.removeChild(document.getElementById("headerFluid"));
+            document.getElementById("headerDouble").parentNode.removeChild(document.getElementById("headerDouble"));
             //document.getElementById("sidebarMain").parentNode.removeChild(document.getElementById("sidebarMain"));
           }
 
@@ -442,22 +393,6 @@
             }).hide();
         });
     </script>
-    <script>
-        function toggleHelpCenterLinkStyle() {
-            var $helpCenterLink = $('#helpCenterLink');
-            var isMenuOpen = $('#user-settings-menu').is(':visible');
-            if (isMenuOpen) {
-                // إذا كانت القائمة مفتوحة، إزالة الستايل
-                $helpCenterLink.attr('style', 'bottom: 30px; position: absolute;');
-            } else {
-                $helpCenterLink.removeAttr('style');
-                // إذا كانت القائمة مغلقة، إعادة تطبيق الستايل
-
-            }
-        }
-        </script>
-
-
 @endpush
 
 

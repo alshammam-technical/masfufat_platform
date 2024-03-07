@@ -38,7 +38,7 @@
 @endpush
 @section('content')
     <div class="container py-4 py-lg-5 my-4"
-         style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card border-1 box-shadow-0">
@@ -51,9 +51,9 @@
                             <div class="form-group">
                                 <p for="si-email" class="my-4 font-weight-bold text-grey">{{\App\CPU\Helpers::translate('Please enter the login code that sent to you')}}</p>
                                 <p for="si-email" class="mt-4 font-weight-bold text-dark">{{\App\CPU\Helpers::translate('Login code')}}</p>
-                                <div class="w-full text-center justify-content-center d-flex">
+                                <div class="w-100 text-center justify-content-center d-flex">
                                     <input class="form-control w-75" type="text" name="login_code" id="si-email"
-                                    style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};"
+                                    style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};"
                                     value="{{old('user_id')}}"
                                     required>
                                 </div>
@@ -62,19 +62,17 @@
 
                                 </div>
                             </div>
-                            <input type="hidden" name="phone" value="{{ request('phone') }}" />
-                            <button class="btn bg-primaryColor btn-primary btn-block w-full" type="submit">{{\App\CPU\Helpers::translate('sign_in')}}</button>
+                            <button class="btn btn--primary btn-primary btn-block w-100" type="submit">{{\App\CPU\Helpers::translate('sign_in')}}</button>
                         </form>
                     </div>
                     <form class="needs-validation mt-0" autocomplete="off" action="{{route('customer.auth.phone')}}" method="post" id="form-id">
                         @csrf
                         <input hidden class="d-none" dir="ltr" type="text" name="phone" id="si-email"
-                        style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};"
+                        style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};"
                         value="{{'+'.request()->get('phone')}}"
                         placeholder="{{\App\CPU\Helpers::translate('Please enter your phone number')}}"
                         required>
-                        <input type="hidden" name="phone" value="{{ request('phone') }}" />
-                        <button class="btn btn-white py-0 btn-block w-full border-0 text-primary font-weight-bold" type="submit">{{\App\CPU\Helpers::translate('resend the code')}}</button>
+                        <button class="btn btn-white py-0 btn-block w-100 border-0 text-primary font-weight-bold" type="submit">{{\App\CPU\Helpers::translate('resend the code')}}</button>
                     </form>
                 </div>
             </div>
@@ -83,16 +81,16 @@
 @endsection
 
 @push('script')
-    <script>
-        $(document).ready(function(){
-            $("#footer1").insertAfter("#content");
-            setTimeout(function(){
-                $("#footer1").css("position","absolute");
-            },1000)
-        })
-    </script>
+
     {{-- recaptcha scripts start --}}
     @if(1 == 1)
+        <script type="text/javascript">
+            var onloadCallback = function () {
+                grecaptcha.render('recaptcha_element', {
+                    'sitekey': '{{ \App\CPU\Helpers::get_business_settings('recaptcha')['site_key'] }}'
+                });
+            };
+        </script>
         <script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async
                 defer></script>
         <script>

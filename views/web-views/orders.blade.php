@@ -4,9 +4,6 @@
 
 @push('css_or_js')
     <style>
-        .top-bar{
-            display: none;
-        }
         .widget-categories .accordion-heading > a:hover {
             color: #FFD5A4 !important;
         }
@@ -40,7 +37,7 @@
         }
 
         .tdBorder {
-            border- {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}: 1px solid #f7f0f0;
+            border- {{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 1px solid #f7f0f0;
             text-align: center;
         }
 
@@ -67,6 +64,10 @@
                 background: {{$web_config['primary_color']}};
             }
 
+            .orderDate {
+                display: none;
+            }
+
             .sidebar_heading h1 {
                 text-align: center;
                 color: aliceblue;
@@ -83,50 +84,41 @@
 
 @section('content')
 
-    <div class="container rtl bg-light p-4" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};border-radius: 11px">
+    <div class="container rtl bg-light p-4" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};border-radius: 11px">
         <div class="d-flex">
-
-            @if (\App\CPU\Helpers::store_module_permission_check('order.sync.view'))
-            <div class="w-50 bg-white text-center" style="border-radius: 11px">
-                <div class="btn w-full btn-primary p-0 orders-tab sync-orders-tab" style="border-radius: 11px">
-                    <a href="#" class="w-full text-center" style="display: grid" onclick="$('.order-frames').fadeOut();$('#sync-orders').fadeIn();$('.orders-tab').removeClass('btn-primary');$('.sync-orders-tab').addClass('btn-primary')">
-                        <p class="sm:text-2xl text-md text-center mb-0 p-3 float-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}} headerTitle">
-                            {{\App\CPU\Helpers::translate('my synchronized orders')}}
-                        </p>
+            <div class="w-50 bg-white" style="border-radius: 11px">
+                <div class="btn w-100 btn-primary p-0 orders-tab a-orders-tab" style="border-radius: 11px">
+                    <a href="#" class="w-100 text-center" style="display: grid" onclick="$('.order-frames').fadeOut();$('#account-orders').fadeIn();$('.orders-tab').removeClass('btn-primary');$('.a-orders-tab').addClass('btn-primary')">
+                        <h5 class="h3 text-center mb-0 p-3 float-{{Session::get('direction') === "rtl" ? 'right' : 'left'}} headerTitle">
+                            {{\App\CPU\Helpers::translate('my direct orders')}}
+                        </h5>
                     </a>
                 </div>
             </div>
-            @endif
 
             <div class="px-3 bg-light"></div>
-            @if (\App\CPU\Helpers::store_module_permission_check('order.direct.view'))
-            <div class="w-50 bg-white text-center" style="border-radius: 11px">
-                <div class="btn w-full p-0 orders-tab a-orders-tab" style="border-radius: 11px">
-                    <a href="#" class="w-full text-center" style="display: grid" onclick="$('.order-frames').fadeOut();$('#account-orders').fadeIn();$('.orders-tab').removeClass('btn-primary');$('.a-orders-tab').addClass('btn-primary');hideSecondTopBar();">
-                        <p class="sm:text-2xl text-md text-center mb-0 p-3 float-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}} headerTitle">
-                            {{\App\CPU\Helpers::translate('my direct orders')}}
-                        </p>
+
+            <div class="w-50 bg-white" style="border-radius: 11px">
+                <div class="btn w-100 p-0 orders-tab sync-orders-tab" style="border-radius: 11px">
+                    <a href="#" class="w-100 text-center" style="display: grid" onclick="$('.order-frames').fadeOut();$('#sync-orders').fadeIn();$('.orders-tab').removeClass('btn-primary');$('.sync-orders-tab').addClass('btn-primary')">
+                        <h5 class="h3 text-center mb-0 p-3 float-{{Session::get('direction') === "rtl" ? 'right' : 'left'}} headerTitle">
+                            {{\App\CPU\Helpers::translate('my synchronized orders')}}
+                        </h5>
                     </a>
                 </div>
             </div>
-            @endif
-
         </div>
     </div>
 
     <!-- Page Content-->
     <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl"
-         style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row">
         <!-- Content  -->
             <section class="col-lg-12 col-md-12 px-0">
                 <div class="">
-                    @if (\App\CPU\Helpers::store_module_permission_check('order.direct.view'))
-                    <iframe class="order-frames" id="account-orders" src="{{ route('account-oder') }}" frameborder="0" style="min-height: 1185px;display:@if (!\App\CPU\Helpers::store_module_permission_check('order.sync.view')) @else none @endif"></iframe>
-                    @endif
-                    @if (\App\CPU\Helpers::store_module_permission_check('order.sync.view'))
-                    <iframe class="order-frames" id="sync-orders" src="{{ route('sync_orders') }}" frameborder="0" style="min-height: 1185px"></iframe>
-                    @endif
+                    <iframe class="order-frames" id="account-orders" src="{{ route('account-oder') }}" frameborder="0" style="min-height: 1185px"></iframe>
+                    <iframe class="order-frames" id="sync-orders" src="{{ route('sync_orders') }}" frameborder="0" style="min-height: 1185px;display: none"></iframe>
                 </div>
             </section>
 
@@ -146,29 +138,4 @@
             });
         }
     </script>
-
-<script>
-    function hideSecondTopBar() {
-        var iframe = document.getElementById('account-orders');
-        if (iframe) {
-            // تحقق مما إذا كان الـ iframe محملاً بالفعل
-            if (iframe.contentWindow.document.readyState === 'complete') {
-                hideBar(iframe);
-            } else {
-                iframe.onload = function() {
-                    hideBar(iframe);
-                };
-            }
-        }
-    }
-    function hideBar(iframe) {
-        var insideIframe = iframe.contentWindow || iframe.contentDocument;
-        if (insideIframe.document) {
-        var topBars = insideIframe.document.querySelectorAll('.top-bar');
-        if(topBars && topBars.length > 1) {
-        topBars[1].style.display = 'none';
-        }
-        }
-        }
-</script>
 @endpush

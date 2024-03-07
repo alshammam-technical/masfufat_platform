@@ -1,7 +1,6 @@
 @extends('layouts.front-end.app')
-@php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
-@php($user = \App\User::find($storeId))
-@section('title',$user->f_name.' '.$user->l_name)
+
+@section('title',auth('customer')->user()->f_name.' '.auth('customer')->user()->l_name)
 
 @push('css_or_js')
 <title>{{ Helpers::translate('my account data') }}</title>
@@ -76,8 +75,8 @@
         }
 
         .photoHeader {
-            margin- {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}: 1rem;
-            margin- {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}: 2rem;
+            margin- {{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 1rem;
+            margin- {{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 2rem;
             padding: 13px;
         }
 
@@ -113,8 +112,8 @@
             }
 
             .photoHeader {
-                /*margin-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}: 2px !important;
-                margin-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}: 1px !important;*/
+                /*margin-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 2px !important;
+                margin-{{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 1px !important;*/
                 padding: 13px;
             }
         }
@@ -782,7 +781,7 @@
 
     <!-- Page Content-->
     <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl"
-         style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row">
             <!-- Sidebar-->
 
@@ -853,7 +852,7 @@
                                         </p>
                                     </div>
                                 </div>
-                                @if (auth('customer')->check())
+
                                 <form class="row" action="{{route('user-update')}}" method="post" enctype="multipart/form-data">
                                     <div class="mb-0 col-lg-6">
                                         <div class="form-group">
@@ -862,78 +861,12 @@
                                             <input tabindex="4" readonly onfocus="$(this).removeAttr('readonly')" name="email" class="form-control" autocomplete="off" value="{{($customer['email'] ?? '')}}" />
                                         </div>
                                     </div>
-                                    <div class="mb-0 col-lg-6"></div>
                                     <div class="mb-0 col-lg-6">
                                         <div class="form-group">
                                             <label>{{\App\CPU\Helpers::translate('Password')}} : </label>
                                             <div class="password-toggle">
                                                 <input tabindex="5" readonly onfocus="$(this).removeAttr('readonly')" class="form-control" name="password" type="password" id="si-password"
-                                                    style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};"
-                                                    required>
-                                                <label class="password-toggle-btn">
-                                                    <input class="custom-control-input" type="checkbox"><i
-                                                        class="czi-eye password-toggle-indicator"></i><span
-                                                        class="sr-only">{{\App\CPU\Helpers::translate('Show password')}} </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-0 col-lg-6">
-                                        <div class="form-group">
-                                            <label>{{\App\CPU\Helpers::translate('repeat_password')}} : </label>
-                                            <div class="password-toggle">
-                                                <input tabindex="5" readonly onfocus="$(this).removeAttr('readonly')" class="form-control" name="password_confirmation" type="password" id="si-password"
-                                                    style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};"
-                                                    required>
-                                                <label class="password-toggle-btn">
-                                                    <input class="custom-control-input" type="checkbox"><i
-                                                        class="czi-eye password-toggle-indicator"></i><span
-                                                        class="sr-only">{{\App\CPU\Helpers::translate('Show password')}} </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @if (\App\CPU\Helpers::store_module_permission_check('my_account.data.update'))
-                                    <div class="row justify-content-end pe-0">
-                                        <div class="col-12 text-end pe-0">
-                                            <button type="submit" class="btn bg-primaryColor btn-primary btn-save px-4">{{ \App\CPU\Helpers::translate('update')}}</button>
-                                        </div>
-                                    </div>
-                                    @endif
-                                </form>
-                                @else
-
-
-                                <form class="row" action="{{route('delegate-update')}}" method="post" enctype="multipart/form-data">
-                                    <div class="mb-0 col-lg-6">
-                                        <div class="form-group">
-                                            <label>{{\App\CPU\Helpers::translate('Email')}} : </label>
-                                            @csrf
-                                            <input tabindex="4" readonly onfocus="$(this).removeAttr('readonly')" name="email" class="form-control" autocomplete="off" value="{{ auth('delegatestore')->user()->email}}" />
-                                        </div>
-                                    </div>
-                                    <div class="mb-0 col-lg-6"></div>
-                                    <div class="mb-0 col-lg-6">
-                                        <div class="form-group">
-                                            <label>{{\App\CPU\Helpers::translate('Password')}} : </label>
-                                            <div class="password-toggle">
-                                                <input tabindex="5" readonly onfocus="$(this).removeAttr('readonly')" class="form-control" name="password" type="password" id="si-password"
-                                                    style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};"
-                                                    required>
-                                                <label class="password-toggle-btn">
-                                                    <input class="custom-control-input" type="checkbox"><i
-                                                        class="czi-eye password-toggle-indicator"></i><span
-                                                        class="sr-only">{{\App\CPU\Helpers::translate('Show password')}} </span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="mb-0 col-lg-6">
-                                        <div class="form-group">
-                                            <label>{{\App\CPU\Helpers::translate('repeat_password')}} : </label>
-                                            <div class="password-toggle">
-                                                <input tabindex="5" readonly onfocus="$(this).removeAttr('readonly')" class="form-control" name="password_confirmation" type="password" id="si-password"
-                                                    style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};"
+                                                    style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};"
                                                     required>
                                                 <label class="password-toggle-btn">
                                                     <input class="custom-control-input" type="checkbox"><i
@@ -945,11 +878,10 @@
                                     </div>
                                     <div class="row justify-content-end pe-0">
                                         <div class="col-12 text-end pe-0">
-                                            <button type="submit" class="btn bg-primaryColor btn-primary btn-save px-4">{{ \App\CPU\Helpers::translate('update')}}</button>
+                                            <button type="submit" class="btn btn--primary btn-primary btn-save px-4">{{ \App\CPU\Helpers::translate('update')}}</button>
                                         </div>
                                     </div>
                                 </form>
-                                @endif
 
 
                                 <div class="row">
@@ -957,7 +889,7 @@
                                         <div class="form-group">
                                             <label>{{\App\CPU\Helpers::translate('delegates_name')}} : </label>
                                             <p>
-                                                {{($store->ChiefCommissioner->name ?? '')}}
+                                                {{($store['delegate_name'] ?? '')}}
                                             </p>
                                         </div>
                                     </div>
@@ -965,7 +897,7 @@
                                         <div class="form-group">
                                             <label>{{\App\CPU\Helpers::translate('delegates_phone')}} : </label>
                                             <p>
-                                                {{$store->ChiefCommissioner->phone ?? ''}}
+                                                {{$store['delegate_phone'] ?? ''}}
                                             </p>
                                         </div>
                                     </div>
@@ -1005,7 +937,7 @@
                                         <div class="form-group">
                                             <label>{{\App\CPU\Helpers::translate('governorate')}} : </label>
                                             <p>
-                                                {{ \App\CPU\Helpers::getItemName('provinces','name',$store['governorate'] ?? null) }}
+                                                {{ \App\CPU\Helpers::getItemName('provinces','name',$store['governorate']) }}
                                             </p>
                                         </div>
                                     </div>

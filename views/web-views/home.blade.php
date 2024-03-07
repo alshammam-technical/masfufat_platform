@@ -1,6 +1,6 @@
 @extends('layouts.front-end.app')
 
-@section('title', $web_config['name']->value.' '.\App\CPU\Helpers::translate('Online Shopping').' | '.$web_config['name']->value.' '.\App\CPU\Helpers::translate('Ecommerce'))
+@section('title', $web_config['name']->value.' '.\App\CPU\Helpers::translate('Online Shopping').' | '.$web_config['name']->value.' '.\App\CPU\Helpers::translate(' Ecommerce'))
 
 @push('css_or_js')
     <meta property="og:image" content="{{asset('storage/app/public/company')}}/{{$web_config['web_logo']->value}}"/>
@@ -268,22 +268,22 @@
                 {{session('direction') === "rtl" ? 'margin-left: 10px;' : 'margin-right: 6px;'}}
             }
             .categories-title {
-                {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'margin-right: 0px;' : 'margin-left: 6px;'}}
+                {{Session::get('direction') === "rtl" ? 'margin-right: 0px;' : 'margin-left: 6px;'}}
             }
             .seller-list-title{
-                {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'margin-right: 0px;' : 'margin-left: 10px;'}}
+                {{Session::get('direction') === "rtl" ? 'margin-right: 0px;' : 'margin-left: 10px;'}}
             }
             .seller-list-view-all {
-                {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'margin-left: 20px;' : 'margin-right: 10px;'}}
+                {{Session::get('direction') === "rtl" ? 'margin-left: 20px;' : 'margin-right: 10px;'}}
             }
             .seller-card {
                 padding-left: 0px !important;
             }
             .category-product-view-title {
-                {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'margin-right: 16px;' : 'margin-left: -8px;'}}
+                {{Session::get('direction') === "rtl" ? 'margin-right: 16px;' : 'margin-left: -8px;'}}
             }
             .category-product-view-all {
-                {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'margin-left: -7px;' : 'margin-right: 5px;'}}
+                {{Session::get('direction') === "rtl" ? 'margin-left: -7px;' : 'margin-right: 5px;'}}
             }
             .recomanded-product-card {
                 background: #F8FBFD;margin:20px;height: 343px; border-radius: 5px;
@@ -301,22 +301,22 @@
                 {{session('direction') === "rtl" ? 'margin-left: 30px;' : 'margin-right: 27px;'}}
             }
             .categories-title {
-                {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'margin-right: 25px;' : 'margin-left: 25px;'}}
+                {{Session::get('direction') === "rtl" ? 'margin-right: 25px;' : 'margin-left: 25px;'}}
             }
             .seller-list-title{
-                {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'margin-right: 6px;' : 'margin-left: 10px;'}}
+                {{Session::get('direction') === "rtl" ? 'margin-right: 6px;' : 'margin-left: 10px;'}}
             }
             .seller-list-view-all {
-                {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'margin-left: 12px;' : 'margin-right: 10px;'}}
+                {{Session::get('direction') === "rtl" ? 'margin-left: 12px;' : 'margin-right: 10px;'}}
             }
             .seller-card {
-                {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'padding-left:0px !important;' : 'padding-right:0px !important;'}}
+                {{Session::get('direction') === "rtl" ? 'padding-left:0px !important;' : 'padding-right:0px !important;'}}
             }
             .category-product-view-title {
-                {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'margin-right: 10px;' : 'margin-left: -12px;'}}
+                {{Session::get('direction') === "rtl" ? 'margin-right: 10px;' : 'margin-left: -12px;'}}
             }
             .category-product-view-all {
-                {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'margin-left: -20px;' : 'margin-right: 0px;'}}
+                {{Session::get('direction') === "rtl" ? 'margin-left: -20px;' : 'margin-right: 0px;'}}
             }
             .recomanded-product-card {
                 background: #F8FBFD;margin:20px;height: 343px; border-radius: 5px;
@@ -470,7 +470,6 @@
 @section('content')
 @php($decimal_point_settings = !empty(\App\CPU\Helpers::get_business_settings('decimal_point_settings')) ? \App\CPU\Helpers::get_business_settings('decimal_point_settings') : 0)
 @php($current_lang = session()->get('local'))
-@if (\App\CPU\Helpers::store_module_permission_check('store.home.view'))
     <!-- Hero (Banners + Slider)-->
     <section class="bg-transparent mb-3">
         <div class="container">
@@ -490,15 +489,15 @@
             }])->where(['status'=>1])->where(['deal_type'=>'flash_deal'])->whereDate('start_date','<=',date('Y-m-d'))->whereDate('end_date','>=',date('Y-m-d'))->first())
     @if ($flash_deals)
     <div class="container">
-        <div class="flash-deal-view-all-web row d-flex justify-content-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'start' : 'end'}}" style="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'margin-left: 2px;' : 'margin-right:2px;'}}">
+        <div class="flash-deal-view-all-web row d-flex justify-content-{{Session::get('direction') === "rtl" ? 'start' : 'end'}}" style="{{Session::get('direction') === "rtl" ? 'margin-left: 2px;' : 'margin-right:2px;'}}">
             @if (count($flash_deals->products)>0)
                 <a class="text-capitalize view-all-text" href="{{route('flash-deals',[isset($flash_deals)?$flash_deals['id']:0])}}">
                     {{ \App\CPU\Helpers::translate('view_all')}}
-                    <i class="czi-arrow-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left-circle mr-1 ml-n1 mt-1 float-left' : 'right-circle ml-1 mr-n1'}}"></i>
+                    <i class="czi-arrow-{{Session::get('direction') === "rtl" ? 'left-circle mr-1 ml-n1 mt-1 float-left' : 'right-circle ml-1 mr-n1'}}"></i>
                 </a>
             @endif
         </div>
-        <div class="row d-flex mb-3 {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'flex-row-reverse' : 'flex-row'}}">
+        <div class="row d-flex mb-3 {{Session::get('direction') === "rtl" ? 'flex-row-reverse' : 'flex-row'}}">
 
 
 
@@ -516,39 +515,23 @@
         <div class="row justify-content-center">
             {{-- featured products --}}
             <div class="col-md-12 mt-0 mb-4 py-5" style="border-radius: 16px">
-                <div class="latest-product-margin" style="margin-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right:0px' : 'left:0px'}}">
+                <div class="latest-product-margin" style="margin-{{Session::get('direction') === "rtl" ? 'right:0px' : 'left:0px'}}">
                     <div class="row mt-2 mx-0">
                         <div class="col-6 mb-4 px-0 text-start">
                             <span class="for-feature-title text-dark" style="text-align: center;font-size:4.3vh !important; font-weight:700">{{ \App\CPU\Helpers::translate('featured_products')}}</span>
                         </div>
                     </div>
-                    @if (count($featured_products) > 4)
 
                     <div class="carousel-wrap" >
                         <div class="owl-carousel owl-theme p-2" id="new-arrivals-product">
-                            @foreach($featured_products as $key1 =>$product)
+                            @foreach($featured_products as $product)
                             @php($product->unit_price = Helpers::getProductPrice_pl($product->id)['value'] ?? 0)
-                            <div style="margin:2px;">
-                                @include('web-views.partials._single-product',['product'=>$product,'decimal_point_settings'=>$decimal_point_settings])
-                            </div>
+                                <div style="margin:2px;">
+                                    @include('web-views.partials._single-product',['product'=>$product,'decimal_point_settings'=>$decimal_point_settings])
+                                </div>
                             @endforeach
                         </div>
                     </div>
-                    @else
-                    <div class="row mt-2 mb-3 d-flex justify-content-between">
-                        <div class="col-md-12 col-12 ">
-                           <div class="row d-flex justify-content-md-center">
-                            @foreach($featured_products as $key1 =>$product)
-                                <div class="col-md-3 col-6 mt-5 sm:mt-2 mt-md-0" style="">
-                                   @include('web-views.partials._single-product',['product'=>$product,'decimal_point_settings'=>$decimal_point_settings])
-                                </div>
-                           @endforeach
-                            </div>
-                       </div>
-
-
-                   </div>
-                    @endif
                 </div>
             </div>
         </div>
@@ -571,40 +554,38 @@
         {{--  start  --}}
         <div id="features-section1" class="row mb-5 mt-8 d-sm-none d-lg-block pos-relative" dir="{{session()->get('direction') ?? 'rtl'}}" style="height:450px">
             <div class="col-lg-12 p-0 text-dark text-center">
-                <strong class="text-dark text-center w-full h3" data-bs-aos="fade-up">
+                <strong class="text-dark text-center w-100 h3" data-bs-aos="fade-up">
                     {{\App\CPU\Helpers::translate('What characterize Masfufat')}}
                 </strong>
 
-                <div class="flex mt-8" style="overflow-x: auto">
+                <div class="row flex-nowrap mt-8 w-100" style="overflow-x: auto">
                     <div
                     data-bs-aos="fade-down"
                     data-bs-aos-duration="1000"
-                    class="col-4 text-center">
-                        <img src="{{asset('/public/assets/landing/img/package4-icon.png')}}" alt="" class="self-center inline">
+                    class="col-md-4 text-center">
+                        <img src="{{asset('/public/assets/landing/img/package4-icon.png')}}" alt="">
                         <p class="section3_cols_title text-white">
                             <strong class="h2 text-black">
                                 {{\App\CPU\Helpers::translate('High quality')}}
                             </strong>
                         </p>
                     </div>
-
                     <div
                     data-bs-aos="fade-down"
                     data-bs-aos-duration="1500"
-                    class="col-4 text-center">
-                        <img src="{{asset('/public/assets/landing/img/store-icon.png')}}" alt="" class="self-center inline">
+                    class="col-md-4 text-center">
+                        <img src="{{asset('/public/assets/landing/img/store-icon.png')}}" alt="">
                         <p class="section3_cols_title text-white">
                             <strong class="h2 text-black">
                                 {{\App\CPU\Helpers::translate('provide products')}}
                             </strong>
                         </p>
                     </div>
-
                     <div
                     data-bs-aos="fade-down"
                     data-bs-aos-duration="3000"
-                    class="col-4 text-center">
-                        <img src="{{asset('/public/assets/landing/img/shipping-icon.png')}}" alt="" class="self-center inline">
+                    class="col-md-4 text-center">
+                        <img src="{{asset('/public/assets/landing/img/shipping-icon.png')}}" alt="">
                         <p class="section3_cols_title text-white">
                             <strong class="h2 text-black">
                                 {{\App\CPU\Helpers::translate('Packaging and shipping')}}
@@ -619,7 +600,7 @@
         @if ($flash_deals)
         <div class="row justify-content-center">
             <div class="col-12 mt-0 mb-4 py-5 bg-secondary px-4" style="border-radius: 16px">
-                <div class="latest-product-margin" style="margin-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right:0px' : 'left:0px'}}">
+                <div class="latest-product-margin" style="margin-{{Session::get('direction') === "rtl" ? 'right:0px' : 'left:0px'}}">
                     <div class="row mt-0 mx-0">
                         <div class="col-2 mb-0 px-0 text-start py-4">
                             <span class="for-feature-title text-dark" style="text-align: center;font-size:32px !important; font-weight:700">{{ \App\CPU\Helpers::translate('flash deal')}}</span>
@@ -663,7 +644,7 @@
                             <a class="text-capitalize btn-primary w-auto p-3 rounded-pill"
                             href="{{route('products',['data_from'=>'latest'])}}">
                                 {{ \App\CPU\Helpers::translate('view_all')}}
-                                <i class="czi-arrow-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left mr-1 ml-n1 mt-0 float-left' : 'right ml-1 mr-n1'}}"></i>
+                                <i class="czi-arrow-{{Session::get('direction') === "rtl" ? 'left mr-1 ml-n1 mt-0 float-left' : 'right ml-1 mr-n1'}}"></i>
                             </a>
                         </div>
                     </div>
@@ -687,9 +668,9 @@
         @if(isset($featured_deals))
         <section class="row justify-content-center">
             {{--    --}}
-            <div class="row justify-content-center w-full px-0">
+            <div class="row justify-content-center w-100 px-0">
                 <div class="col-md-8 mt-0 mb-4 py-3 bg-dark px-0" style="border-radius: 16px;height:max-content">
-                    <div class="latest-product-margin" style="margin-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right:0px' : 'left:0px'}}">
+                    <div class="latest-product-margin" style="margin-{{Session::get('direction') === "rtl" ? 'right:0px' : 'left:0px'}}">
                         <div class="row mt-0 mx-0 ps-3 pe-3">
                             <div class="col-6 mb-0 px-0 text-start py-1">
                                 <span class="for-feature-title text-light" style="text-align: center;font-size:32px !important; font-weight:700">{{ \App\CPU\Helpers::translate('featured_deal')}}</span>
@@ -698,7 +679,7 @@
                                 <a class="text-capitalize btn-white text-dark w-auto p-3 rounded-pill"
                                 href="{{route('products',['data_from'=>'latest'])}}">
                                     {{ \App\CPU\Helpers::translate('view_all')}}
-                                    <i class="czi-arrow-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left mr-1 ml-n1 mt-0 float-left' : 'right ml-1 mr-n1'}}"></i>
+                                    <i class="czi-arrow-{{Session::get('direction') === "rtl" ? 'left mr-1 ml-n1 mt-0 float-left' : 'right ml-1 mr-n1'}}"></i>
                                 </a>
                             </div>
                         </div>
@@ -707,7 +688,6 @@
                             @foreach($featured_deals->products as $key=>$deal)
                                 @if( $deal->product && $key <= 2)
                                 @php($product = $deal->product)
-                                @php($productdiscount = Helpers::getProductPrice_pl($product->id)['discount_price'] ?? 0)
                                 <div class="col-12 m-1 bg-white" style="border-style: solid;border-radius:5px;"
                                         data-bs-href="{{route('product',$product->slug)}}">
                                     <div class="row" style="padding:8px;">
@@ -726,7 +706,7 @@
                                             <h6 class="widget-product-title col-9 text-start pt-2">
                                                 <a dir="{{session('direction')}}" class="fs-25"
                                                 href="{{route('product',$product->slug)}}">
-                                                    {{\Illuminate\Support\Str::limit(\App\CPU\Helpers::getItemName('products','name',$product['id'],$lang ?? 'sa') ?? $product['name'],100)}}
+                                                    {{\Illuminate\Support\Str::limit($product['name'],100)}}
                                                 </a>
                                             </h6>
                                             @php($top_overallRating = \App\CPU\ProductManager::get_overall_rating($product['reviews']))
@@ -739,19 +719,18 @@
                                                     </span>
 
                                                     <div>
-                                                        @php($productdiscount = Helpers::getProductPrice_pl($product->id)['discount_price'] ?? 0)
-                                                        @if($productdiscount > 0)
+                                                        @if($product->discount > 0)
                                                             <strike style="font-size: 12px!important;color: #E96A6A!important;">
                                                                 {{\App\CPU\Helpers::currency_converter($product->unit_price)}}
                                                             </strike>
                                                             <span style="font-size: 12px!important;" class="text-success mx-2">
-                                                                @if($productdiscount > 0)
-                                                                    @php($productdiscount = Helpers::getProductPrice_pl($product->id)['discount_price'] ?? 0)
-                                                                    @php($productdiscount_type = Helpers::getProductPrice_pl($product->id)['discount_type'] ?? 0)
-                                                                    @if ($productdiscount_type == 'percent')
-                                                                    {{round($productdiscount)}}%
-                                                                    @elseif($productdiscount_type =='flat')
-                                                                        {{\App\CPU\Helpers::currency_converter($productdiscount)}}
+                                                                @if($product->discount > 0)
+                                                                    @php($product->discount = Helpers::getProductPrice_pl($product->id)['discount_price'] ?? 0)
+                                                                    @php($product->discount_type = Helpers::getProductPrice_pl($product->id)['discount_type'] ?? 0)
+                                                                    @if ($product->discount_type == 'percent')
+                                                                    {{round($product->discount)}}%
+                                                                    @elseif($product->discount_type =='flat')
+                                                                        {{\App\CPU\Helpers::currency_converter($product->discount)}}
                                                                     @endif {{\App\CPU\Helpers::translate('off_')}}
                                                                 @endif
                                                             </span>
@@ -824,14 +803,13 @@
                                                         {{\App\CPU\Helpers::currency_converter($product->unit_price)}}
                                                     </strike>
                                                     <span style="font-size: 12px!important;" class="text-success mx-2">
-                                                        @php($productdiscount = Helpers::getProductPrice_pl($product->id)['discount_price'] ?? 0)
-                                                        @if($productdiscount > 0)
-                                                            @php($productdiscount = Helpers::getProductPrice_pl($product->id)['discount_price'] ?? 0)
-                                                            @php($productdiscount_type = Helpers::getProductPrice_pl($product->id)['discount_type'] ?? 0)
-                                                            @if ($productdiscount_type == 'percent')
-                                                            {{round($productdiscount)}}%
-                                                            @elseif($productdiscount_type =='flat')
-                                                                {{\App\CPU\Helpers::currency_converter($productdiscount)}}
+                                                        @if($product->discount > 0)
+                                                            @php($product->discount = Helpers::getProductPrice_pl($product->id)['discount_price'] ?? 0)
+                                                            @php($product->discount_type = Helpers::getProductPrice_pl($product->id)['discount_type'] ?? 0)
+                                                            @if ($product->discount_type == 'percent')
+                                                            {{round($product->discount)}}%
+                                                            @elseif($product->discount_type =='flat')
+                                                                {{\App\CPU\Helpers::currency_converter($product->discount)}}
                                                             @endif {{\App\CPU\Helpers::translate('off_')}}
                                                         @endif
                                                     </span>
@@ -843,9 +821,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="w-full d-inline-block">
-                                <div class="pos-relative w-full">
-                                    <div class="pos-absolute text-white w-full text-center" style="top:-60px">
+                            <div class="w-100 d-inline-block">
+                                <div class="pos-relative w-100">
+                                    <div class="pos-absolute text-white w-100 text-center" style="top:-60px">
                                         <button class="buy_btn btn-primary border-white px-5"
                                         onclick="location.href='{{route('product',$deal_of_the_day->product->slug)}}'">
                                             {{\App\CPU\Helpers::translate('buy_now')}}
@@ -890,8 +868,8 @@
                                                 </span>
                                             </div>
                                             <div class="float-right">
-                                                @php($productdiscount = Helpers::getProductPrice_pl($product->id)['discount_price'] ?? 0)
-                                                @if($productdiscount > 0)
+
+                                                @if($product->discount > 0)
                                                     <strike style="font-size: 12px!important;color: #E96A6A!important;">
                                                         {{\App\CPU\Helpers::currency_converter($product->unit_price)}}
                                                     </strike>
@@ -928,16 +906,16 @@
         <div class="row justify-content-center">
             {{-- Latest products --}}
             <div class="col-md-12 mt-0 mb-4 py-5" style="border-radius: 16px">
-                <div class="latest-product-margin" style="margin-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right:0px' : 'left:0px'}}">
+                <div class="latest-product-margin" style="margin-{{Session::get('direction') === "rtl" ? 'right:0px' : 'left:0px'}}">
                     <div class="row mt-2 mx-0">
                         <div class="col-6 mb-4 px-0 text-start">
-                            <span class="for-feature-title text-dark text-2xl" style="text-align: center;font-weight:700">{{ \App\CPU\Helpers::translate('latest_products')}}</span>
+                            <span class="for-feature-title text-dark" style="text-align: center;font-size:4.3vh !important; font-weight:700">{{ \App\CPU\Helpers::translate('latest_products')}}</span>
                         </div>
-                        <div class="col-6 mb-4 sm:px-5 px-0 text-end">
+                        <div class="col-6 mb-4 px-5 text-end">
                             <a class="text-capitalize btn-primary w-auto p-3 rounded-pill"
                                href="{{route('products',['data_from'=>'latest'])}}">
                                 {{ \App\CPU\Helpers::translate('view_all')}}
-                                <i class="czi-arrow-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left-circle mr-1 ml-n1 mt-0 float-left' : 'right-circle ml-1 mr-n1'}}"></i>
+                                <i class="czi-arrow-{{Session::get('direction') === "rtl" ? 'left-circle mr-1 ml-n1 mt-0 float-left' : 'right-circle ml-1 mr-n1'}}"></i>
                             </a>
                         </div>
                     </div>
@@ -1012,18 +990,18 @@
         @if(count($category['products']))
         <section class="container rtl mb-3">
             <!-- Heading-->
-            <div class="sm:ps-5 sm:pe-5 sm:py-5 ps-0 pe-0 bg-white rounded-md">
-                <div class="flex-between sm:pe-4">
-                    <div class="category-product-view-title ms-0 sm:ms-3" >
-                        <span class="for-feature-title {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'float-right' : 'float-left'}}"
-                                style="font-weight: 700;font-size: 20px;text-transform: uppercase;{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'text-align:right;' : 'text-align:left;'}}">
+            <div style="background: #ffffff; padding:20px;border-radius:5px;">
+                <div class="flex-between pl-4">
+                    <div class="category-product-view-title" >
+                        <span class="for-feature-title {{Session::get('direction') === "rtl" ? 'float-right' : 'float-left'}}"
+                                style="font-weight: 700;font-size: 20px;text-transform: uppercase;{{Session::get('direction') === "rtl" ? 'text-align:right;' : 'text-align:left;'}}">
                                 {{Str::limit($category['name'],38)}}
                         </span>
                     </div>
                     <div class="category-product-view-all" >
                         <a class="text-capitalize btn-primary w-auto p-3 rounded-pill"
                             href="{{route('products',['id'=> $category['id'],'data_from'=>'category','page'=>1])}}">{{ \App\CPU\Helpers::translate('view_all')}}
-                            <i class="czi-arrow-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left-circle mr-1 ml-n1 mt-0 float-left' : 'right-circle ml-1 mr-n1'}}"></i>
+                            <i class="czi-arrow-{{Session::get('direction') === "rtl" ? 'left-circle mr-1 ml-n1 mt-0 float-left' : 'right-circle ml-1 mr-n1'}}"></i>
                         </a>
 
                     </div>
@@ -1034,7 +1012,7 @@
                         <div class="row d-flex" >
                             @foreach($category['products'] ?? [] as $key=>$product)
                             @if ($key<4)
-                                <div class="col-md-3 col-6 mt-5 sm:mt-2 mt-md-0" style="">
+                                <div class="col-md-3 col-12 mt-2 mt-md-0" style="">
                                     @include('web-views.partials._single-product',['product'=>$product,'decimal_point_settings'=>$decimal_point_settings])
                                 </div>
                             @endif
@@ -1051,14 +1029,14 @@
 
     @php($business_mode=\App\CPU\Helpers::get_business_settings('business_mode'))
     @if ($business_mode == 'multi' && (\App\Model\BusinessSetting::where('type','show_sellers_section')->first()->value ?? ''))
-    <section class="container bg-primary w-full px-5 py-10 justify-content-center text-center d-flex mb-10 overflow-hidden">
+    <section class="container bg-primary w-100 px-5 py-10 justify-content-center text-center d-flex mb-10">
         <div class="wd-md-75p">
             <h2 class="mb-5 text-white">
                 {{ Helpers::translate('Our Partners') }}
             </h2>
             <div class="owl-carousel owl-theme p-2" id="our-partners">
-                @foreach (App\Model\Seller::where(['status' => 'approved','show_sellers_section' => true])->get() as $seller)
-                <a href="{{route('shopView',['id'=>$seller['id']])}}" style="width: 68px;height: 68px;border-radius: 12px" class="text-center justify-content-center inline-block">
+                @foreach (App\Model\Seller::where('status','approved')->get() as $seller)
+                <a href="{{route('shopView',['id'=>$seller['id']])}}" style="width: 68px;height: 68px;border-radius: 12px">
                     <img style="width: 68px;height: 68px;border-radius: 12px" src="{{asset('storage/app/public/shop')}}/{{$seller->shop->image ?? null}}" onerror="this.src='{{asset('public/assets/back-end/img/900x400/img1.jpg')}}'" alt="">
                 </a>
                 @endforeach
@@ -1068,17 +1046,7 @@
     @endif
 
 
-    @else
-    <div class="container rtl">
-        {{--  start  --}}
-        <div id="features-section1" class="row mb-5 mt-8 d-sm-none d-lg-block pos-relative" dir="{{session()->get('direction') ?? 'rtl'}}" style="height:450px">
-            <div class="col-lg-12 p-0 text-dark text-center">
-                <strong class="text-dark text-center w-full h3 font-weight-bold" data-bs-aos="fade-up">
-                    {{\App\CPU\Helpers::translate('Welcome To Masfufat')}}
-                </strong>
-            </div>
-        </div>
-    @endif
+
 
 
 

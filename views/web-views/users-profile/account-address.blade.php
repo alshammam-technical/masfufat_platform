@@ -102,7 +102,7 @@
         .namHad {
             color: #030303;
             position: absolute;
-            padding-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}: 13px;
+            padding-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 13px;
             padding-top: 8px;
         }
 
@@ -114,7 +114,7 @@
 
         .donate-now li {
             float: left;
-            margin: {{(Session::get('direction') ?? 'rtl') === "rtl" ? '0 0 0 5px' : '0 5px 0 0'}};
+            margin: {{Session::get('direction') === "rtl" ? '0 0 0 5px' : '0 5px 0 0'}};
             width: 100px;
             height: 40px;
             position: relative;
@@ -190,20 +190,19 @@
                 font-size: 19px;
             }
         }
-        #location_map_canvas,.location_map_canvas{
+        #location_map_canvas{
             height: 100%;
         }
         @media only screen and (max-width: 768px) {
             /* For mobile phones: */
-            #location_map_canvas,.location_map_canvas{
+            #location_map_canvas{
                 height: 200px;
             }
         }
     </style>
 @endpush
-@php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
-@php($user = \App\User::find($storeId))
-    <div class="modal fade rtl" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+
+    <div class="modal fade rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog  modal-lg" role="document">
             <div class="modal-content">
@@ -215,7 +214,7 @@
                 <div class="modal-body">
                     <form action="{{route('address-store')}}" method="post">
                         @csrf
-                        @php($store = $user->store_informations)
+                        @php($store = auth('customer')->user()->store_informations)
                         <!-- Tab panes -->
                         <div class="form-row mb-1">
                             <div class="form-group col-md-6">
@@ -237,7 +236,7 @@
                                 <label for="exampleInputEmail1">{{ \App\CPU\Helpers::translate('The receiving person mobile number')}}
                                 <span
                                 style="color: red">*</span></label>
-                                <div class="form-group  w-full col-lg-12">
+                                <div class="form-group  w-100 col-lg-12">
                                     <input tabindex="3" name="phone" class="form-control phoneInput text-left" dir="ltr" value="{{ $store['phone'] ?? '+966'}}" />
                                 </div>
                             </div>
@@ -249,11 +248,11 @@
                                         for="exampleInputEmail1">{{ \App\CPU\Helpers::translate('Country')}}
                                         <span
                                             style="color: red">*</span></label>
-                                    <select name="country" id="" class="form-control SumoSelect-custom" data-live-search="true" required
+                                    <select name="country" id="" class="form-control SumoSelect-custom" data-bs-live-search="true" required
                                     onchange="$('#area_id,.area_id').attr('disabled',1);$('#area_id_loading').show();$.get('{{route('get-shipping-areas')}}?code='+$(this).val()).then(d=>{$('#area_id,.area_id').html(d);$('#area_id,.area_id').removeAttr('disabled');$('#area_id_loading').hide();$('#area_id').SumoSelect().sumo.reload()})">
-                                        <option disabled selected></option>
+                                        <option></option>
                                         @foreach (\App\CPU\Helpers::getCountries() as $country)
-                                            <option @if(($store['country'] ?? null) == $country['id'])  @endif value="{{ $country->code }}" icon="{{ $country->photo }}">
+                                            <option @if($store['country'] == $country['id']) selected @endif value="{{ $country->code }}" icon="{{ $country->photo }}">
                                                 {{ \App\CPU\Helpers::getItemName('countries','name',$country->id) }}
                                             </option>
                                         @endforeach
@@ -266,7 +265,7 @@
                                     <label
                                         for="exampleInputEmail1">{{ \App\CPU\Helpers::translate('Governorate')}}
                                         <span style="color: red">*</span></label>
-                                    <select name="area_id" id="area_id" class="form-control SumoSelect-custom" data-live-search="true" required></select>
+                                    <select name="area_id" id="area_id" class="form-control SumoSelect-custom" data-bs-live-search="true" required></select>
                                     <span class="text-warning" id="area_id_loading" style="display: none;">{{ Helpers::translate('Please wait') }}</span>
                                     <input type="hidden" id="area_id_hidden" >
                                 </div>
@@ -275,13 +274,13 @@
                             <div class="form-group col-md-6">
                                 <label for="zip_code">{{\App\CPU\Helpers::translate('zip_code')}}</label>
                                 @if($zip_restrict_status)
-                                    <select name="zip" class="form-control selectpicker" data-live-search="true" id="" required>
+                                    <select name="zip" class="form-control selectpicker" data-bs-live-search="true" id="" required>
                                         @foreach($delivery_zipcodes ?? [] as $zip)
                                             <option value="{{ $zip->zipcode }}" >{{ $zip->zipcode }}</option>
                                         @endforeach
                                     </select>
                                 @else
-                                    <input class="form-control" type="text" pattern="\d*" t="number" id="zip_code" name="zip" required>
+                                    <input class="form-control" type="number" id="zip_code" name="zip" required>
                                 @endif
                             </div>
                             <div class="col-md-6">
@@ -313,8 +312,8 @@
                         </div>
                         @endif
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{\App\CPU\Helpers::translate('close')}}</button>
-                            <button type="submit" class="btn bg-primaryColor text-light">{{\App\CPU\Helpers::translate('Add')}}</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{\App\CPU\Helpers::translate('close')}}</button>
+                            <button type="submit" class="btn btn--primary text-light">{{\App\CPU\Helpers::translate('Add')}}</button>
                         </div>
                     </form>
                 </div>
@@ -335,13 +334,11 @@
                             <div class="col-sm-4">
                                 <h1 class="h3  mb-0 folot-left headerTitle">{{\App\CPU\Helpers::translate('ADDRESSES')}}</h1>
                             </div>
-                            @if (\App\CPU\Helpers::store_module_permission_check('my_account.data.add_address'))
                             <div class="mt-2 col-sm-4" style="text-align: end">
-                                <button type="submit" class="btn bg-primaryColor" data-toggle="modal"
-                                    data-target="#exampleModal" id="add_new_address">{{\App\CPU\Helpers::translate('add_new_address')}}
+                                <button type="submit" class="btn btn--primary" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal" id="add_new_address">{{\App\CPU\Helpers::translate('add_new_address')}}
                                 </button>
                             </div>
-                            @endif
                         </div>
                         @foreach($shippingAddresses as $shippingAddress)
                             <section class="col-lg-6 col-md-6 mb-4 mt-5">
@@ -353,19 +350,17 @@
                                                 <label for="a25" class="col-6">
                                                     {{\App\CPU\Helpers::translate('permanent')}}
                                                 </label>
-                                                @if (\App\CPU\Helpers::store_module_permission_check('my_account.data.enable_address'))
                                                 <div class="col-6 text-end">
                                                     <div class="form-check form-switch p-0">
-                                                        <input class="form-check-input flexSwitchCheckDefault" type="checkbox" role="switch" data-id="{{ $shippingAddress->id }}" name="addressAs" value="permanent"
+                                                        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" name="addressAs" value="permanent"
                                                         {{ $shippingAddress->address_type == 'permanent' ? 'checked' : ''}}
                                                         />
-                                                    </div>
+                                                      </div>
                                                 </div>
-                                                @endif
                                             </div>
                                         </div>
 
-                                        <div class="card-body mt-3" style="padding: {{(Session::get('direction') ?? 'rtl') === "rtl" ? '0 13px 15px 15px' : '0 15px 15px 13px'}};">
+                                        <div class="card-body mt-3" style="padding: {{Session::get('direction') === "rtl" ? '0 13px 15px 15px' : '0 15px 15px 13px'}};">
 
                                             <div class="d-flex justify-content-between" style="padding: 5px;">
                                                 <div>
@@ -375,16 +370,13 @@
                                                 </div>
 
                                                 <div class="d-flex justify-content-between">
-                                                    @if (\App\CPU\Helpers::store_module_permission_check('my_account.data.edit_address'))
                                                     <a class="bg-black ps-1 rounded wd-25 ht-25" title="Edit Address" id="edit" href="{{route('address-edit',$shippingAddress->id)}}">
                                                         <i class="ri-pencil-fill text-white fa-md"></i>
                                                     </a>
-                                                    @endif
-                                                    @if (\App\CPU\Helpers::store_module_permission_check('my_account.data.delete_address'))
+
                                                     <a class="ps-1 pt-1 rounded wd-25 ht-25" title="Delete Address" href="{{ route('address-delete',['id'=>$shippingAddress->id])}}" onclick="return confirm('{{\App\CPU\Helpers::translate('Are you sure you want to Delete')}}?');" id="delete">
                                                         <i class="ri-delete-bin-5-fill text-danger fa-lg"></i>
                                                     </a>
-                                                    @endif
                                                 </div>
                                             </div>
 
@@ -415,7 +407,7 @@
                                                     {{ \App\CPU\Helpers::translate('Country')}}:
                                                 </strong>
                                                 <div class="col-6 text-end">
-                                                    <select name="country" disabled id="" data-live-search="true" required style="color: black;font-weight:bold;border: none;text-align-last: end;border: none;background-blend-mode: hue;width: 95px;float: left;text-align-last:end;height:32px;margin-top:-10px" class="p-0 form-control bg-white">
+                                                    <select name="country" disabled id="" data-bs-live-search="true" required style="color: black;font-weight:bold;border: none;text-align-last: end;border: none;background-blend-mode: hue;width: 95px;float: left;text-align-last:end;height:32px;margin-top:-10px" class="p-0 form-control bg-white">
                                                         <option></option>
                                                         @foreach (\App\CPU\Helpers::getCountries() as $country)
                                                             <option @if($country->code == $shippingAddress->country) selected @endif value="{{ $country->code }}" icon="{{ $country->photo }}">
@@ -433,7 +425,7 @@
                                                     {{ \App\CPU\Helpers::translate('Governorate')}}:
                                                 </strong>
                                                 <div class="col-6 text-end">
-                                                    <select disabled name="area_id" id="area_id{{$shippingAddress->id}}" data-live-search="true" required style="color: black;font-weight:bold;border: none;text-align-last: end;border: none;background-blend-mode: hue;width: 95px;float: left;text-align-last:end;height:32px;margin-top:-10px" class="p-0 form-control bg-white"></select>
+                                                    <select disabled name="area_id" id="area_id{{$shippingAddress->id}}" data-bs-live-search="true" required style="color: black;font-weight:bold;border: none;text-align-last: end;border: none;background-blend-mode: hue;width: 95px;float: left;text-align-last:end;height:32px;margin-top:-10px" class="p-0 form-control bg-white"></select>
                                                     <span class="text-warning area_id" id="area_id_loading" style="display: none;">{{ Helpers::translate('Please wait') }}</span>
                                                     <input type="hidden" id="area_id_hidden" value="{{$shippingAddress->area_id ?? '0'}}">
                                                 </div>
@@ -476,43 +468,7 @@
 
 
 
-        <script>
-            $(document).ready(function() {
-                $('.flexSwitchCheckDefault').on('change', function() {
-                    let isChecked = $(this).prop('checked');
-                    let addressValue = isChecked ? 'permanent' : '0';
-                    let id = $(this).data('id');
-                    if (isChecked) {
-                        // إذا تم تفعيل الزر، قم بإزالة الاختيار من جميع الأزرار الأخرى
-                        $('.flexSwitchCheckDefault').not(this).prop('checked', false);
-                    }
-
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                        }
-                    });
-                    $.ajax({
-                        type: "POST",
-                        url: "{{route('default-address-edit')}}",
-                        data: {
-                            addressAs: addressValue,
-                            id:id,
-
-                        },
-                        success: function(response) {
-                            toastr.error('{{\App\CPU\Helpers::translate('The default address has been updated successfully')}}.');
-                        },
-                        error: function(error) {
-                            toastr.error('{{\App\CPU\Helpers::translate('An error occurred while updating the address')}}.');
-                            currentSwitch.prop('checked', !isChecked);
-                        }
-                    });
-                });
-            });
-            </script>
-            <script>
-
+    <script>
         $(document).ready(function (){
             $('.address_type_li').on('click', function (e) {
                 // e.preventDefault();
@@ -541,7 +497,7 @@
             country = $('#own_country').val();
             phone = $('#own_phone').val();
 
-            let id = $(this).attr('data-id');
+            let id = $(this).attr('data-bs-id');
 
             if (addressAs != '' && address != '' && name != '' && zip != '' && city != '' && state != '' && country != '' && phone != '') {
                 $.ajaxSetup({

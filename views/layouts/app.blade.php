@@ -52,7 +52,6 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -116,31 +115,17 @@
             @yield('content')
         </main>
     </div>
-    <script id="respondio__widget" src="https://cdn.respond.io/webchat/widget/widget.js?cId=6fbe80a90fa9dde3a56998e3e891764"></script>
-    <a href="#" id="scrollToTopButton" style="display: none; position: fixed; bottom: 20px; {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left: 20px;' : 'right: 20px;'}} z-index: 1000; transition: opacity 0.3s ease, visibility 0.3s ease;" onclick="scrollToTop();return false;">
-        <i class="fa fa-chevron-up" style="display: inline-block; padding: 10px; background: #673ab7; color: white; border-radius: 50%;"></i>
-    </a>
     <script>
-        // الدالة للتمرير لأعلى الصفحة
-        function scrollToTop() {
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        }
-
-        // الدالة لإظهار أو إخفاء زر التمرير لأعلى
-        function toggleScrollToTopButton() {
-            var scrollToTopButton = document.getElementById('scrollToTopButton');
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                scrollToTopButton.style.display = 'block';
-            } else {
-                scrollToTopButton.style.display = 'none';
-            }
-        }
-
-        // إضافة معالج لحدث التمرير
-        window.onscroll = function() {
-            toggleScrollToTopButton();
+        window.intercomSettings = {
+          api_base: "https://api-iam.intercom.io",
+          app_id: "nbwdn606"
         };
-        </script>
+      </script>
+
+      <script>
+      // We pre-filled your app ID in the widget URL: 'https://widget.intercom.io/widget/nbwdn606'
+      (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/nbwdn606';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+      </script>
 </body>
 
 

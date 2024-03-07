@@ -31,17 +31,25 @@
 
 @section('content')
     <!-- Page Title-->
-    <div class="container rtl min-h-[500px]" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+    <div class="container rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row">
             <div class="col-md-12 sidebar_heading">
-                <h1 class="h3  mb-0 float-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}} headerTitle">{{\App\CPU\Helpers::translate('WISHLIST')}}</h1>
+                <h1 class="h3  mb-0 float-{{Session::get('direction') === "rtl" ? 'right' : 'left'}} headerTitle">{{\App\CPU\Helpers::translate('WISHLIST')}}</h1>
             </div>
-        </div>
-        <div class="col-md-12 col-12" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
-            @include('web-views.partials._wish-list-data',['wishlists'=>$wishlists, 'brand_setting'=>$brand_setting])
         </div>
     </div>
     <!-- Page Content-->
+    <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
+        <div class="row">
+            <!-- Sidebar-->
+        <!-- Content  -->
+            <section class="col-lg-12 col-md-12 mt-2" id="set-wish-list">
+                <!-- Item-->
+
+                @include('web-views.partials._wish-list-data',['wishlists'=>$wishlists, 'brand_setting'=>$brand_setting])
+            </section>
+        </div>
+    </div>
 @endsection
 
 @push('script')

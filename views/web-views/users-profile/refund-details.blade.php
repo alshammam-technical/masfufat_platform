@@ -26,10 +26,11 @@
         transform: scale(1.1);
     }
 </style>
-<div class="container rtl" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+<div class="container rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
     <div class="row">
+        <div class="col-md-3"></div>
         <div class="col-md-9 mt-2 sidebar_heading">
-            <h1 class="h3  mb-0 float-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}} headerTitle">
+            <h1 class="h3  mb-0 float-{{Session::get('direction') === "rtl" ? 'right' : 'left'}} headerTitle">
                 {{\App\CPU\Helpers::translate('refund_request')}}
             </h1>
         </div>
@@ -38,7 +39,7 @@
 
 <!-- Page Content-->
 <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl"
-     style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+     style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
     <div class="row">
         <!-- Sidebar-->
     <!-- Content  -->

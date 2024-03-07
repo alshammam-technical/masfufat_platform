@@ -85,24 +85,58 @@
     }
 </style>
 @php($current_lang = session()->get('local'))
-@php($decimal_point_settings = !empty(\App\CPU\Helpers::get_business_settings('decimal_point_settings')) ? \App\CPU\Helpers::get_business_settings('decimal_point_settings') : 0)
 @if($wishlists->count()>0)
-    <div class="row mt-3">
     @foreach($wishlists as $wishlist)
     @php($product = $wishlist->product_full_info)
     @php($product->unit_price = Helpers::getProductPrice_pl($product->id)['value'] ?? 0)
         @if( $wishlist->product_full_info)
-            <div class="col-sm-6 col-md-3 col-6 mb-4 px-0 bg-white mx-0 sm:mx-2">
-                <button class="absolute z-10 text-light rounded-0 col-12" onclick="removeWishlist({{ $product['id'] }});$(this).parent().remove()">
-                    <i class="ri-heart-fill" style="color:#b70101;float: left;font-size: 30px;margin-top: -4px;"></i>
-                </button>
-                @include('web-views.partials._single-product',['product'=>$product,'decimal_point_settings'=>$decimal_point_settings])
+            <div class="card box-shadow-sm mt-2">
+                <div class="product mb-2">
+                    <div class="card">
+                        <div class="row forPadding">
+                            <div class="wishlist_product_img col-md-2 col-lg-2 col-sm-2">
+                                <a href="{{route('product',$product->slug)}}">
+                                    <img
+                                        src="{{asset("storage/app/public/product/$current_lang")}}/{{(isset(json_decode($product['images'])->$current_lang)) ? json_decode($product['images'])->$current_lang[0] ?? '' : ''}}"
+                                        >
+                                </a>
+                            </div>
+                            <div class="wishlist_product_desc col-md-6 mt-4 {{Session::get('direction') === "rtl" ? 'pr-4' : 'pl-4'}}">
+                                <span class="font-name">
+                                    <a href="{{route('product',$product['slug'])}}">{{Helpers::getItemName('products','name',$product->id)}}</a>
+                                </span>
+                                <br>
+                                @if($brand_setting)
+                                <span class="sellerName"> {{\App\CPU\Helpers::translate('Brand')}} :{{$product->brand?$product->brand['name']:''}} </span>
+                                @endif
+
+                                <div class="">
+                                    @if($product->discount > 0)
+                                    <strike style="color: #E96A6A;" class="{{Session::get('direction') === "rtl" ? 'ml-1' : 'mr-3'}}">
+                                        {{\App\CPU\Helpers::currency_converter($product->unit_price)}}
+                                    </strike>
+                                @endif
+                                <span
+                                    class="font-weight-bold amount">{{\App\CPU\Helpers::get_price_range($product) }}</span>
+                                </div>
+                            </div>
+                            <div
+                                class="wishlist_product_btn col-md-4 mt-5 float-right bodytr font-weight-bold"
+                                style="color: #92C6FF;">
+
+                                <a href="javascript:" class="wishlist_product_icon ml-2 pull-right mr-3">
+                                    <i class="czi-close-circle" onclick="removeWishlist('{{$product['id']}}')"
+                                       style="color: red"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         @else
             <span class="badge badge-danger">{{\App\CPU\Helpers::translate('item_removed')}}</span>
         @endif
     @endforeach
-    </div>
 @else
     <center>
         <h6 class="text-muted">

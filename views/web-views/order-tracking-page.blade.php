@@ -21,7 +21,7 @@
             border-radius: 10px;
         }
        .closet{
-            float: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}};
+            float: {{Session::get('direction') === "rtl" ? 'left' : 'right'}};
             font-size: 1.5rem;
             font-weight: 300;
             line-height: 1;
@@ -34,7 +34,7 @@
 
 @section('content')
     <!-- Page Content-->
-    <div class="container rtl" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+    <div class="container rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row">
             <div class="col-md-3 col-lg-3"></div>
             <div class="col-md-7 col-lg-6">
@@ -64,7 +64,7 @@
                                            placeholder="{{\App\CPU\Helpers::translate('your_phone_number')}}" required>
                                 </div>
                                 <div class="input-group-append">
-                                    <button class="btn bg-primaryColor text-light" type="submit" name="trackOrder">{{\App\CPU\Helpers::translate('track_order')}}</button>
+                                    <button class="btn btn--primary text-light" type="submit" name="trackOrder">{{\App\CPU\Helpers::translate('track_order')}}</button>
                                 </div>
                             </form>
                         </div>

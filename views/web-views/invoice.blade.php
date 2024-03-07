@@ -72,7 +72,7 @@
     @php($customer = \App\User::find($order['customer_id']))
     @php($logo=\App\Model\BusinessSetting::where(['type'=>'company_admin_logo'])->first()->value)
     {{--  <div style="width:410px;">  --}}
-        <div class="d-print-none w-full text-center mt-5">
+        <div class="d-print-none w-100 text-center mt-5">
             <button class="btn btn-primary" onclick="$('#a-layout').addClass('print_me');$('#roll-layout').removeClass('print_me');window.print()">
                 {{ Helpers::translate('print an A4 copy') }}
             </button>
@@ -191,9 +191,157 @@
 
         </div>
 
-        <div>
-            <div>
-                @include('web-views.order-details-component',['colf'=>true])
+        <table class="table table-bordered mt-3 text-left bg-white" style="width: 100%!important">
+            <thead class="bg-light">
+            <tr>
+                <th class="border border-dark text-center">م</th>
+                <th class="border border-dark text-center">{{\App\CPU\Helpers::translate('Product Image')}}</th>
+                <th class="border border-dark text-center">{{\App\CPU\Helpers::translate('Product number')}}</th>
+                <th class="border border-dark text-center">{{\App\CPU\Helpers::translate('Product name')}}</th>
+                <th class="border border-dark text-center">{{\App\CPU\Helpers::translate('QTY')}}</th>
+                <th class="border border-dark text-center">ك.المجانية</th>
+                <th class="border border-dark text-center">{{\App\CPU\Helpers::translate('Price')}}</th>
+                <th class="border border-dark text-center">{{\App\CPU\Helpers::translate('Value added tax')}}</th>
+                <th class="border border-dark text-center">{{\App\CPU\Helpers::translate('The price includes tax')}}</th>
+                <th class="border border-dark text-center">{{\App\CPU\Helpers::translate('Total inclusive of VAT')}}</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            @php($sub_total=0)
+            @php($total_tax=0)
+            @php($total_dis_on_pro=0)
+            @php($product_price=0)
+            @php($total_product_price=0)
+            @php($ext_discount=0)
+            @php($coupon_discount=0)
+            @php($total_qty=0)
+            @php($local = session()->get('local'))
+            @foreach($order->details as $key=>$detail)
+                @if($detail->product)
+
+                    <tr>
+                        <td class="border border-dark text-center">{{ $key }}</td>
+                        <td class="border border-dark text-center">
+                            <img class="rounded productImg" width="64"
+                            onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
+                            src="{{asset("storage/app/public/product/$local")}}/{{(isset(json_decode($detail->product['images'])->$local)) ? json_decode($detail->product['images'])->$local[0] ?? '' : ''}}">
+                        </td>
+                        <td class="border border-dark text-center justify-content-center">
+                            {{ $detail->product['code'] }}
+                            <center>
+                                {!! DNS1D::getBarcodeHTML($detail->product['code'], 'CODABAR') !!}
+                            </center>
+                        </td>
+                        <td class="border border-dark text-center">
+                            {{ \App\CPU\Helpers::getItemName('products','name',$detail->product['id'] )}}
+                        </td>
+                        <td class="border border-dark text-center" style="width: 80px">
+                            @php($total_qty += $detail['qty'])
+                            {{$detail['qty']}}
+                        </td>
+                        <td class="border border-dark text-center"></td>
+
+                        <td class="border border-dark text-center">
+                            @php($amount=($detail['price']*$detail['qty'])-$detail['discount'])
+                            @php($product_price = $detail['price']*$detail['qty'])
+                            {{ $product_price }}
+                        </td>
+                        <td class="border border-dark text-center">
+                            @php($total_tax+=$detail['tax'])
+                            {{$total_tax}}
+                        </td>
+                        <td class="border border-dark text-center">
+                            @php($total_product_price+=$product_price)
+                            {{$product_price + $total_tax}}
+                        </td>
+                        <td class="border border-dark text-center">
+                            {{$product_price + $total_tax}}
+                        </td>
+                    </tr>
+                    @php($sub_total+=$amount)
+
+                    <tr hidden>
+                        <td class="text-center">
+                        </td>
+                        <td class="text-center">
+                        </td>
+                        <td class="text-center justify-content-center">
+
+                        </td>
+                        <td class="text-center">
+                        </td>
+                        <td class="border border-dark text-center" style="width: 80px">
+                            {{$total_qty}}
+                        </td>
+                        <td class="border border-dark text-center"></td>
+
+                        <td class="text-center">
+                        </td>
+                        <td class="text-center">
+                        </td>
+                        <td class="text-center">
+                        </td>
+                        <td class="text-center">
+                        </td>
+                    </tr>
+
+                    @endif
+                    @endforeach
+                    <tr>
+                        <td class="text-center">
+                        </td>
+                        <td class="text-center">
+                        </td>
+                        <td class="text-center justify-content-center">
+
+                        </td>
+                        <td class="text-center border-left border-left-dark">
+                        </td>
+                        <td class="border border-dark text-center" style="width: 80px">
+                            {{$total_qty}}
+                        </td>
+                        <td class="border border-dark text-center"></td>
+
+                        <td class="text-center">
+                        </td>
+                        <td class="text-center">
+                        </td>
+                        <td class="text-center">
+                        </td>
+                        <td class="text-center">
+                        </td>
+                    </tr>
+                    <tr hidden>
+                        <td class="border-0 text-center"></td>
+                        <td class="border-0 text-center"></td>
+                        <td class="border-0 text-center justify-content-center"></td>
+                        <td class="border-0 text-center"></td>
+                        <td class="border-0 border border-dark text-center" colspan="2" style="width: 80px"></td>
+                        <td class="border-0 text-center"></td>
+                        <td class="border-0 text-center"></td>
+                        <td class="border-0 text-center"></td>
+                        <td class="border-0 text-center"></td>
+                    </tr>
+            </tbody>
+        </table>
+
+        <div class="row border-bottom border-dark mb-5">
+            <div class="col-4"></div>
+            <div class="col-4"></div>
+
+            <div class="col-4">
+                <div class="row">
+                    الإجمالي قبل الخصم: {{ $order['order_amount'] }}
+                </div>
+                <div class="row">
+                    الخصم: {{ $order['discount_amount'] }}
+                </div>
+                <div class="row">الإجمالي غير شامل ضريبة القيمة المضافة: {{ '' }}</div>
+                <div class="row">الاعباء: {{ '' }}</div>
+                <div class="row">ضريبة القيمة المضافة 15%: {{ '' }}</div>
+                <div class="row">المجموع شامل الضريبة المضافة: {{ '' }}</div>
+                <div class="row"> {{ \App\CPU\Helpers::numberToWord(123.15) }} </div>
             </div>
         </div>
 
@@ -209,7 +357,6 @@
             <div class="col-4 text-end">طبع بواسطة : مدير النظام</div>
         </div>
 
-    </div>
     </div>
     <div style="width:410px" class="bg-white" id="roll-layout">
         <div class="mb-3 border border-dark p-2 bg-white" style="border-radius: 11px">
@@ -302,9 +449,89 @@
 
         </div>
 
-        <div>
-            <div>
-                @include('web-views.order-details-component',['small_table'=>1])
+        <table class="table table-bordered mt-3 text-left bg-white" style="width: 100%!important">
+            <thead class="bg-light">
+            <tr>
+                <th class="border border-dark text-center">{{\App\CPU\Helpers::translate('The item')}}</th>
+                <th class="border border-dark text-center">{{\App\CPU\Helpers::translate('QTY')}}</th>
+                <th class="border border-dark text-center">ك.م</th>
+                <th class="border border-dark text-center">{{\App\CPU\Helpers::translate('Price')}}</th>
+                <th class="border border-dark text-center">{{\App\CPU\Helpers::translate('Total')}}</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            @php($sub_total=0)
+            @php($total_tax=0)
+            @php($total_dis_on_pro=0)
+            @php($product_price=0)
+            @php($total_product_price=0)
+            @php($ext_discount=0)
+            @php($coupon_discount=0)
+            @php($total_qty=0)
+            @php($local = session()->get('local'))
+            @foreach($order->details as $key=>$detail)
+                @if($detail->product)
+
+                    <tr>
+                        <td class="text-center">{{ $detail->product['id'] }}</td>
+
+                        <td class="text-center" style="width: 80px">
+                            @php($total_qty += $detail['qty'])
+                            {{$detail['qty']}}
+                        </td>
+                        <td class="text-center"></td>
+
+                        <td class="text-center">
+                            @php($amount=($detail['price']*$detail['qty'])-$detail['discount'])
+                            @php($product_price = $detail['price']*$detail['qty'])
+                            {{ $product_price }}
+                        </td>
+
+
+                        <td class="text-center">
+                            {{$product_price + $total_tax}}
+                        </td>
+                    </tr>
+                    <tr style="border-bottom: black thin solid !important">
+                        <td colspan="4">
+                            <div class="text-start justify-content-start">
+                                {{ $detail->product['code'] }}
+
+                                {!! DNS1D::getBarcodeHTML($detail->product['code'], 'CODABAR') !!}
+                            </div>
+                            <div class="text-start">
+                                {{ \App\CPU\Helpers::getItemName('products','name',$detail->product['id'] )}}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="text-start">
+                                <img class="rounded productImg" width="64"
+                                onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
+                                src="{{asset("storage/app/public/product/$local")}}/{{(isset(json_decode($detail->product['images'])->$local)) ? json_decode($detail->product['images'])->$local[0] ?? '' : ''}}">
+                            </div>
+                        </td>
+                    </tr>
+                    @php($sub_total+=$amount)
+                @endif
+            @endforeach
+            </tbody>
+        </table>
+
+        <div class="row mb-5 px-3" style="border-bottom: black dashed thin">
+            <div class="col-4">
+                <div class="row">الكمية: {{ $total_qty }}</div>
+                <div class="row">ك مجانية: {{ '0' }}</div>
+                <div class="row">إجمالي الكمية: {{ $total_qty }}</div>
+            </div>
+            <div class="col-8">
+                <div class="row">الإجمالي قبل الضر يبة: {{ '' }}</div>
+                <div class="row">
+                    الخصم: {{ $order['discount_amount'] }}
+                </div>
+                <div class="row">الاعباء: {{ '' }}</div>
+                <div class="row">ضريبة القيمة المضافة 15%: {{ '' }}</div>
+                <div class="row">المجموع شامل الضريبة المضافة: {{ '' }}</div>
             </div>
         </div>
 

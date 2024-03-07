@@ -1,6 +1,6 @@
 @extends('layouts.front-end.app')
 
-@section('title',Helpers::translate('All Seller Page'))
+@section('title',\App\CPU\Helpers::translate('All Seller Page'))
 
 @push('css_or_js')
     <meta property="og:image" content="{{asset('storage/app/public/company')}}/{{$web_config['web_logo']->value}}"/>
@@ -44,14 +44,14 @@
     <!-- Page Content-->
     <div class="container mb-md-4">
         <div class="row mt-3 mb-3 border-bottom">
-            <div class="col-md-8 hidden sm:block text-start">
-                <h4 class="mt-2">{{ \App\CPU\Helpers::translate('Sellers') }} ({{ $cnt }})</h4>
+            <div class="col-md-8">
+                <h4 class="mt-2">{{ \App\CPU\Helpers::translate('Sellers') }}</h4>
             </div>
             <div class="col-md-4">
                 <form action="{{route('search-shop')}}">
                     @csrf
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control"  placeholder="{{\App\CPU\Helpers::translate('Shop name')}}" name="shop_name" value="{{ request('shop_name') }}">
+                        <input type="text" class="form-control"  placeholder="{{\App\CPU\Helpers::translate('Shop name')}}" name="shop_name" required>
                         <div class="input-group-append">
                             <button class="btn btn-outline-secondary" type="submit">{{\App\CPU\Helpers::translate('Search')}}</button>
                         </div>
@@ -63,20 +63,17 @@
             <!-- Content  -->
             <section class="col-lg-12">
                 <!-- Products grid-->
-                <div class="row mx-n2 justify-center" style="min-height: 200px">
+                <div class="row mx-n2" style="min-height: 200px">
                     @foreach($sellers as $shop)
                         <div class="col-lg-2 col-md-3 col-sm-4 col-6 px-2 pb-4 text-center">
                             <div class="card-body border" style="border-radius: 8px">
-                                <a href="@if (\App\CPU\Helpers::store_module_permission_check('store.sellerview.view')){{route('shopView',['id'=>$shop['seller_id']])}}@else # @endif">
-                                    <img class="inline" style="vertical-align: middle;height: 6rem; border-radius: 3%;"
+                                <a href="{{route('shopView',['id'=>$shop['seller_id']])}}">
+                                    <img style="vertical-align: middle;height: 6rem; border-radius: 3%;"
                                          onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
                                          src="{{asset("storage/app/public/shop/$shop->image")}}"
                                          alt="{{$shop->name}}">
                                     <div class="text-center text-dark">
                                         <span class="text-center font-weight-bold small p-1">{{Str::limit($shop->name, 9999999999999)}}</span>
-                                    </div>
-                                    <div class="text-center">
-                                        <span class="text-center font-weight-bold text-primaryColor">{{ App\Model\Product::where('added_by','seller')->where('user_id',$shop['seller_id'])->count() }} {{ Helpers::translate('products') }}</span>
                                     </div>
                                 </a>
                             </div>

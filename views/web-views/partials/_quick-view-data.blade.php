@@ -26,7 +26,7 @@
     .cz-preview {
         width: 100%;
         margin-top: 0;
-        margin- {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}: 0;
+        margin- {{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 0;
         max-height: 100% !important;
     }
 
@@ -85,7 +85,7 @@
             flex-wrap: wrap;
             -ms-flex-pack: center;
             justify-content: center;
-            margin-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}: 0;
+            margin-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 0;
             padding-top: 1rem;
             padding-right: 22px;
             padding-bottom: 10px;
@@ -111,7 +111,7 @@
             <a class="product-title2" href="{{route('product',$product->slug)}}" data-bs-toggle="tooltip"
                data-bs-placement="right"
                title="Go to product page">{{Helpers::getItemName('products','name',$product->id)}}
-                <i class="czi-arrow-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left mr-2' : 'right ml-2'}} font-size-lg" style="margin-right: 0px !important;"></i>
+                <i class="czi-arrow-{{Session::get('direction') === "rtl" ? 'left mr-2' : 'right ml-2'}} font-size-lg" style="margin-right: 0px !important;"></i>
             </a>
         </h4>
     </div>
@@ -159,13 +159,13 @@
         </div>
         <!-- Product details-->
         <div class="col-lg-6 col-md-6 mt-md-0 mt-sm-3">
-            <div class="details" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+            <div class="details" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
                 <a href="{{route('product',$product->slug)}}" class="h3 mb-2 product-title">{{$product->name}}</a>
                 @if (\App\Model\BusinessSetting::where('type','products_rating')->first()->value ?? '')
                 <div class="d-flex align-items-center mb-2 pro">
                     @if (\App\Model\BusinessSetting::where('type','products_rating')->first()->value ?? '')
                     <span
-                        class="d-inline-block font-size-sm text-body align-middle mt-1 {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-2 pl-2' : 'mr-2 pr-2'}}">{{$overallRating[0]}}</span>
+                        class="d-inline-block font-size-sm text-body align-middle mt-1 {{Session::get('direction') === "rtl" ? 'ml-2 pl-2' : 'mr-2 pr-2'}}">{{$overallRating[0]}}</span>
                     <div class="star-rating">
                         @for($inc=0;$inc<5;$inc++)
                             @if($inc<$overallRating[0])
@@ -178,20 +178,20 @@
                     @endif
                     <div>
                         <span
-                        class="d-inline-block font-size-sm text-body align-middle mt-1 {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-2 mr-1' : 'ml-1 mr-2'}} pl-2 pr-2">{{$overallRating[1]}} {{\App\CPU\Helpers::translate('reviews')}}</span>
+                        class="d-inline-block font-size-sm text-body align-middle mt-1 {{Session::get('direction') === "rtl" ? 'ml-2 mr-1' : 'ml-1 mr-2'}} pl-2 pr-2">{{$overallRating[1]}} {{\App\CPU\Helpers::translate('reviews')}}</span>
                         <span style="width: 0px;height: 10px;border: 0.5px solid #707070; margin-top: 6px"></span>
                         <span
-                            class="d-inline-block font-size-sm text-body align-middle mt-1 {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-2 mr-1' : 'ml-1 mr-2'}} pl-2 pr-2">{{$countOrder}} {{\App\CPU\Helpers::translate('orders')}}  </span>
+                            class="d-inline-block font-size-sm text-body align-middle mt-1 {{Session::get('direction') === "rtl" ? 'ml-2 mr-1' : 'ml-1 mr-2'}} pl-2 pr-2">{{$countOrder}} {{\App\CPU\Helpers::translate('orders')}}  </span>
                         <span style="width: 0px;height: 10px;border: 0.5px solid #707070; margin-top: 6px">    </span>
                         <span
-                            class="d-inline-block font-size-sm text-body align-middle mt-1 {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-2 mr-1' : 'ml-1 mr-2'}} pl-2 pr-2">  {{$countWishlist}}  {{\App\CPU\Helpers::translate('wish')}}</span>
+                            class="d-inline-block font-size-sm text-body align-middle mt-1 {{Session::get('direction') === "rtl" ? 'ml-2 mr-1' : 'ml-1 mr-2'}} pl-2 pr-2">  {{$countWishlist}}  {{\App\CPU\Helpers::translate('wish')}}</span>
 
                     </div>
                 </div>
                 @endif
                 <div class="mb-3">
                     <span
-                        class="h3 font-weight-normal text-accent {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-1' : 'mr-1'}}">
+                        class="h3 font-weight-normal text-accent {{Session::get('direction') === "rtl" ? 'ml-1' : 'mr-1'}}">
                         {{\App\CPU\Helpers::get_price_range($product) }}
                     </span>
                     @if($product->discount > 0)
@@ -218,7 +218,7 @@
                     @php($minimum_order_qty = Helpers::getProductPrice_pl($product['id'])['min_qty'] ?? 0)
                     <input type="hidden" name="quantity" value="{{ $minimum_order_qty ?? 1 }}">
                     <input type="hidden" name="id" value="{{ $product->id }}">
-                    <div class="position-relative {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-n4' : 'mr-n4'}} mb-3">
+                    <div class="position-relative {{Session::get('direction') === "rtl" ? 'ml-n4' : 'mr-n4'}} mb-3">
                         @if (count(json_decode($product->colors)) > 0)
                             <div class="flex-start">
                                 <div class="product-description-label mt-2">
@@ -322,7 +322,7 @@
                                 style="width:37%; height: 45px">
                             {{\App\CPU\Helpers::translate('buy_now')}}
                         </button>
-                        <button class="btn bg-primaryColor string-limit"
+                        <button class="btn btn--primary string-limit"
                                 onclick="addToCart()"
                                 type="button"
                                 style="width:37%; height: 45px">
@@ -331,7 +331,7 @@
                         <button type="button" onclick="addWishlist('{{$product['id']}}')"
                                 class="btn btn-dark for-hover-bg string-limit"
                                 style="">
-                            <i class="fa fa-heart-o {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-2' : 'mr-2'}}"
+                            <i class="fa fa-heart-o {{Session::get('direction') === "rtl" ? 'ml-2' : 'mr-2'}}"
                                aria-hidden="true"></i>
                             <span class="countWishlist-{{$product['id']}}">{{$countWishlist}}</span>
                         </button>

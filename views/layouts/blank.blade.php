@@ -18,7 +18,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="">
     <link rel="stylesheet" href="{{asset('public/assets/back-end')}}/css/toastr.css"/>
     <!-- Main Theme Styles + Bootstrap-->
-    <link rel="stylesheet" media="screen" href="{{asset('public/assets/front-end')}}/css/theme.min.css?v=1">
+    <link rel="stylesheet" media="screen" href="{{asset('public/assets/front-end')}}/css/theme.min.css">
     <link rel="stylesheet" media="screen" href="{{asset('public/assets/front-end')}}/css/slick.css">
     <link rel="stylesheet" href="{{asset('public/assets/back-end')}}/css/toastr.css"/>
     <link rel="stylesheet" href="{{asset('public/assets/front-end')}}/css/master.css"/>

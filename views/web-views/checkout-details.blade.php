@@ -24,9 +24,8 @@
 @endpush
 
 @section('content')
-@php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
-@php($user = \App\User::find($storeId))
-    <div class="container pb-5 mb-2 mb-md-4 rtl" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+
+    <div class="container pb-5 mb-2 mb-md-4 rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row">
             <div class="col-md-12 mb-5 pt-5">
                 <div class="feature_header" style="background: #dcdcdc;line-height: 1px">
@@ -40,10 +39,10 @@
                 <!-- Shipping methods table-->
                     <h2 class="h4 pb-3 mb-2 mt-5">{{\App\CPU\Helpers::translate('Authentication')}}</h2>
                     <!-- Autor info-->
-                    @if((auth('customer')->check() || auth('delegatestore')->check()))
+                    @if(auth('customer')->check())
                         <div class="card">
                             <div class="card-body">
-                                <h4>{{$user->f_name}}, {{\App\CPU\Helpers::translate('HI')}}!</h4>
+                                <h4>{{auth('customer')->user()->f_name}}, {{\App\CPU\Helpers::translate('HI')}}!</h4>
                                 <small>{{\App\CPU\Helpers::translate('you_are_already_login_proceed')}}.</small>
                             </div>
                         </div>
@@ -109,7 +108,7 @@
                                                                 {{\App\CPU\Helpers::translate('remember_me')}}
                                                             </label>
 
-                                                            <a class="font-size-sm {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'mr-5' : 'ml-5'}}"
+                                                            <a class="font-size-sm {{Session::get('direction') === "rtl" ? 'mr-5' : 'ml-5'}}"
                                                                href="{{route('customer.auth.recover-password')}}">
                                                                 {{\App\CPU\Helpers::translate('forgot_password')}}?
                                                             </a>
@@ -119,7 +118,7 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="col">
-                                                    <button class="btn bg-primaryColor btn-block text-light"
+                                                    <button class="btn btn--primary btn-block text-light"
                                                             type="submit">{{\App\CPU\Helpers::translate('sing_in')}}</button>
                                                 </div>
                                             </div>
@@ -164,7 +163,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <label for="su-email">{{\App\CPU\Helpers::translate('Phone')}}</label>
-                                                        <input class="form-control phoneInput" name="phone" type="text" pattern="\d*" t="number"
+                                                        <input class="form-control phoneInput" name="phone" type="number"
                                                                id="su-phone" placeholder="{{\App\CPU\Helpers::translate('01700000000')}}"
                                                                required>
                                                         <div class="invalid-feedback">{{\App\CPU\Helpers::translate('Please provide a valid phone number')}}.
@@ -206,7 +205,7 @@
                                             </div>
                                             <div class="form-row">
                                                 <div class="col">
-                                                    <button class="btn bg-primaryColor btn-block text-light" type="submit">
+                                                    <button class="btn btn--primary btn-block text-light" type="submit">
                                                         {{\App\CPU\Helpers::translate('sign-up')}}
                                                     </button>
                                                 </div>
@@ -223,18 +222,18 @@
                 <div class="row">
                     <div class="col-6">
                         <a class="btn btn-secondary btn-block" href="{{route('shop-cart')}}">
-                            <i class="czi-arrow-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}} mt-sm-0 mx-1"></i>
+                            <i class="czi-arrow-{{Session::get('direction') === "rtl" ? 'right' : 'left'}} mt-sm-0 mx-1"></i>
                             <span
                                 class="d-none d-sm-inline">{{\App\CPU\Helpers::translate('Back to')}}  {{\App\CPU\Helpers::translate('Cart')}} </span>
                             <span class="d-inline d-sm-none">{{\App\CPU\Helpers::translate('Back')}}</span>
                         </a>
                     </div>
                     <div class="col-6 text-end">
-                        @if((auth('customer')->check() || auth('delegatestore')->check()))
-                            <a class="btn bg-primaryColor btn-block text-light" href="{{route('shop-cart')}}">
+                        @if(auth('customer')->check())
+                            <a class="btn btn--primary btn-block text-light" href="{{route('shop-cart')}}">
                                 <span class="d-none d-sm-inline">{{\App\CPU\Helpers::translate('shop_cart')}}</span>
                                 <span class="d-inline d-sm-none">{{\App\CPU\Helpers::translate('Next')}}</span>
-                                <i class="czi-arrow-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}} mt-sm-0 mx-1"></i>
+                                <i class="czi-arrow-{{Session::get('direction') === "rtl" ? 'left' : 'right'}} mt-sm-0 mx-1"></i>
                             </a>
                         @endif
                     </div>

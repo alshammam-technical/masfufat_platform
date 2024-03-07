@@ -48,8 +48,7 @@
     }
 
 </style>
-@php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
-@php($user = \App\User::find($storeId))
+
 <div class="sidebarR col-lg-3 col-md-3">
     <!--Price Sidebar-->
     <div class="price_sidebar rounded-lg box-shadow-sm" id="shop-sidebar" style="margin-bottom: -10px;background: white">
@@ -104,7 +103,7 @@
         </div>
         @endif
 
-        @if($user->is_active)
+        @if(auth('customer')->user()->is_active)
         <div class="pb-0" style="padding-top: 12px;">
             <!-- Filter by price-->
             <div class="sidebarL">
@@ -166,7 +165,7 @@
         </div>
         @endif
 
-        @if($user->is_active)
+        @if(auth('customer')->user()->is_active)
         <div class="pb-0" style="padding-top: 12px;">
             <!-- Filter by price-->
             <div class="sidebarL">

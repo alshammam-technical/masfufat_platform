@@ -1,53 +1,9 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
-    @if($_SERVER['SERVER_NAME'] !== "platform.masfufat.com")
-    @if($_SERVER['SERVER_NAME'] == "masfufat.com")
-    <script>
-        window['_fs_host'] = 'fullstory.com';
-        window['_fs_script'] = 'edge.fullstory.com/s/fs.js';
-        window['_fs_org'] = 'o-1RV6VB-na1';
-        window['_fs_namespace'] = 'FS';
-        (function(m,n,e,t,l,o,g,y){
-            if (e in m) {if(m.console && m.console.log) { m.console.log('FullStory namespace conflict. Please set window["_fs_namespace"].');} return;}
-            g=m[e]=function(a,b,s){g.q?g.q.push([a,b,s]):g._api(a,b,s);};g.q=[];
-            o=n.createElement(t);o.async=1;o.crossOrigin='anonymous';o.src='https://'+_fs_script;
-            y=n.getElementsByTagName(t)[0];y.parentNode.insertBefore(o,y);
-            g.identify=function(i,v,s){g(l,{uid:i},s);if(v)g(l,v,s)};g.setUserVars=function(v,s){g(l,v,s)};g.event=function(i,v,s){g('event',{n:i,p:v},s)};
-            g.anonymize=function(){g.identify(!!0)};
-            g.shutdown=function(){g("rec",!1)};g.restart=function(){g("rec",!0)};
-            g.log = function(a,b){g("log",[a,b])};
-            g.consent=function(a){g("consent",!arguments.length||a)};
-            g.identifyAccount=function(i,v){o='account';v=v||{};v.acctId=i;g(o,v)};
-            g.clearUserCookie=function(){};
-            g.setVars=function(n, p){g('setVars',[n,p]);};
-            g._w={};y='XMLHttpRequest';g._w[y]=m[y];y='fetch';g._w[y]=m[y];
-            if(m[y])m[y]=function(){return g._w[y].apply(this,arguments)};
-            g._v="1.3.0";
-        })(window,document,window['_fs_namespace'],'script','user');
-    </script>
-    @endif
-    @endif
     <meta charset="utf-8">
     <title>Masfufat</title>
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PZ11VQNTWS"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
 
-      gtag('config', 'G-PZ11VQNTWS');
-    </script>
-    {{--  tailwind  --}}
-    @php
-    $cssDirectory = public_path('masfufat_style/dist/assets');
-    @endphp
-    @foreach (scandir($cssDirectory) as $file)
-        @if (pathinfo($file, PATHINFO_EXTENSION) === 'css')
-            <link rel="stylesheet" href="{{ asset('/public/masfufat_style/dist/assets/' . $file) }}">
-        @endif
-    @endforeach
 
     <link rel="apple-touch-icon" sizes="180x180"
           href="{{asset('/storage/app/public/company/2022-11-24-637fa1734f7e3.png')}}">
@@ -71,10 +27,9 @@
           href="{{asset('public/assets/front-end')}}/vendor/lightgallery.js/dist/css/lightgallery.min.css"/>
     <link rel="stylesheet" href="{{asset('public/assets/back-end')}}/css/toastr.css"/>
     <!-- Main Theme Styles + Bootstrap-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
 
     <link rel="stylesheet" media="screen" href="{{asset('public/assets/landing')}}/css/b.min.css">
-    <link rel="stylesheet" media="screen" href="{{asset('public/assets/landing')}}/css/theme.min.css?v=1">
+    <link rel="stylesheet" media="screen" href="{{asset('public/assets/landing')}}/css/theme.min.css">
     <link rel="stylesheet" media="screen" href="{{asset('public/assets/front-end')}}/css/slick.css">
     {{--  <link rel="stylesheet" media="screen" href="{{asset('public/assets/front-end')}}/css/font-awesome.min.css">  --}}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
@@ -90,7 +45,7 @@
     @stack('css_or_js')
 
 
-    @if((Session::get('direction') ?? 'rtl') === "rtl")
+    @if(Session::get('direction') === "rtl")
     <link rel="stylesheet" href="{{asset('public/assets/back-end')}}/css/menurtl.css">
     @endif
     <link rel="stylesheet" href="{{asset('public/assets/back-end')}}/css/menu.css">
@@ -268,9 +223,6 @@
             padding-left: 1rem;
             padding-right: 1rem;
             border-radius: 2px;
-        }
-        #toast-container {
-            z-index: 100000000000000 !important;
         }
 
         .d-table.checkbox-alphanumeric--style-1 {
@@ -517,13 +469,13 @@
             line-height: 1.25rem;
         }
 
-        .bg-primaryColor {
+        .btn--primary {
             color: #fff;
             background-color: {{$web_config['primary_color']}}!important;
             border-color: {{$web_config['primary_color']}}!important;
         }
 
-        .bg-primaryColor:hover {
+        .btn--primary:hover {
             color: #fff;
             background-color: {{$web_config['primary_color']}}!important;
             border-color: {{$web_config['primary_color']}}!important;
@@ -701,7 +653,7 @@
         }
         .dropdown-menu {
             min-width: 304px !important;
-            margin-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}: -8px !important;
+            margin-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}: -8px !important;
             border-top-left-radius: 0px;
             border-top-right-radius: 0px;
         }
@@ -741,30 +693,7 @@
 </head>
 <!-- Body-->
 <body class="toolbar-enabled navbar-vertical-aside-closed-mode">
-    <a href="#" id="scrollToTopButton" style="display: none; position: fixed; bottom: 20px; {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left: 20px;' : 'right: 20px;'}} z-index: 1000000000; transition: opacity 0.3s ease, visibility 0.3s ease;" onclick="scrollToTop();return false;">
-        <i class="fa fa-chevron-up" style="display: inline-block; padding: 10px; background: #673ab7; color: white; border-radius: 50%;"></i>
-    </a>
-    <script>
-        // الدالة للتمرير لأعلى الصفحة
-        function scrollToTop() {
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        }
 
-        // الدالة لإظهار أو إخفاء زر التمرير لأعلى
-        function toggleScrollToTopButton() {
-            var scrollToTopButton = document.getElementById('scrollToTopButton');
-            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-                scrollToTopButton.style.display = 'block';
-            } else {
-                scrollToTopButton.style.display = 'none';
-            }
-        }
-
-        // إضافة معالج لحدث التمرير
-        window.onscroll = function() {
-            toggleScrollToTopButton();
-        };
-        </script>
 @include('layouts.landing.partials._header')
 <!-- Page title-->
 
@@ -774,15 +703,17 @@
 
 <!-- Footer-->
 <!-- Footer-->
-@stack('script')
-<script>
-    AOS.init();
-</script>
 @include('layouts.landing.partials._footer')
-@if($_SERVER['SERVER_NAME'] !== "platform.masfufat.com")
-@if($_SERVER['SERVER_NAME'] == "masfufat.com")
-<script id="respondio__widget" src="https://cdn.respond.io/webchat/widget/widget.js?cId=6fbe80a90fa9dde3a56998e3e891764"></script>
-@endif
-@endif
+<script>
+    window.intercomSettings = {
+      api_base: "https://api-iam.intercom.io",
+      app_id: "nbwdn606"
+    };
+  </script>
+
+  <script>
+  // We pre-filled your app ID in the widget URL: 'https://widget.intercom.io/widget/nbwdn606'
+  (function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/nbwdn606';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();
+  </script>
 </body>
 </html>

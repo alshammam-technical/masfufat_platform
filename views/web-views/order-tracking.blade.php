@@ -150,7 +150,7 @@
         <div class="pt-3 pb-3">
             <h2>{{ \App\CPU\Helpers::translate('My Order')}}</h2>
         </div>
-        <div class="bg-primaryColor">
+        <div class="btn--primary">
             <div class="container d-lg-flex justify-content-between py-2 py-lg-3">
 
                 <div class="order-lg-1 pr-lg-4 text-center text-lg-left">
@@ -286,7 +286,7 @@
         <div class="d-sm-flex flex-wrap justify-content-between align-items-center text-center pt-3">
             <div class="custom-control custom-checkbox mt-1 mr-3">
             </div>
-            <a class="btn bg-primaryColor btn-sm mt-2 mb-2" href="#order-details" data-bs-toggle="modal">{{ \App\CPU\Helpers::translate('View Order Details')}}</a>
+            <a class="btn btn--primary btn-sm mt-2 mb-2" href="#order-details" data-bs-toggle="modal">{{ \App\CPU\Helpers::translate('View Order Details')}}</a>
         </div>
     </div>
 

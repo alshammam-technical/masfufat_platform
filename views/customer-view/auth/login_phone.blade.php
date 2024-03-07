@@ -38,18 +38,17 @@
 @endpush
 @section('content')
     <div class="container py-4 py-lg-5 my-4"
-         style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row justify-content-center">
             <div class="col-md-7">
                 <div class="card border-1 box-shadow-0">
                     <div class="card-body">
-                        <h2 class="h4 mb-5">{{\App\CPU\Helpers::translate('sign_in')}}</h2>
-                        @include('sellerCustomerLoginTabs')
-                        <div class="row mt-0 mb-8 ps-1 pe-4" style="flex-direction: row-reverse">
+                        <div class="row mt-0 mb-8 ps-1 pe-4">
+                            <h2 class="h4 mb-5">{{\App\CPU\Helpers::translate('sign_in')}}</h2>
                             @foreach (\App\CPU\Helpers::get_business_settings('social_login') as $socialLoginService)
                                 @if (isset($socialLoginService) && $socialLoginService['status']==true)
                                     <div class="col-sm-6 text-center mb-1">
-                                        <a class="whitespace-normal btn @if($socialLoginService['login_medium'] == 'phone') border-b-solid border-b-2 border-b-[#FDCD05] @else btn-white border-0 @endif"
+                                        <a class="btn @if($socialLoginService['login_medium'] == 'phone') btn-primary @else btn-white @endif border-0"
                                            href="{{route('customer.auth.service-login', $socialLoginService['login_medium'])}}"
                                            style="width: 100%">
                                             {{\App\CPU\Helpers::translate('sign_in_with_'.$socialLoginService['login_medium'])}}
@@ -66,8 +65,8 @@
                                 <label for="si-email" class="font-weight-bold">
                                     {{\App\CPU\Helpers::translate('phone')}}</label>
                                     <div class="form-control " dir="ltr">
-                                        <input class="phoneInput text-left border-0 w-full" dir="ltr" type="text" name="phone" id="si-email"
-                                        style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};"
+                                        <input class="phoneInput text-left border-0 w-100" dir="ltr" type="text" name="phone" id="si-email"
+                                        style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};"
                                         value="{{old('phone') ?? '+966'}}"
                                         placeholder="{{\App\CPU\Helpers::translate('Please enter your phone number')}}"
                                         required>
@@ -77,12 +76,12 @@
                                     .
                                 </div>
                             </div>
-                            <button class="btn bg-primaryColor btn-primary btn-block w-full"
+                            <button class="btn btn--primary btn-primary btn-block w-100"
                                     type="submit">{{\App\CPU\Helpers::translate('login')}}</button>
                         </form>
                     </div>
                     <div class="col-12 flex-between justify-content-center row p-0 text-center" style="direction: {{ Session::get('direction') }}">
-                        <div class="mb-3 {{(Session::get('direction') ?? 'rtl') === "rtl" ? '' : 'ml-2'}}">
+                        <div class="mb-3 {{Session::get('direction') === "rtl" ? '' : 'ml-2'}}">
                             <h6>
                                 {{ \App\CPU\Helpers::translate('dont have an account?') }}
                                 <a href="{{route('customer.auth.register')}}">

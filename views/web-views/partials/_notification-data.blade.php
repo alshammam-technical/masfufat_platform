@@ -89,28 +89,23 @@
     }
 </style>
 @php($current_lang = session()->get('local'))
-@php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
 @if($notifications->count()>0)
     @foreach($notifications as $notification)
-        <div class="card box-shadow-sm mt-5">
-            <div class="product">
-                <div class="card {{ in_array($storeId,explode(',',$notification->seen_by)) ? '' : 'bg-grey' }}">
+        <div class="card box-shadow-sm mt-2">
+            <div class="product mb-2">
+                <div class="card {{ in_array(auth('customer')->id(),explode(',',$notification->seen_by)) ? '' : 'bg-grey' }}">
                     <div class="row forPadding">
                         <div class="wishlist_product_img col-md-2 col-lg-2 col-sm-2">
                             <a>
-                                <img width="50%"
-                                    onerror="$(this).remove()"
+                                <img
+                                    onerror="this.src='{{asset('storage/app/icon/bell.png')}}'"
                                     src="{{asset('storage/app/public/notification')}}/{{$notification['image']}}"
                                     >
                             </a>
                         </div>
-                        <div class="wishlist_product_desc col-md-5 mt-4 {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'pr-4' : 'pl-4'}} mb-3">
+                        <div class="wishlist_product_desc col-md-5 mt-4 {{Session::get('direction') === "rtl" ? 'pr-4' : 'pl-4'}}">
                             <span class="font-name mb-1 d-block">
-                                <a href="@if ($notification->title == Helpers::translate('Your support ticket has been answered') || $notification->title == Helpers::translate('A support ticket has been sent to you'))
-                                    {{route('support-ticket.index',[$notification->ticket_id ?? ''])}}
-                                @else
-                                   #
-                                @endif">
+                                <a href="#">
                                     {{ $notification->title ?? Helpers::translate('New notification') }}
                                 </a>
                             </span>
@@ -120,12 +115,12 @@
                                 {!! $notification->description !!}
                             </div>
                         </div>
-                        <div class="wishlist_product_btn col-md-3 mt-6 float-right bodytr font-weight-bold" style="color: #92C6FF;">
+                        <div class="wishlist_product_btn col-md-3 mt-5 float-right bodytr font-weight-bold" style="color: #92C6FF;">
 
                             {{ $notification->created_at }}
                         </div>
-                        <div class="wishlist_product_btn col-md-2 mt-6 float-right bodytr font-weight-bold text-center">
-                            @if(!in_array($storeId,explode(',',$notification->seen_by)))
+                        <div class="wishlist_product_btn col-md-2 mt-10 float-right bodytr font-weight-bold text-center">
+                            @if(!in_array(auth('customer')->id(),explode(',',$notification->seen_by)))
                             <a role="button" class="text-success" onclick="$.get('{{route('notifications.read',['id'=>$notification['id']])}}').then(d=>{return 1});$(this).closest('.bg-grey').removeClass('bg-grey');$(this).remove()">
                                 <i class="fa fa-eye"></i>
                             </a>
@@ -139,7 +134,7 @@
 @else
     <center>
         <h6 class="text-muted">
-            {{\App\CPU\Helpers::translate('No notifications found')}}.
+            {{\App\CPU\Helpers::translate('No data found')}}.
         </h6>
     </center>
 @endif

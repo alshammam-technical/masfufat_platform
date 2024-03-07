@@ -3,7 +3,6 @@
 @section('title',\App\CPU\Helpers::translate('My Loyalty Point'))
 
 @push('css_or_js')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.12.1/af-2.4.0/b-2.2.3/b-colvis-2.2.3/b-print-2.2.3/cr-1.5.6/fh-3.2.4/kt-2.7.0/r-2.3.0/rr-1.2.8/sb-1.3.4/sl-1.4.0/sr-1.1.1/datatables.min.css"/>
     <style>
         .widget-categories .accordion-heading > a:hover {
             color: #FFD5A4 !important;
@@ -37,7 +36,7 @@
         }
 
         .tdBorder {
-            border- {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}: 1px solid #f7f0f0;
+            border- {{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 1px solid #f7f0f0;
             text-align: center;
         }
 
@@ -91,6 +90,9 @@
             border: none;
             text-align: center;
         }
+        tr td, tr th{
+            width: 14.28571428571429%;
+        }
 
         .card-footer{
             border: none !important;
@@ -124,7 +126,7 @@
 @section('content')
     <!-- Page Content-->
     <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl"
-         style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row">
         <!-- Content  -->
             <section class="col-lg-12 col-md-12">
@@ -134,7 +136,7 @@
                 @endphp
                 <div class="justify-content-between">
                     <div class="row justify-content-between mx-0 mb-4">
-                        <div class="col-md-6 col-sm-12 bg-primary p-4 border border-primary text-center" style="border-radius: 12px">
+                        <div class="col-6 bg-primary p-4 border border-primary text-center" style="border-radius: 12px">
                             <p class="text-white h4 text-center">
                                 {{\App\CPU\Helpers::translate('total_loyalty_point')}}
                             </p>
@@ -148,13 +150,11 @@
                             </p>
                         </div>
 
-                        <div class="col-md-6 col-sm-12 text-end">
+                        <div class="col-6 text-end">
                             @if ($wallet_status == 1 && $loyalty_point_status == 1)
-                            @if (\App\CPU\Helpers::store_module_permission_check('my_account.my_loyalty_point.convert_to_currency'))
-                            <button type="button" class="btn bg-primaryColor text-light mt-6 py-3 px-4 whitespace-normal" data-bs-toggle="modal" data-bs-target="#convertToCurrency">
+                            <button type="button" class="btn btn--primary text-light mt-6 py-3 px-4" data-bs-toggle="modal" data-bs-target="#convertToCurrency">
                                 {{\App\CPU\Helpers::translate('convert_to_currency')}}
                             </button>
-                            @endif
                             @endif
                         </div>
                     </div>
@@ -164,43 +164,41 @@
 
                     <div class="card-body p-0">
                         <div style="overflow: auto">
-                            <table class="table lp_table">
+                            <table class="table">
                                 <thead>
-                                    <tr style="background-color: F8F8F8;">
-                                        <td></td>
-                                        <td class="tdBorder">
-                                            <div class="py-2"><span
-                                                    class="d-block spandHeadO ">{{\App\CPU\Helpers::translate('sl#')}}</span></div>
-                                        </td>
-                                        <td class="tdBorder">
-                                            <div class="py-2"><span
-                                                    class="d-block spandHeadO">{{\App\CPU\Helpers::translate('transaction_type')}} </span>
-                                            </div>
-                                        </td>
-                                        <td class="tdBorder">
-                                            <div class="py-2"><span
-                                                    class="d-block spandHeadO">{{\App\CPU\Helpers::translate('credit')}} </span>
-                                            </div>
-                                        </td>
-                                        <td class="tdBorder">
-                                            <div class="py-2"><span
-                                                    class="d-block spandHeadO"> {{\App\CPU\Helpers::translate('debit')}}</span></div>
-                                        </td>
-                                        <td class="tdBorder">
-                                            <div class="py-2"><span
-                                                    class="d-block spandHeadO"> {{\App\CPU\Helpers::translate('balance')}}</span></div>
-                                        </td>
-                                        <td class="tdBorder">
-                                            <div class="py-2"><span
-                                                    class="d-block spandHeadO"> {{\App\CPU\Helpers::translate('date')}}</span></div>
-                                        </td>
-                                    </tr>
+                                <tr style="background-color: F8F8F8;">
+                                    <td class="tdBorder">
+                                        <div class="py-2"><span
+                                                class="d-block spandHeadO ">{{\App\CPU\Helpers::translate('sl#')}}</span></div>
+                                    </td>
+                                    <td class="tdBorder">
+                                        <div class="py-2"><span
+                                                class="d-block spandHeadO">{{\App\CPU\Helpers::translate('transaction_type')}} </span>
+                                        </div>
+                                    </td>
+                                    <td class="tdBorder">
+                                        <div class="py-2"><span
+                                                class="d-block spandHeadO">{{\App\CPU\Helpers::translate('credit')}} </span>
+                                        </div>
+                                    </td>
+                                    <td class="tdBorder">
+                                        <div class="py-2"><span
+                                                class="d-block spandHeadO"> {{\App\CPU\Helpers::translate('debit')}}</span></div>
+                                    </td>
+                                    <td class="tdBorder">
+                                        <div class="py-2"><span
+                                                class="d-block spandHeadO"> {{\App\CPU\Helpers::translate('balance')}}</span></div>
+                                    </td>
+                                    <td class="tdBorder">
+                                        <div class="py-2"><span
+                                                class="d-block spandHeadO"> {{\App\CPU\Helpers::translate('date')}}</span></div>
+                                    </td>
+                                </tr>
                                 </thead>
 
                                 <tbody>
                                 @foreach($loyalty_point_list as $key=>$item)
                                     <tr>
-                                        <td></td>
                                         <td class="bodytr">
                                             {{$loyalty_point_list->firstItem()+$key}}
                                         </td>
@@ -208,7 +206,8 @@
                                         <td class="bodytr"><span class="">{{ $item['credit']}}</span></td>
                                         <td class="bodytr"><span class="">{{ $item['debit']}}</span></td>
                                         <td class="bodytr"><span class="">{{ $item['balance']}}</span></td>
-                                        <td class="bodytr"><span class="whitespace-nowrap">{{$item['created_at']}}</span></td>
+                                        <td class="bodytr"><span class="">{{$item['created_at']}}</span></td>
+
                                     </tr>
                                 @endforeach
                                 </tbody>
@@ -260,14 +259,14 @@
             <div class="form-row">
                 <div class="form-group col-12">
 
-                    <input class="form-control" type="text" pattern="\d*" t="number" id="city" name="point" required>
+                    <input class="form-control" type="number" id="city" name="point" required>
                 </div>
             </div>
 
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{\App\CPU\Helpers::translate('close')}}</button>
-          <button type="submit" class="btn bg-primaryColor text-light">{{\App\CPU\Helpers::translate('submit')}}</button>
+          <button type="submit" class="btn btn--primary text-light">{{\App\CPU\Helpers::translate('submit')}}</button>
         </div>
     </form>
       </div>
@@ -276,28 +275,5 @@
 @endsection
 
 @push('script')
-    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.12.1/af-2.4.0/b-2.2.3/b-colvis-2.2.3/b-print-2.2.3/cr-1.5.6/fh-3.2.4/kt-2.7.0/r-2.3.0/rr-1.2.8/sb-1.3.4/sl-1.4.0/sr-1.1.1/datatables.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/1.13.1/js/dataTables.bulma.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
-    <script>
-        $(document).ready(function(){
-            $(".lp_table").DataTable({
-                searching: false,
-                paging: false,
-                info: false,
-                responsive: true,
-                autoWidth:false,
-                columns: [
-                    { responsivePriority: 1 },
-                    { responsivePriority: 2 },
-                    { responsivePriority: 3 },
-                    { responsivePriority: 50 },
-                    { responsivePriority: 60 },
-                    { responsivePriority: 4 },
-                    { responsivePriority: 7 },
-                ],
-            })
-        })
-    </script>
+
 @endpush

@@ -30,9 +30,6 @@
 
     <link href="{{asset('public/assets/front-end')}}/css/home.css" rel="stylesheet">
     <style>
-        .btn{
-            border-radius: 7px !important
-        }
         .headerTitle {
             font-size: 34px;
             font-weight: bolder;
@@ -88,9 +85,6 @@
             color: #373f50;
             width: 40%;
             border: none;
-        }
-        .custom-control-label{
-            z-index: 99;
         }
 
         .openbtn:hover {
@@ -224,14 +218,14 @@
                 </div>
             </div>
             {{-- sidebar opener --}}
-            <div class="col-md-3 mt-2 rtl" style=" width: 100%; text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+            <div class="col-md-3 mt-2 rtl" style=" width: 100%; text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
                 <a class="openbtn-tab" style="" onclick="openNav()">
-                    <div style="font-size: 20px; font-weight: 600; text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}" class="for-tab-display"> ☰ {{\App\CPU\Helpers::translate('categories')}}</div>
+                    <div style="font-size: 20px; font-weight: 600; text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}}" class="for-tab-display"> ☰ {{\App\CPU\Helpers::translate('categories')}}</div>
                 </a>
             </div>
             {{-- seller info+contact --}}
-            <div class="col-lg-12 rtl" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
-                <div style="border-radius:10px;background: #ffffff;{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'padding-left:5px;' : 'padding-left:5px;'}}">
+            <div class="col-lg-12 rtl" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
+                <div style="border-radius:10px;background: #ffffff;{{Session::get('direction') === "rtl" ? 'padding-left:5px;' : 'padding-left:5px;'}}">
                     <div class="row d-flex justify-content-between seller-details" style="">
                         {{-- logo --}}
                         <div class="d-flex" style="padding:8px;">
@@ -275,79 +269,28 @@
                                         <span>{{ $total_review}} {{\App\CPU\Helpers::translate('reviews')}} </span>
                                         <span style="border-left: 1px solid #C4C4C4;margin:5px;"></span>
                                         @endif
-                                        @php($total_product = \App\Model\Product::where(['added_by' => 'seller','user_id' => $id])->count())
+
                                         @if (\App\Model\BusinessSetting::where('type','seller_orders')->first()->value ?? '')
-                                        <span>{{ $total_order}} {{\App\CPU\Helpers::translate('orders')}}</span>
-                                        @endif
-                                        @if (\App\Model\BusinessSetting::where('type','show_sellers_products_count')->first()->value ?? '')
-                                            <span style="border-left: 1px solid #C4C4C4;margin:5px;"></span>
-                                            <span>{{ $total_product }} {{\App\CPU\Helpers::translate('Product')}}</span>
+                                            <span>{{ $total_order}} {{\App\CPU\Helpers::translate('orders')}}</span>
                                         @endif
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12 d-flex  align-items-center" style="margin-bottom: -6px;
-                        margin-top: 20px;
-                        padding-right: 0px;">
-                            {{--  <div class="col-md-6 m-2 m-md-0 d-flex align-items-center justify-content-end">
-                                <div class="btn-group-vertical top-[50%] left-6 z-10" id="selection-buttons-container" style="display: none; position: fixed; transform: translateY(-50%);">
-                                    <button class="btn bg-primaryColor addto-list with-transitions mb-3" id="selectAllButton">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-ui-checks" viewBox="0 0 16 16" style="margin-left: 10px;margin-right: 10px;">
-                                            <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
-                                          </svg>
-                                        {{\App\CPU\Helpers::translate('Select All Products')}}
-                                    </button>
-
-                                    <button class="btn bg-primaryColor addto-list with-transitions" id="deselectAllButton">
-                                        <svg viewBox="147.713 148.346 15 14" width="32" height="32" fill="#fff" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" style="margin-left: 10px;margin-right: 10px;">
-                                            <path d="M 154.713 149.846 C 154.713 149.57 154.937 149.346 155.213 149.346 L 162.213 149.346 C 162.489 149.346 162.713 149.57 162.713 149.846 L 162.713 150.846 C 162.713 151.122 162.489 151.346 162.213 151.346 L 155.213 151.346 C 154.937 151.346 154.713 151.122 154.713 150.846 L 154.713 149.846 Z M 149.713 148.346 C 148.609 148.346 147.713 149.241 147.713 150.346 L 147.713 152.346 C 147.713 153.45 148.609 154.346 149.713 154.346 L 151.713 154.346 C 152.818 154.346 153.713 153.45 153.713 152.346 L 153.713 150.346 C 153.713 149.241 152.818 148.346 151.713 148.346 L 149.713 148.346 Z M 149.713 156.346 C 148.609 156.346 147.713 157.241 147.713 158.346 L 147.713 160.346 C 147.713 161.45 148.609 162.346 149.713 162.346 L 151.713 162.346 C 152.818 162.346 153.713 161.45 153.713 160.346 L 153.713 158.346 C 153.713 157.241 152.818 156.346 151.713 156.346 L 149.713 156.346 Z M 154.713 157.846 C 154.713 157.57 154.937 157.346 155.213 157.346 L 162.213 157.346 C 162.489 157.346 162.713 157.57 162.713 157.846 L 162.713 158.846 C 162.713 159.122 162.489 159.346 162.213 159.346 L 155.213 159.346 C 154.937 159.346 154.713 159.122 154.713 158.846 L 154.713 157.846 Z M 154.713 152.846 C 154.713 152.57 154.937 152.346 155.213 152.346 L 160.213 152.346 C 160.598 152.346 160.839 152.762 160.646 153.096 C 160.557 153.251 160.392 153.346 160.213 153.346 L 155.213 153.346 C 154.937 153.346 154.713 153.122 154.713 152.846 M 154.713 160.846 C 154.713 160.57 154.937 160.346 155.213 160.346 L 160.213 160.346 C 160.598 160.346 160.839 160.762 160.646 161.096 C 160.557 161.251 160.392 161.346 160.213 161.346 L 155.213 161.346 C 154.937 161.346 154.713 161.122 154.713 160.846" transform="matrix(1, 0, 0, 1, 0, -2.842170943040401e-14)"/>
-                                          </svg>
-                                        {{\App\CPU\Helpers::translate('UnSelect All Products')}}
-                                    </button>
-                                </div>
-                            </div>  --}}
-                            <div class="col-md-6 m-2 m-md-0 d-flex align-items-center justify-content-end">
-                                <div class="btn-group top-[50%] left-6 z-10" id="selection-buttons-container" style="display: none; position: fixed; transform: translateY(-50%);    left: 10rem;">
-                                  <button class="btn bg-primaryColor addto-list with-transitions mb-3 d-flex align-items-center justify-content-center" id="selectAllButton" style="border-radius: 0.25rem;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-ui-checks" viewBox="0 0 16 16" style="margin-left: 10px;margin-right: 10px;">
-                                        <path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/>
-                                      </svg>
-                                    <span>{{\App\CPU\Helpers::translate('Select All Products')}}</span>
-                                  </button>
-
-                                  <button class="btn bg-primaryColor addto-list with-transitions d-flex align-items-center justify-content-center" id="deselectAllButton" style="border-radius: 0.25rem;">
-                                    <svg viewBox="147.713 148.346 15 14" width="32" height="32" fill="#fff" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" style="margin-left: 10px;margin-right: 10px;">
-                                        <path d="M 154.713 149.846 C 154.713 149.57 154.937 149.346 155.213 149.346 L 162.213 149.346 C 162.489 149.346 162.713 149.57 162.713 149.846 L 162.713 150.846 C 162.713 151.122 162.489 151.346 162.213 151.346 L 155.213 151.346 C 154.937 151.346 154.713 151.122 154.713 150.846 L 154.713 149.846 Z M 149.713 148.346 C 148.609 148.346 147.713 149.241 147.713 150.346 L 147.713 152.346 C 147.713 153.45 148.609 154.346 149.713 154.346 L 151.713 154.346 C 152.818 154.346 153.713 153.45 153.713 152.346 L 153.713 150.346 C 153.713 149.241 152.818 148.346 151.713 148.346 L 149.713 148.346 Z M 149.713 156.346 C 148.609 156.346 147.713 157.241 147.713 158.346 L 147.713 160.346 C 147.713 161.45 148.609 162.346 149.713 162.346 L 151.713 162.346 C 152.818 162.346 153.713 161.45 153.713 160.346 L 153.713 158.346 C 153.713 157.241 152.818 156.346 151.713 156.346 L 149.713 156.346 Z M 154.713 157.846 C 154.713 157.57 154.937 157.346 155.213 157.346 L 162.213 157.346 C 162.489 157.346 162.713 157.57 162.713 157.846 L 162.713 158.846 C 162.713 159.122 162.489 159.346 162.213 159.346 L 155.213 159.346 C 154.937 159.346 154.713 159.122 154.713 158.846 L 154.713 157.846 Z M 154.713 152.846 C 154.713 152.57 154.937 152.346 155.213 152.346 L 160.213 152.346 C 160.598 152.346 160.839 152.762 160.646 153.096 C 160.557 153.251 160.392 153.346 160.213 153.346 L 155.213 153.346 C 154.937 153.346 154.713 153.122 154.713 152.846 M 154.713 160.846 C 154.713 160.57 154.937 160.346 155.213 160.346 L 160.213 160.346 C 160.598 160.346 160.839 160.762 160.646 161.096 C 160.557 161.251 160.392 161.346 160.213 161.346 L 155.213 161.346 C 154.937 161.346 154.713 161.122 154.713 160.846" transform="matrix(1, 0, 0, 1, 0, -2.842170943040401e-14)"/>
-                                      </svg>
-                                    <span>{{\App\CPU\Helpers::translate('UnSelect All Products')}}</span>
-                                  </button>
-                                </div>
-                              </div>
-
-                        </div>
                         </div>
 
                         {{-- contact --}}
-                        @if (\App\CPU\Helpers::store_module_permission_check('store.sellerview.send_message'))
                         <div class="d-flex align-items-center">
-                            <div class="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-4' : 'mr-4'}}">
+                            <div class="{{Session::get('direction') === "rtl" ? 'ml-4' : 'mr-4'}}">
                                 @if($seller_id!=0)
-                                @if ((auth('customer')->check() || auth('delegatestore')->check()))
+                                @if (auth('customer')->check())
                                 @if (App\CPU\Helpers::get_business_settings('chat_with_seller_status') == 1)
                                     <div class="d-flex">
-                                        <a href="{{route('chat',['type'=>'seller'])}}" class="btn btn-block" data-bs-toggle="modal"
-                                                data-bs-target="#exampleModal" style="border-radius: 25px;border: 1px solid #673bb7;color: ##673bb7 ;">
-                                            <i class="fa fa-envelope mx-2" aria-hidden="true"></i>
-                                            {{\App\CPU\Helpers::translate('Chat with seller ')}}
-                                        </a>
-                                    </div>
-                                    {{--  <div class="d-flex">
                                         <button class="btn btn-block" data-bs-toggle="modal"
                                                 data-bs-target="#exampleModal" style="border-radius: 25px;border: 1px solid #1B7FED;color: #1B7FED ;">
                                             <i class="fa fa-envelope" aria-hidden="true"></i>
                                             {{\App\CPU\Helpers::translate('Chat with seller ')}}
                                         </button>
-                                    </div>  --}}
+                                    </div>
                                 @else
 
                                 @endif
@@ -355,7 +298,6 @@
                             @endif
                             </div>
                         </div>
-                        @endif
 
 
                     </div>
@@ -380,14 +322,14 @@
                                     <textarea name="message" class="form-control" required></textarea>
                                     <br>
                                     @if($shop['id'] != 0)
-                                        <button class="btn bg-primaryColor text-light" style="color: white;">{{\App\CPU\Helpers::translate('send')}}</button>
+                                        <button class="btn btn--primary text-light" style="color: white;">{{\App\CPU\Helpers::translate('send')}}</button>
                                     @else
-                                        <button class="btn bg-primaryColor text-light" style="color: white;" disabled>{{\App\CPU\Helpers::translate('send')}}</button>
+                                        <button class="btn btn--primary text-light" style="color: white;" disabled>{{\App\CPU\Helpers::translate('send')}}</button>
                                     @endif
                                 </form>
                             </div>
                             <div class="card-footer">
-                                <a href="{{route('chat', ['type' => 'seller'])}}" class="btn bg-primaryColor mx-1">
+                                <a href="{{route('chat', ['type' => 'seller'])}}" class="btn btn--primary mx-1">
                                     {{\App\CPU\Helpers::translate('go_to chatbox')}}
                                 </a>
                                 <button type="button" class="btn btn-secondary pull-right" data-bs-dismiss="modal">{{\App\CPU\Helpers::translate('close')}}
@@ -405,7 +347,7 @@
 
         <div class="row mt-1 mr-0 rtl">
             {{-- sidebar (Category) - before toggle --}}
-            <div class="col-lg-3 mt-3  mr-0 {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'pl-4' : 'pr-4'}}">
+            <div class="col-lg-3 mt-3  mr-0 {{Session::get('direction') === "rtl" ? 'pl-4' : 'pr-4'}}">
                 <aside class=" hidden-xs SearchParameters" id="SearchParameters">
                     <!-- Categories Sidebar-->
                     <div class=" rounded-lg " id="shop-sidebar">
@@ -413,7 +355,7 @@
                             <!-- Categories-->
                             <div class="widget widget-categories mb-4 ">
                                 <div>
-                                    <div class="text-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}" style="display: block;">
+                                    <div style="display: inline">
                                         <h3 class="widget-title"
                                             style="font-weight: 700;font-size: 18px;display: inline;">{{\App\CPU\Helpers::translate('categories')}}</h3>
                                     </div>
@@ -427,7 +369,7 @@
 
                                             <div class="card-header p-1 flex-between" >
                                                 <div class="d-flex ">
-                                                    <img class="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-2' : 'mr-2'}}" style="width: 20px; border-radius:5px;height:20px;"
+                                                    <img class="{{Session::get('direction') === "rtl" ? 'ml-2' : 'mr-2'}}" style="width: 20px; border-radius:5px;height:20px;"
                                                     onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
                                                     src="{{asset('storage/app/public/category')}}/{{$category['icon']}}">
                                                     <label class="for-hover-lable" style="cursor: pointer"
@@ -440,7 +382,7 @@
                                                     {{$category->childes->count()>0?'+':''}}
                                                 </strong>
                                             </div>
-                                            <div class="card-body {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'mr-2' : 'ml-2'}}" id="collapse-{{$category['id']}}"
+                                            <div class="card-body {{Session::get('direction') === "rtl" ? 'mr-2' : 'ml-2'}}" id="collapse-{{$category['id']}}"
                                                  style="display: none">
                                                 @foreach($category->childes as $child)
                                                     <div class=" for-hover-lable card-header p-1 flex-between">
@@ -453,7 +395,7 @@
                                                             {{$child->childes->count()>0?'+':''}}
                                                         </strong>
                                                     </div>
-                                                    <div class="card-body {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'mr-2' : 'ml-2'}}" id="collapse-{{$child['id']}}"
+                                                    <div class="card-body {{Session::get('direction') === "rtl" ? 'mr-2' : 'ml-2'}}" id="collapse-{{$child['id']}}"
                                                          style="display: none">
                                                         @foreach($child->childes as $ch)
                                                             <div class="card-header p-1 flex-between">
@@ -475,7 +417,7 @@
                 </aside>
             </div>
             {{-- sidebar (Category mobile) - after toggle --}}
-            <div id="mySidepanel" class="sidepanel d-md-none" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right:0; left:auto' : 'right:auto; left:0'}};">
+            <div id="mySidepanel" class="sidepanel d-md-none" style="text-align: {{Session::get('direction') === "rtl" ? 'right:0; left:auto' : 'right:auto; left:0'}};">
                 <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
                 <div class="cz-sidebar-body">
                     <div class="widget widget-categories mb-4 pb-4 border-bottom">
@@ -487,7 +429,7 @@
                         </div>
                         <div class="divider-role"
                              style="border: 1px solid whitesmoke; margin-bottom: 14px;  margin-top: 5px;"></div>
-                        <div class="accordion mt-n1" id="shop-categories" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+                        <div class="accordion mt-n1" id="shop-categories" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
                             @foreach($categories as $category)
                                 <div class="card">
                                     <div class="card-header p-1 flex-between">
@@ -500,7 +442,7 @@
                                             {{$category->childes->count()>0?'+':''}}
                                         </strong>
                                     </div>
-                                    <div class="card-body {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'mr-2' : 'ml-2'}}" id="collapse-m-{{$category['id']}}"
+                                    <div class="card-body {{Session::get('direction') === "rtl" ? 'mr-2' : 'ml-2'}}" id="collapse-m-{{$category['id']}}"
                                          style="display: none">
                                         @foreach($category->childes as $child)
                                             <div class=" for-hover-lable card-header p-1 flex-between">
@@ -513,7 +455,7 @@
                                                     {{$child->childes->count()>0?'+':''}}
                                                 </strong>
                                             </div>
-                                            <div class="card-body {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'mr-2' : 'ml-2'}}" id="collapse-m-{{$child['id']}}"
+                                            <div class="card-body {{Session::get('direction') === "rtl" ? 'mr-2' : 'ml-2'}}" id="collapse-m-{{$child['id']}}"
                                                  style="display: none">
                                                 @foreach($child->childes as $ch)
                                                     <div class="card-header p-1 flex-between">
@@ -539,7 +481,7 @@
                         <form class="{{--form-inline--}} md-form form-sm mt-0" method="get"
                               action="{{route('shopView',['id'=>$seller_id])}}">
                             <div class="input-group input-group-sm mb-3">
-                                <input type="text" class="form-control" name="product_name" style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};"
+                                <input type="text" class="form-control" name="product_name" style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};"
                                        placeholder="{{\App\CPU\Helpers::translate('Search products from this store')}}" aria-label="Recipient's username"
                                        aria-describedby="basic-addon2">
                                 <div class="input-group-append" >
@@ -555,9 +497,6 @@
                 <div class="row" id="ajax-products">
                     @include('web-views.products._ajax-products',['products'=>$products,'decimal_point_settings'=>$decimal_point_settings])
                 </div>
-                <div class="row mt-3" id="ajax-products2">
-                    <div class='w-full please_wait' style="display: none"><center><img width='100px' src='{{asset('public/assets/front-end/img/loader_.gif')}}' /></center></div>
-                </div>
             </div>
         </div>
     </div>
@@ -565,49 +504,6 @@
 
 @push('script')
     <script>
-        var done = false;
-        var page = 1;
-        var st = $(window).scrollTop();
-        function scrlload(e){
-            if(!done){
-                $('.please_wait').show();
-            }
-            elem = $(e.target);
-            let bottomOfPage = document.body.scrollHeight - window.innerHeight;
-            if (window.scrollY >= bottomOfPage - 100) {
-                // User is close to the bottom of the page
-                st = $(window).scrollTop()
-                page = page + 1;
-                $.ajax({
-                    url:"{{route('shopView',['id'=>$id])}}",
-                    data: {
-                        lazy:true,
-                        page:page,
-                    },
-                    success: function(data){
-                        if (data) {
-                            $(data).appendTo("#ajax-products");
-                            //$(".please_wait").hide();
-                        } else {
-                            done = true
-                        }
-                    }
-                }).then(function(){
-                    if($('.inline_product').length == {{$products->total()}}){
-                        $(".please_wait").hide();
-                    }
-                })
-            }
-        }
-
-        $(document).ready(function(){
-            var lastScrollTop = 0;
-            var scrollThreshold = 2500;
-            $(document).on("scroll",function(e){
-                scrlload(e)
-            })
-        })
-
         function productSearch(seller_id, category_id) {
             $.ajaxSetup({
                 headers: {

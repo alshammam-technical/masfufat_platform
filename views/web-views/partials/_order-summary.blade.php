@@ -17,24 +17,87 @@
     }
 </style>
 
-@php($summary = Helpers::order_summary_user_auth())
-@php($shippong_cost = $summary['total_shipping_cost'])
-@php($shippong_tax = $summary['shipping_tax'])
-
 <aside class="col-lg-4 pt-4 pt-lg-0">
-    <div class="cart_total bg-light border-light rounded-11 font-wight-bold" style="line-height: 40px">
-        <p class="text-2xl font-weight-bold">
+    <div class="cart_total bg-light border-light rounded-11" style="line-height: 40px">
+        <h4>
             {{ Helpers::translate('Bill') }}
-        </p>
+        </h4>
+
+        @if(session()->has('coupon_discount'))
+            @php($coupon = \App\Model\Coupon::where('code',session('coupon_code'))->first())
+        @endif
+
+        @php($sub_total=0)
+        @php($total_tax=0)
+        @php($total_shipping_cost=0)
+        @php($total_discount_on_product=0)
+        @php($admin_shipping = \App\Model\ShippingType::where('seller_id',0)->first())
+        @php($shippingType =isset($admin_shipping)==true?$admin_shipping->shipping_type:'order_wise')
+        @php($cart=\App\CPU\CartManager::get_cart())
+
         @php($shipping_cost=\App\CPU\CartManager::get_shipping_cost())
         @if($cart->count() > 0)
+            @foreach($cart as $key => $cartItem)
+                @php($product = \App\Model\Product::find($cartItem['product_id']))
+                @php($coupon_discount = session()->has('coupon_discount')? (session('coupon_discount')) : 0)
+                @php($sub_total+=($cartItem['price'])*$cartItem['quantity'])
+                @if(Helpers::getProductPrice_pl($product->id)['discount_type'] == "percent")
+                    @php($total_discount_on_product+=($cartItem['discount']*$cartItem['quantity']))
+                @else
+                    @php($total_discount_on_product=Helpers::getProductPrice_pl($product->id)['discount']*$cartItem['quantity'])
+                @endif
+                @php($d_price = $cartItem['price'] - $coupon_discount - $total_discount_on_product)
+                @php($cartItemTax=$d_price*($product['tax']/100))
+                @php($total_tax+=$cartItemTax*$cartItem['quantity'])
+                @php($total_taxz=$total_tax)
+
+                @isset($coupon)
+                    @if($coupon->coupon_type == "free_delivery")
+                        @php($free_delivery = 1)
+                        {{\App\CPU\Helpers::currency_converter(0)}}
+                    @else
+                        @php($free_delivery = 0)
+                        {{\App\CPU\Helpers::currency_converter($total_shipping_cost)}}
+                    @endif
+                @else
+                    @php($free_delivery = 0)
+                @endisset
+
+
+
+
+
+                @if($free_delivery==0)
+                    @if($shippingType=='order_wise')
+                        @php($total_shipping_cost = $choosen_shipping['shipping_cost'] ?? 0)
+
+                        @isset($coupon)
+                        @if($coupon->coupon_type !== "free_delivery")
+                            @php($total_tax+=($choosen_shipping['shipping_cost'] ?? 0) * (($choosen_shipping['tax'] ?? 0)/100))
+                        @endif
+                        @else
+                        @php($total_tax+=($choosen_shipping['shipping_cost'] ?? 0) * (($choosen_shipping['tax'] ?? 0)/100))
+                        @endisset
+
+                    @elseif($shippingType=='product_wise')
+                        @if($product->multiply_qty)
+                            @php($total_shipping_cost += $cartItem['shipping_cost']*$cartItem['quantity'])
+                        @else
+                            @php($total_shipping_cost += $cartItem['shipping_cost'])
+                        @endif
+                    @else
+                        {{--    --}}
+                    @endif
+                @endif
+
+            @endforeach
         @else
             <span>{{\App\CPU\Helpers::translate('empty_cart')}}</span>
         @endif
         <div class="d-flex justify-content-between">
             <span class="cart_title">{{\App\CPU\Helpers::translate('sub_total')}}</span>
             <span class="cart_value">
-                {{\App\CPU\Helpers::currency_converter($summary['sub_total'])}}
+                {{\App\CPU\Helpers::currency_converter($sub_total)}}
             </span>
         </div>
         @if(session()->has('coupon_discount'))
@@ -48,7 +111,7 @@
                 </span>
                 @if($coupon->coupon_type == "free_delivery")
                 <span class="cart_value" id="coupon-discount-amount">
-                    - {{\App\CPU\Helpers::currency_converter($summary['total_shipping_cost'])}}
+                    - {{\App\CPU\Helpers::currency_converter($total_shipping_cost)}}
                 </span>
                 @else
                 <span class="cart_value" id="coupon-discount-amount">
@@ -56,15 +119,18 @@
                 </span>
                 @endif
             </div>
+            @php($coupon_dis=session('coupon_discount'))
         @else
             <div class="mt-2">
                 <form class="needs-validation rounded-11 border bg-white" action="javascript:" method="post" novalidate id="coupon-code-ajax">
-                    <div class="row">
-                        <input class="col-8 border-0 input_code rounded-11" type="text" name="code"
+                    <div class="input-group bg-transparent ps-1 pe-0 py-0 w-100 bg-white">
+                        <input class="border-0 input_code rounded-11" type="text" name="code" style="width: 282.6px"
                             placeholder="{{\App\CPU\Helpers::translate('Coupon code')}}" required>
-                        <button class="col-4 btn btn-primary text-light py-1 d-block rounded-md" type="button"
-                            onclick="couponCode()">{{\App\CPU\Helpers::translate('apply_code')}}
-                        </button>
+                        <div class="">
+                            <button class="btn btn-primary text-light py-1 h-100 d-block" type="button"
+                                onclick="couponCode()">{{\App\CPU\Helpers::translate('apply_code')}}
+                            </button>
+                        </div>
                         <div class="invalid-feedback">{{\App\CPU\Helpers::translate('please_provide_coupon_code')}}
                         </div>
                     </div>
@@ -75,20 +141,20 @@
         <div class="d-flex justify-content-between">
             <span class="cart_title">{{\App\CPU\Helpers::translate('shipping')}}</span>
             <span class="cart_value">
-                {{\App\CPU\Helpers::currency_converter($summary['total_shipping_cost'])}}
+                {{\App\CPU\Helpers::currency_converter($total_shipping_cost)}}
             </span>
         </div>
         <div class="d-flex justify-content-between">
             <span class="cart_title">{{\App\CPU\Helpers::translate('discount_on_product')}}</span>
             <span class="cart_value">
-                - {{\App\CPU\Helpers::currency_converter($summary['total_discount_on_product'])}}
+                - {{\App\CPU\Helpers::currency_converter($total_discount_on_product)}}
             </span>
         </div>
         <div class="d-flex justify-content-between">
             <span class="cart_title">{{\App\CPU\Helpers::translate('products tax')}}</span>
             <span class="cart_value">
-                {{\App\CPU\Helpers::currency_converter($summary['total_tax_products'])}}
                 @isset($total_taxz)
+                {{\App\CPU\Helpers::currency_converter($total_taxz)}}
                 @endisset
             </span>
         </div>
@@ -112,7 +178,7 @@
         <div class="d-flex justify-content-between">
             <span class="cart_title">{{\App\CPU\Helpers::translate('total')}}</span>
             <span class="cart_value">
-               {{ $summary['total'] }}
+               {{\App\CPU\Helpers::currency_converter($sub_total-$coupon_dis-$total_discount_on_product+$total_tax+$total_shipping_cost)}}
             </span>
         </div>
 
@@ -124,7 +190,7 @@
 
     </div>
     <a onclick="checkout()"
-       class="btn bg-primaryColor mt-4 text-light w-full pull-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}">
+       class="btn btn--primary mt-4 text-light w-100 pull-{{Session::get('direction') === "rtl" ? 'left' : 'right'}}">
         {{\App\CPU\Helpers::translate('checkout')}}
     </a>
 </aside>

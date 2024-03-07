@@ -6,7 +6,7 @@
 
 <!-- Page Content-->
 <div class="container pb-5 mb-2 mb-md-4 mt-2 rtl"
-     style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+     style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
     <div class="row">
         <!-- Sidebar-->
         <section class="col-lg-12  col-md-12">
@@ -40,7 +40,7 @@
                         <div class="modal-footer">
                             <a href="{{ URL::previous() }}" class="btn btn-secondary">{{\App\CPU\Helpers::translate('back')}}</a>
 
-                            <button type="submit" class="btn bg-primaryColor text-light">{{\App\CPU\Helpers::translate('submit')}}</button>
+                            <button type="submit" class="btn btn--primary text-light">{{\App\CPU\Helpers::translate('submit')}}</button>
                         </div>
                     </form>
                 </div>

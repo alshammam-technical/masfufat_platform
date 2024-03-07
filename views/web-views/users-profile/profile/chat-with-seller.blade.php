@@ -169,7 +169,7 @@
         }
 
         .headind_srch {
-            padding: {{(Session::get('direction') ?? 'rtl') === "rtl" ? '10px 20px 10px 29px' : '10px 29px 10px 20px'}};
+            padding: {{Session::get('direction') === "rtl" ? '10px 20px 10px 29px' : '10px 29px 10px 20px'}};
             overflow: hidden;
             border-bottom: none;
         }
@@ -212,7 +212,7 @@
 
         .chat_ib {
             float: left;
-            padding: {{(Session::get('direction') ?? 'rtl') === "rtl" ? '0 15px 6px 0' : '0 0 6px 15px'}};
+            padding: {{Session::get('direction') === "rtl" ? '0 15px 6px 0' : '0 0 6px 15px'}};
             width: 88%;
             margin-top: 0.56rem;
         }
@@ -239,7 +239,7 @@
 
         .received_msg {
             display: inline-block;
-            padding: {{(Session::get('direction') ?? 'rtl') === "ltr" ? '0 10px 0 0' : '0 0 0 10px'}};
+            padding: {{Session::get('direction') === "rtl" ? '0 10px 0 0' : '0 0 0 10px'}};
             vertical-align: top;
             width: 92%;
         }
@@ -250,9 +250,8 @@
             color: #030303;
             font-size: 14px;
             margin: 0;
-            padding: {{(Session::get('direction') ?? 'rtl') === "ltr" ? '4px 10px 3px 8px' : '4px 8px 3px 10px'}};
+            padding: {{Session::get('direction') === "rtl" ? '4px 10px 3px 8px' : '4px 8px 3px 10px'}};
             width: 100%;
-            float:inline-end;
         }
 
         .time_date {
@@ -268,7 +267,7 @@
         }
 
         .mesgs {
-            padding: {{(Session::get('direction') ?? 'rtl') === "rtl" ? '30px 25px 0 15px' : '30px 15px 0 25px'}};
+            padding: {{Session::get('direction') === "rtl" ? '30px 25px 0 15px' : '30px 15px 0 25px'}};
 
         }
 
@@ -278,7 +277,7 @@
             font-size: 14px;
             margin: 0;
             color: #black;
-            padding: {{(Session::get('direction') ?? 'rtl') === "rtl" ? '5px 12px 5px 10px' : '5px 10px 5px 12px'}};
+            padding: {{Session::get('direction') === "rtl" ? '5px 12px 5px 10px' : '5px 10px 5px 12px'}};
             width: 100%;
         }
 
@@ -287,35 +286,20 @@
             margin-top: 26px;
             display: inline-flex;
             @if (session('direction') == 'ltr')
-            margin-left: 10px;
-            float: left;
-            justify-content: left;
-            @else
-            margin-right: 10px;
+            margin-right: 26px;
             float: right;
             justify-content: right;
-            @endif
-        }
-
-        .incoming_msg {
-            overflow: hidden;
-            margin-top: 26px;
-            display: inline-flex;
-            @if (session('direction') == 'rtl')
-            margin-right: 10px;
+            @else
+            margin-left: 26px;
             float: left;
             justify-content: left;
-            @else
-            margin-left: 10px;
-            float: right;
-            justify-content: right;
             @endif
         }
 
         .send_msg {
             float: inherit;
             width: 46%;
-            margin- {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}: 10px;
+            margin- {{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 10px;
         }
 
         .input_msg_write input {
@@ -351,6 +335,7 @@
         }
 
         .msg_history {
+            min-height: 512px;
             overflow-y: auto;
         }
 
@@ -412,7 +397,7 @@
             }
 
             .send_msg {
-                margin- {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}: 7px;
+                margin- {{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 7px;
             }
         }
 
@@ -424,7 +409,7 @@
 
     <!-- Page Content-->
     <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl"
-         style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};padding-bottom:500px !important;">
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};padding-bottom:500px !important;">
         <div class="row mt-3">
             {{-- Seller List start --}}
             @if (isset($unique_shops))
@@ -436,7 +421,7 @@
                                 <form
                                     class="form-inline d-flex justify-content-center md-form form-sm active-cyan-2 mt-2 bg-white">
                                     <input
-                                        class="form-control form-control-sm {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-3' : 'mr-3'}} w-75"
+                                        class="form-control form-control-sm {{Session::get('direction') === "rtl" ? 'ml-3' : 'mr-3'}} w-75"
                                         id="myInput" type="text"
                                         placeholder="{{\App\CPU\Helpers::translate('Search')}}"
                                         aria-label="Search"
@@ -448,9 +433,9 @@
                             <div class="inbox_chat">
                                 @if (isset($unique_shops))
                                     @foreach($unique_shops as $key=>$shop)
-                                        <div class="chat_list chat_list_ @if ($key == 0) bg-white @endif"
+                                        <div class="chat_list @if ($key == 0) bg-white @endif"
                                              id="user_{{$shop->delivery_man_id ? $shop->delivery_man_id: $shop->id}}">
-                                            <div class="chat_people d-flex">
+                                            <div class="chat_people d-flex" id="chat_people">
                                                 <div class="chat_img">
                                                     <img
                                                         onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
@@ -470,30 +455,19 @@
                     </div>
                 </div>
 
-                <section class="col-lg-8 absolute sm:static top-28 chat_box h-full sm:h-auto" style="display: none">
-                    <div class="card box-shadow-sm Chat h-full">
-                        <div class="card-header flex">
-                            <button class="btn btn-white go_back me-2" onclick="$('.chat_box').hide()">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M14.4297 5.92969L20.4997 11.9997L14.4297 18.0697" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M3.5 12H20.33" stroke="#292D32" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </button>
-                            <div class="chat_people_">
+                <section class="col-lg-8">
+                    <div class="card box-shadow-sm Chat">
+                        <div class="messaging">
+                            <div class="inbox_msg">
 
-                            </div>
-                        </div>
-                        <div class="messaging h-full">
-                            <div class="inbox_msg h-full">
-
-                                <div class="mesgs bg-light px-0 h-full">
-                                    <div class="msg_history h-5/6" id="show_msg">
+                                <div class="mesgs bg-light px-0">
+                                    <div class="msg_history" id="show_msg">
                                         @if (isset($chattings))
 
                                             @foreach($chattings as $key => $chat)
                                                 @if ($chat->sent_by_seller? $chat->sent_by_seller : $chat->sent_by_delivery_man)
                                                     <div class="incoming_msg">
-                                                        <div class="incoming_msg_img hidden sm:hidden"><img
+                                                        <div class="incoming_msg_img"><img
                                                                 src="@if($chat->image == 'def.png'){{asset('storage/app/public/'.$chat->image)}} @else {{ $shop->delivery_man_id ?asset('storage/app/public/delivery-man/'.$shop->image) : asset('storage/app/public/shop/'.$shop->image)}}
                                                                 @endif"
                                                                 alt="sunil"></div>
@@ -545,16 +519,14 @@
                                                            value="{{$last_chat->delivery_man_id}}" name="">
                                                 @endif
 
-                                                <textarea name="msgInputValue"
-                                                    class="form-control form-control-sm {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-3' : 'mr-3'}} w-75"
+                                                <input
+                                                    class="form-control form-control-sm {{Session::get('direction') === "rtl" ? 'ml-3' : 'mr-3'}} w-75"
                                                     id="msgInputValue"
                                                     type="text" placeholder="{{\App\CPU\Helpers::translate('Send a message')}}" aria-label="Search">
-                                                </textarea>
-                                                @if (\App\CPU\Helpers::store_module_permission_check('my_account.chat_with_seller.send_message'))
-                                                <div class="w-full text-end w-25">
+                                                <div class="w-100 text-end">
                                                     <input class="aSend btn btn-primary bg-primary" type="submit" id="msgSendBtn" style="width: 94px;" value="{{\App\CPU\Helpers::translate('Send')}}" />
                                                 </div>
-                                                @endif
+
                                             </form>
                                         </div>
                                     </div>
@@ -584,8 +556,8 @@
                 shop_id = e.target.id;
                 console.log(shop_id)
                 //active when click on seller
-                $('.chat_list.bg-primaryColor').removeClass('bg-primaryColor');
-                $(`#user_${shop_id}`).addClass("bg-primaryColor");
+                $('.chat_list.btn--primary').removeClass('btn--primary');
+                $(`#user_${shop_id}`).addClass("btn--primary");
                 $('.seller').css('color', 'black');
                 $(`#user_${shop_id} h5`).css('color', 'white');
 
@@ -597,7 +569,7 @@
                 else if("{{ Request::is('chat/delivery-man') }}" == true) {
                     url = "{{ route('messages') }}" +"?delivery_man_id=" + shop_id;
                 }
-                var ths = $(this);
+
 
                 $.ajax({
                     type: "get",
@@ -620,7 +592,7 @@
                                     $(".msg_history").append(`
                                         <div class="outgoing_msg">
                                           <div class='send_msg'>
-                                            <p>${element.message}</p>
+                                            <p  class="btn--primary">${element.message}</p>
                                             <span class='time_date'> ${time}    |    ${date}</span>
                                           </div>
                                         </div>`
@@ -631,7 +603,7 @@
 
                                     $(".msg_history").append(`
                                         <div class="incoming_msg" style="display: flex;" id="incoming_msg">
-                                          <div class="incoming_msg_img hidden sm:hidden" id="">
+                                          <div class="incoming_msg_img" id="">
                                             <img src="${img_path}" alt="">
                                           </div>
                                           <div class="received_msg">
@@ -643,10 +615,6 @@
                                     )
                                 }
                                 $('#hidden_value').attr("value", shop_id);
-                                $(".chat_people_").html(ths.closest('.chat_list_').html());
-                                $(".chat_people_").find('img').addClass('w-40');
-                                $('.chat_box').show()
-                                $(".msg_history").stop().animate({scrollTop: $(".msg_history")[0].scrollHeight}, 1000);
                             });
                         } else {
                             $(".msg_history").html(`<p> No Message available </p>`);
@@ -671,7 +639,6 @@
             });
 
             $("#msgSendBtn").click(function (e) {
-                $("#msgSendBtn").attr('disabled','disabled')
                 e.preventDefault();
                 // get all the inputs into an array.
                 var inputs = $('#myForm').find('#msgInputValue').val();
@@ -699,17 +666,14 @@
                         $(".msg_history").append(`
                             <div class="outgoing_msg" id="outgoing_msg">
                               <div class='send_msg'>
-                                <p>${respons}</p>
+                                <p class="btn--primary">${respons}</p>
                                 <span class='time_date'> now</span>
                               </div>
                             </div>`
                         )
-                        $(".msg_history").stop().animate({scrollTop: $(".msg_history")[0].scrollHeight}, 1000);
-                        $("#msgSendBtn").removeAttr('disabled')
                     },
                     error: function (error) {
                         toastr.warning(error.responseJSON)
-                        $("#msgSendBtn").removeAttr('disabled')
                     }
                 });
                 $('#myForm').find('#msgInputValue').val('');

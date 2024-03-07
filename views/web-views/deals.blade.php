@@ -139,7 +139,7 @@
 @section('content')
 @php($decimal_point_settings = \App\CPU\Helpers::get_business_settings('decimal_point_settings'))
     <div class="for-banner container rtl"
-         style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
 
         <img class="d-block for-image"
              onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
@@ -148,11 +148,11 @@
 
     </div>
     <div class="container md-4 mt-3 rtl"
-         style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row flex-center">
             {{-- <section class="col-lg-12 for-deal-tab"> --}}
                 @php($flash_deals=\App\Model\FlashDeal::with(['products.product.reviews'])->where(['status'=>1])->where(['deal_type'=>'flash_deal'])->whereDate('start_date','<=',date('Y-m-d'))->whereDate('end_date','>=',date('Y-m-d'))->first())
-                <div class="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'mr-2' : 'ml-2'}}">
+                <div class="{{Session::get('direction') === "rtl" ? 'mr-2' : 'ml-2'}}">
                     <div class="row ">
                         <span class="flash_deal_title ">
                             {{ \App\CPU\Helpers::translate('flash_deal')}}
@@ -160,7 +160,7 @@
 
                     </div>
                 </div>
-                <div class=" {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-2' : 'mr-2'}} ">
+                <div class=" {{Session::get('direction') === "rtl" ? 'ml-2' : 'mr-2'}} ">
                     <div class="row d-inline-flex">
                         <div class="countdown-background ">
                             <span class="cz-countdown d-flex justify-content-center align-items-center"
@@ -195,7 +195,7 @@
 
     <!-- Products grid-->
     <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl"
-         style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row">
             <section class="col-lg-12">
                 <div class="row mt-4">

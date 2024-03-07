@@ -4,9 +4,8 @@
 
 <!-- Grid-->
 <hr class="view_border">
-@php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
 @php($shippingMethod=\App\CPU\Helpers::get_business_settings('shipping_method'))
-@php($cart=\App\Model\Cart::where(['customer_id' => $storeId])->get()->groupBy('cart_group_id'))
+@php($cart=\App\Model\Cart::where(['customer_id' => auth('customer')->id()])->get()->groupBy('cart_group_id'))
 
 <div class="row">
     <!-- List of items-->
@@ -108,7 +107,7 @@
 
                                         @foreach(json_decode($cartItem['variations'],true) ?? [] as $key1 =>$variation)
                                             <div class="text-muted mr-2">
-                                                <span class="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-2' : 'mr-2'}}"
+                                                <span class="{{Session::get('direction') === "rtl" ? 'ml-2' : 'mr-2'}}"
                                                       style="font-size: 12px;">
                                                     {{$key1}} : {{$variation}}</span>
 
@@ -131,7 +130,7 @@
                                         @php($minimum_order=\App\Model\Product::select('minimum_order_qty')->find($cartItem['product_id']))
                                         @php($minimum_order_qty = Helpers::getProductPrice_pl($cartItem['product_id'])['min_qty'])
                                         @php($max_order_qty = Helpers::getProductPrice_pl($cartItem['product_id'])['max_qty'] ?? $)
-                                        <input style="width: 75px;" type="text" pattern="\d*" t="number" name="quantity[{{ $cartItem['id'] }}]"
+                                        <input style="width: 75px;" type="number" name="quantity[{{ $cartItem['id'] }}]"
                                                id="cartQuantity{{$cartItem['id']}}"
                                                onchange="updateCartQuantity('{{ $minimum_order_qty }}', '{{$cartItem['id']}}', '{{ $max_order_qty }}')"
                                                min="{{ $minimum_order_qty ?? 1 }}" max="{{ $max_order_qty ?? 100 }}" value="{{$cartItem['quantity']}}">
@@ -150,7 +149,7 @@
                                 <td>
                                     <button class="btn btn-link px-0 text-danger"
                                             onclick="removeFromCart({{ $cartItem['id'] }})" type="button"><i
-                                            class="czi-close-circle {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-2' : 'mr-2'}}"></i>
+                                            class="czi-close-circle {{Session::get('direction') === "rtl" ? 'ml-2' : 'mr-2'}}"></i>
                                     </button>
                                 </td>
                                 </tr>
@@ -260,16 +259,16 @@
 
 <div class="row pt-2">
     <div class="col-6">
-        <a href="{{route('home')}}" class="btn bg-primaryColor text-light">
-            <i class="fa fa-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'forward' : 'backward'}} px-1"></i> {{\App\CPU\Helpers::translate('continue_shopping')}}
+        <a href="{{route('home')}}" class="btn btn--primary text-light">
+            <i class="fa fa-{{Session::get('direction') === "rtl" ? 'forward' : 'backward'}} px-1"></i> {{\App\CPU\Helpers::translate('continue_shopping')}}
         </a>
     </div>
 
-    <div class="col-6 text-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}">
+    <div class="col-6 text-{{Session::get('direction') === "rtl" ? 'left' : 'right'}}">
         <a onclick="checkout()"
-           class="btn bg-primaryColor text-light pull-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}">
+           class="btn btn--primary text-light pull-{{Session::get('direction') === "rtl" ? 'left' : 'right'}}">
             {{\App\CPU\Helpers::translate('checkout')}}
-            <i class="fa fa-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'backward' : 'forward'}} px-1"></i>
+            <i class="fa fa-{{Session::get('direction') === "rtl" ? 'backward' : 'forward'}} px-1"></i>
         </a>
     </div>
 </div>

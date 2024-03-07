@@ -66,7 +66,7 @@
             font-size: 15px;
             color: #030303;
             font-weight: 600;
-            margin- {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}: 60px;
+            margin- {{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 60px;
 
         }
 
@@ -110,7 +110,7 @@
             }
 
             .for-glaxy-mobile {
-                margin- {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}: 6px;
+                margin- {{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 6px;
             }
 
             .for-glaxy-name {
@@ -124,7 +124,7 @@
             }
 
             .for-glaxy-mobile {
-                margin- {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}: 6px;
+                margin- {{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 6px;
             }
 
             .for-glaxy-name {
@@ -150,23 +150,23 @@
 
             .order_table_info_div_2 {
                 width: 49%;
-                text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}          !important;
+                text-align: {{Session::get('direction') === "rtl" ? 'left' : 'right'}}          !important;
             }
 
             .spandHeadO {
                 font-size: 16px;
-                margin- {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}: 16px;
+                margin- {{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 16px;
             }
 
             .spanTr {
                 font-size: 16px;
-                margin- {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'left' : 'right'}}: 16px;
+                margin- {{Session::get('direction') === "rtl" ? 'left' : 'right'}}: 16px;
                 margin-top: 10px;
             }
 
             .amount {
                 font-size: 13px;
-                margin- {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}}: 0px;
+                margin- {{Session::get('direction') === "rtl" ? 'right' : 'left'}}: 0px;
 
             }
 
@@ -179,10 +179,6 @@
         .in-header, .in-header *{
             font-size: 17px
         }
-
-        .title-color{
-            text-align-last: start;
-        }
     </style>
 @endpush
 
@@ -190,7 +186,7 @@
 
     <!-- Page Content-->
     <div class="container pb-5 mb-2 mb-md-4 mt-3 rtl"
-         style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row">
             <!-- Sidebar-->
 
@@ -199,8 +195,8 @@
             <section class="col-lg-12 col-md-12">
                 <div class="row">
                     <div class="col-md-6 mb-4">
-                        <a class="page-link" href="{{ route('orders') }}">
-                            <i class="czi-arrow-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right ml-2' : 'left mr-2'}}"></i>{{\App\CPU\Helpers::translate('back')}}
+                        <a class="page-link" href="{{ route('account-oder') }}">
+                            <i class="czi-arrow-{{Session::get('direction') === "rtl" ? 'right ml-2' : 'left mr-2'}}"></i>{{\App\CPU\Helpers::translate('back')}}
                         </a>
                     </div>
                 </div>
@@ -216,190 +212,280 @@
                         @if(isset($order['seller_id']) != 0)
                             @php($shopName=\App\Model\Shop::where('seller_id', $order['seller_id'])->first())
                         @endif
-                        {{--  ext info  --}}
-                        <div class="d-flex flex-wrap gap-10 justify-content-between mb-4">
-                            <div class="d-flex flex-column gap-10">
-                                <div class="d-flex mb-2">
-                                @if($previousOrder)
-                                <a title="{{Helpers::translate('Previous')}}" class="btn ml-2 pr-0 btn-icon-text p-0 pl-1" href="{{ route('orders.show', ['id'=>$previousOrder->id]) }}">
-                                    <i class="czi-arrow-right text-black text-lg  mx-1"></i>{{Helpers::translate('Previous')}}
-                                </a>
-                                @endif
-                                <h4 class="text-capitalize">{{\App\CPU\Helpers::translate('Order_ID')}} {{ $order['id'] }}</h4>
-
-                                @if($nextOrder)
-                                <a title="{{Helpers::translate('Next')}}" class="btn mx-2 btn-icon-text p-0 pr-1" href="{{ route('orders.show', ['id'=>$nextOrder->id]) }}">
-                                    {{Helpers::translate('Next')}}<i class="czi-arrow-left  text-black text-lg  mx-1"></i>
-                                </a>
-                                @endif
-                                </div>
-                                <div class="d-flex">
-                                    <span class="title-color">{{\App\CPU\Helpers::translate('Order date and time')}} : </span>
-                                    <span class="mx-2">
-                                        <i class="tio-date-range"></i> {{date('Y/m/d H:i:s',strtotime($order['created_at']))}}
-                                    </span>
-                                </div>
-                                <div class="d-flex flex-column gap-2 mt-3" dir="rtl">
-                                    <!-- Order status -->
-                                    <div class="d-flex">
-                                        <span class="title-color">{{\App\CPU\Helpers::translate('order status')}} : </span>
-
-                                        @if($order['order_status'] == "ملغي")
-                                        <span class="badge badge-soft-danger font-weight-bold radius-50 d-flex align-items-center py-1 mx-2">
-                                            {{ $order['order_status'] }}
-                                        </span>
-                                        @else
-                                        <span class="badge badge-soft-info font-weight-bold radius-50 d-flex align-items-center py-1 mx-2">
-                                            {{ \App\CPU\Helpers::translate($order['order_status']) }}
-                                        </span>
-                                        @endif
+                        <table class="table table-borderless in-header">
+                            <thead>
+                            <tr class="order_table_tr">
+                                <td class="order_table_td">
+                                    <div class="order_table_info_div">
+                                        <div class="order_table_info_div_1 py-2 d-flex">
+                                            <span class="d-block spandHeadO">{{\App\CPU\Helpers::translate('order_no')}}: </span>
+                                            <span class="spanTr px-2"> {{$order->id}} </span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="order_table_td">
+                                    <div class="order_table_info_div">
+                                        <div class="order_table_info_div_1 py-2 d-flex">
+                                            <span class="d-block spandHeadO">{{\App\CPU\Helpers::translate('order_date')}}: </span>
+                                            <span class="spanTr px-2"> {{date('d M, Y',strtotime($order->created_at))}} </span>
+                                        </div>
 
                                     </div>
-                                    @if($order['order_status'] == "canceled")
-                                    <div class="d-flex">
-                                        <span class="title-color">{{\App\CPU\Helpers::translate('reason for rejection')}} : </span>
-                                        <strong>
-                                            {{ $order['admin_note'] }}
-                                        </strong>
-                                    </div>
-                                    @endif
-                                    @if ($order['order_status'] == "pending")
-                                    <div class="d-flex">
-                                        <span class="title-color">{{\App\CPU\Helpers::translate('Reason for suspending the order')}} : </span>
-                                        <strong>
-                                            {{ $order['admin_note'] }}
-                                        </strong>
-                                    </div>
-                                    @endif
-                                    {{--  order ref  --}}
-                                    <div class="">
-                                        <span class="mt-2 d-inline-block">
-                                            <span class="title-color">{{\App\CPU\Helpers::translate('Reference number')}} :</span>
-                                            <strong> {{ $order['transaction_ref'] }}</strong>
-                                        </span>
-                                        <a class="btn btn-primary mx-2 float-{{((session()->get('direction') ?? 'rtl') == 'ltr') ? 'right' : 'left'}}" onclick="copyToClipboard('{{ $order['transaction_ref'] }}')"> <i class="fa fa-copy"></i> </a>
-                                    </div>
-                                    {{--  customer  --}}
-                                    <!-- Payment Method -->
-                                    <div class="">
-                                        <span class="title-color">{{\App\CPU\Helpers::translate('Payment method')}} :</span>
-                                        <strong> {{ Helpers::translate(str_replace('_',' ',$order['payment_method'])) }}</strong>
-                                    </div>
+                                </td>
+                                @if( $order->order_type == 'default_type')
+                                    <td class="order_table_td">
+                                        <div class="order_table_info_div">
+                                            <div class="order_table_info_div_1 py-2 d-flex">
+                                                <span class="d-block spandHeadO">{{\App\CPU\Helpers::translate('shipping_address')}}: </span>
+                                                @if($order->shippingAddress)
+                                                    @php($shipping=$order->shippingAddress)
+                                                @else
+                                                    @php($shipping=json_decode($order['shipping_address_data']))
+                                                @endif
 
+                                                <span class="spanTr px-2">
+                                                    @if($shipping)
+                                                        {{$shipping->address ?? null}},
+                                                        {{$shipping->city ?? null}}
+                                                        , {{$shipping->zip ?? null}}
 
-
-                                    <!-- Payment Status -->
-                                    <div class="">
-                                        <span class="title-color">{{\App\CPU\Helpers::translate('Payment Status')}} :</span>
-                                        <span class="text-primary font-weight-bold">
-                                            {{\App\CPU\Helpers::translate($order->payment_status)}}
-                                        </span>
-                                    </div>
-
-                                    <!-- Shipping Company -->
-                                    <div class="">
-                                        <span class="title-color">{{\App\CPU\Helpers::translate('Shipping and delivering Company')}} :</span>
-                                        @isset($order->shipping_info['shipment_data'])
-                                            <strong>
-                                                {{ Helpers::translate("Bettween Company") }}
-                                            </strong>
-                                            @else
-                                            <strong>
-                                                {{ Helpers::translate($order->shipping_info['order']['courier'] ?? null) }}
-                                            </strong>
-                                            @endisset
-                                    </div>
-
-                                    <div class="">
-                                        <span class="title-color">{{\App\CPU\Helpers::translate('tracking number of shipping and delivering Company')}} :</span>
-                                        @isset($order->shipping_info['shipment_data'])
-                                            <a target="_blank" href="{{ $order->shipping_info['shipment_data']['shipping_tracking_url'] ?? null }}">
-                                                <strong>
-                                                    {{ ($order->shipping_info['shipment_data']['shipping_tracking_no'] ?? null) !== "" ? $order->shipping_info['shipment_data']['shipping_tracking_no'] : 'none' }}
-                                                </strong>
-                                            </a>
-                                        @else
-                                            <strong>
-                                                {{ ($order->shipping_info['order']['shipmentCode'] ?? null) }}
-                                            </strong>
-                                        @endisset
-                                    </div>
-
-                                    <div class="">
-                                        <span class="title-color">{{\App\CPU\Helpers::translate('shipment status on shipping and delivering Company')}} :</span>
-                                        @isset($order->shipping_info['shipment_data'])
-                                            <strong>
-                                                {{ Helpers::translate($order->shipping_info['shipment_data']['status'] ?? null) }}
-                                            </strong>
-                                        @else
-                                            <strong>
-                                                {{ Helpers::translate($order->shipping_info['order']['status'] ?? null) }}
-                                            </strong>
-                                        @endisset
-                                    </div>
-
-                                    @if($order->delivery_type !=null)
-                                    <!-- Shipping Company -->
-                                    <div class="">
-                                        <span class="title-color">{{\App\CPU\Helpers::translate('Shipping and delivering Company')}} :</span>
-                                        @isset($order->shipping_info['shipment_data'])
-                                            <strong>
-                                                {{ Helpers::translate("Bettween Company") }}
-                                            </strong>
-                                            @else
-                                            <strong>
-                                                {{ Helpers::translate($order->delivery_service_name) }}
-                                            </strong>
-                                            @endisset
-                                    </div>
-
-                                    <div class="">
-                                        <span class="title-color">{{\App\CPU\Helpers::translate('tracking number of shipping and delivering Company')}} :</span>
-                                            @if ($order->delivery_type == 'self_delivery'  && $order->delivery_man_id)
-                                                <p style="color: #414141 !important ; padding-top:5px;">
-
-                                                <span style="text-transform: capitalize">
-                                                    {{\App\CPU\Helpers::translate('delivery_man_name')}} : {{$order->delivery_man['f_name'].' '.$order->delivery_man['l_name']}}
+                                                    @endif
                                                 </span>
-                                                </p>
-                                                @if($order->order_type == 'default_type')
-                                                    <button class="btn btn-outline--info btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                                        <i class="fa fa-envelope"></i>
-                                                        {{\App\CPU\Helpers::translate('Chat_with_deliveryman')}}
-                                                    </button>
+                                            </div>
+
+                                        </div>
+                                    </td>
+                                @endif
+                            </tr>
+                            </thead>
+                        </table>
+                        <table class="table table-borderless p-3 m-0">
+                            <thead>
+                                <tr class="">
+                                    <th class="fw-bold"> {{ Helpers::translate('number_') }} </th>
+                                    <th class="fw-bold"> {{ Helpers::translate('product image') }} </th>
+                                    <th class="fw-bold"> {{ Helpers::translate('product details') }} </th>
+                                    <th class="fw-bold"> {{ Helpers::translate('quantity') }} </th>
+                                    <th class="fw-bold"> {{ Helpers::translate('unit price') }} </th>
+                                    <th class="fw-bold"> {{ Helpers::translate('tax') }} </th>
+                                    <th class="fw-bold"> {{ Helpers::translate('discount') }} </th>
+                                    <th class="fw-bold"> {{ Helpers::translate('price') }} </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            @php($current_lang = session()->get('local'))
+                            @foreach ($order->details as $key=>$detail)
+                                @php($product=json_decode($detail->product,true))
+                                @if($product)
+                                    <tr>
+                                        <td class="pt-5">
+                                            {{ $key + 1 }}
+                                        </td>
+                                        <td class="col-2 for-tab-img">
+                                            <img class="d-block"
+                                                onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
+                                                src="{{asset("storage/app/public/product/$current_lang")}}/{{(isset(json_decode($product['images'])->$current_lang)) ? json_decode($product['images'])->$current_lang[0] ?? '' : ''}}"
+                                                alt="VR Collection" width="60">
+                                        </td>
+                                        <td class="pt-5">
+                                            {{ Helpers::get_prop('App\Model\Product',$product['id'],'name') }}
+                                        </td>
+                                        <td class="pt-5">
+                                            {{$detail->qty}}
+                                        </td>
+                                        <td class="pt-5">
+                                            {{ Helpers::getProductPrice_pl($product['id'])['value'] }}
+                                        </td>
+                                        <td class="pt-5">
+                                            {{ $detail['tax'] }}
+                                        </td>
+                                        <td class="pt-5">
+                                            {{ $detail['discount'] }}
+                                        </td>
+                                        <td class="pt-5">
+                                            {{\App\CPU\Helpers::currency_converter($detail->price)}}
+                                        </td>
+                                        <?php
+                                            $refund_day_limit = \App\CPU\Helpers::get_business_settings('refund_day_limit');
+                                            $order_details_date = $detail->created_at;
+                                            $current = \Carbon\Carbon::now();
+                                            $length = $order_details_date->diffInDays($current);
+                                        ?>
+                                        <td class="text-center">
+                                            @if($order->order_type == 'default_type')
+                                                @if($order->order_status=='delivered')
+                                                    <a href="{{route('submit-review',[$detail->id])}}"
+                                                       class="btn btn--primary btn-sm d-inline-block mb-2" style="width: 100px">{{\App\CPU\Helpers::translate('review')}}</a>
+
+                                                    @if($detail->refund_request !=0)
+                                                        <a href="{{route('refund-details',[$detail->id])}}"
+                                                           class="btn btn--primary btn-sm d-inline-block mb-2" style="width: 100px">
+                                                            {{\App\CPU\Helpers::translate('refund_details')}}
+                                                        </a>
+                                                    @endif
+                                                    @if( $length <= $refund_day_limit && $detail->refund_request == 0)
+                                                        <a href="{{route('refund-request',[$detail->id])}}"
+                                                           class="btn btn--primary btn-sm d-inline-block" style="width: 100px">{{\App\CPU\Helpers::translate('refund_request')}}</a>
+                                                    @endif
+                                                    {{--@else
+                                                        <a href="javascript:" onclick="review_message()"
+                                                        class="btn btn--primary btn-sm d-inline-block mb-2">{{\App\CPU\Helpers::translate('review')}}</a>
+
+                                                        @if($length <= $refund_day_limit)
+                                                            <a href="javascript:" onclick="refund_message()"
+                                                                class="btn btn--primary btn-sm d-inline-block">{{\App\CPU\Helpers::translate('refund_request')}}</a>
+                                                        @endif --}}
                                                 @endif
                                             @else
-                                                {{$order->third_party_delivery_tracking_id}}
+                                                <label class="badge badge-secondary">
+                                                    <a
+                                                        class="btn btn--primary btn-sm text-light">{{\App\CPU\Helpers::translate('pos_order')}}</a>
+                                                </label>
                                             @endif
-                                    </div>
+                                        </td>
+                                    </tr>
+                                @endif
+                            @endforeach
+                            @php($summary=\App\CPU\OrderManager::order_summary($order))
+                            </tbody>
+                        </table>
+                        @php($extra_discount=0)
+                        <?php
+                        if ($order['extra_discount_type'] == 'percent') {
+                            $extra_discount = ($summary['subtotal'] / 100) * $order['extra_discount'];
+                        } else {
+                            $extra_discount = $order['extra_discount'];
+                        }
+                        ?>
+                        @if($order->delivery_type !=null)
 
-                                    <div class="">
-                                        <span class="title-color">{{\App\CPU\Helpers::translate('shipment status on shipping and delivering Company')}} :</span>
-                                        @isset($order->shipping_info['shipment_data'])
-                                            <strong>
-                                                {{ Helpers::translate($order->shipping_info['shipment_data']['status'] ?? null) }}
-                                            </strong>
-                                        @else
-                                            <strong>
-                                                {{ Helpers::translate($order->shipping_info['order']['status'] ?? null) }}
-                                            </strong>
-                                        @endisset
-                                    </div>
+                            <div class="p-2">
+                                <h4 style="color: #130505 !important; margin:0px;text-transform: capitalize;">{{\App\CPU\Helpers::translate('delivery_info')}} </h4>
+                                <hr>
+                            </div>
+                            <div class="row m-2">
+                                <div class="col-md-8">
+                                    @if ($order->delivery_type == 'self_delivery'  && $order->delivery_man_id)
+                                        <p style="color: #414141 !important ; padding-top:5px;">
+
+                                        <span style="text-transform: capitalize">
+                                            {{\App\CPU\Helpers::translate('delivery_man_name')}} : {{$order->delivery_man['f_name'].' '.$order->delivery_man['l_name']}}
+                                        </span>
+                                        </p>
+                                        @if($order->order_type == 'default_type')
+                                            <button class="btn btn-outline--info btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                <i class="fa fa-envelope"></i>
+                                                {{\App\CPU\Helpers::translate('Chat_with_deliveryman')}}
+                                            </button>
+                                        @endif
+                                    @else
+                                        <p style="color: #414141 !important ; padding-top:5px;">
+                                    <span>
+                                        {{\App\CPU\Helpers::translate('delivery_service_name')}} : {{$order->delivery_service_name}}
+                                    </span>
+                                            <br>
+                                            <span>
+                                        {{\App\CPU\Helpers::translate('tracking_id')}} : {{$order->third_party_delivery_tracking_id}}
+                                    </span>
+                                        </p>
+                                    @endif
+                                </div>
+                                <div class="col-md-4 text-right">
+                                    @if($order->order_type == 'default_type' && $order->order_status=='delivered' && $order->delivery_man_id)
+                                        <a href="{{route('deliveryman-review',[$order->id])}}"
+                                           class="btn btn-outline--info btn-sm">
+                                            <i class="czi-star mr-1 font-size-md"></i>
+                                            {{ $order->delivery_man_review ? \App\CPU\Helpers::translate('update') : '' }}
+                                            {{\App\CPU\Helpers::translate('Deliveryman_Review')}}
+                                        </a>
                                     @endif
                                 </div>
                             </div>
+                        @endif
 
+                        @if($order->order_note !=null)
+                            <div class="p-2">
+
+                                <h4>{{\App\CPU\Helpers::translate('order_note')}}</h4>
+                                <hr>
+                                <div class="m-2">
+                                    <p>
+                                        {{$order->order_note}}
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+
+                    {{--Calculation--}}
+                    <div class="row d-flex justify-content-end border-top">
+                        <div class="col-md-12 col-lg-12">
+                            <table class="table table-borderless">
+                                <tbody class="totals">
+
+
+                                <tr>
+                                    <td style="width: 75%">
+                                        <div class="text-{{Session::get('direction') === "rtl" ? 'left' : 'right'}}"><span
+                                                class="product-qty ">{{\App\CPU\Helpers::translate('Discount on_product')}}</span>
+                                        </div>
+                                    </td>
+                                    <td style="width: 10%">
+                                        <div class="text-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}">
+                                            <span>- {{\App\CPU\Helpers::currency_converter($summary['total_discount_on_product'])}}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                @if($order->order_type == 'default_type')
+                                    <tr>
+                                        <td style="width: 75%">
+                                            <div
+                                                class="text-{{Session::get('direction') === "rtl" ? 'left' : 'right'}}"><span
+                                                    class="product-qty ">{{\App\CPU\Helpers::translate('Shipping Fee')}}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="text-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}">
+                                                <span>{{\App\CPU\Helpers::currency_converter($summary['total_shipping_cost'])}}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endif
+
+                                @if($order->order_type != 'default_type')
+                                    <tr>
+                                        <td style="width: 75%">
+                                            <div
+                                                class="text-{{Session::get('direction') === "rtl" ? 'left' : 'right'}}"><span
+                                                    class="product-qty ">{{\App\CPU\Helpers::translate('extra Discount')}}</span>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="text-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}">
+                                                <span>- {{\App\CPU\Helpers::currency_converter($extra_discount)}}</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endif
+
+                                <tr>
+                                    <td style="width: 75%">
+                                        <div class="text-{{Session::get('direction') === "rtl" ? 'left' : 'right'}}"><span
+                                                class="font-weight-bold">{{\App\CPU\Helpers::translate('Total')}}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="text-{{Session::get('direction') === "rtl" ? 'right' : 'left'}}"><span
+                                                class="font-weight-bold amount ">{{\App\CPU\Helpers::currency_converter($order->order_amount)}}</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        {{--  ext info  --}}
-                        @include('web-views.order-details-component')
-                        @php($ps = $order->payment_status ?? null)
-                        @if($ps !== "paid" && $order->order_status == 'pending')
-                        @if (\App\CPU\Helpers::store_module_permission_check('order.direct.payment_completion'))
-                        <a role="button" href="{{ route('home') }}/checkout-complete-by-customer/{{ $order['id'] }}" class="btn btn-primary w-full">
-                            {{ Helpers::translate('Payment completion') }}
-                        </a>
-                        @endif
-                        @endif
+                    </div>
                 </div>
 
                 {{-- Modal --}}
@@ -417,11 +503,11 @@
 
                                     <textarea name="message" class="form-control" required></textarea>
                                     <br>
-                                    <button class="btn bg-primaryColor text-light" style="color: white;">{{\App\CPU\Helpers::translate('send')}}</button>
+                                    <button class="btn btn--primary text-light" style="color: white;">{{\App\CPU\Helpers::translate('send')}}</button>
                                 </form>
                             </div>
                             <div class="card-footer">
-                                <a href="{{route('chat', ['type' => 'delivery-man'])}}" class="btn bg-primaryColor mx-1">
+                                <a href="{{route('chat', ['type' => 'delivery-man'])}}" class="btn btn--primary mx-1">
                                     {{\App\CPU\Helpers::translate('go_to chatbox')}}
                                 </a>
                                 <button type="button" class="btn btn-secondary pull-right" data-bs-dismiss="modal">{{\App\CPU\Helpers::translate('close')}}
@@ -432,28 +518,17 @@
                 </div>
 
 
-                <div class="justify-content-center mt-4 for-mobile-glaxy">
-                    @if (\App\CPU\Helpers::store_module_permission_check('order.details.generate_invoice'))
-                    <a  class="col-auto py-3 h1 btn bg-primaryColor for-glaxy-mobile text-white mx-2"
+                <div class="justify-content mt-4 for-mobile-glaxy row">
+                    <div class="col-1"></div>
+                    <a  class="col-5 py-3 h1 btn btn--primary for-glaxy-mobile text-white mx-2"
                         href="{{route('generate-invoice',[$order->id])}}">
                         {{\App\CPU\Helpers::translate('generate_invoice')}}
                     </a>
-                    @endif
-                    @if(\App\CPU\Helpers::get_business_settings('order_tracking_status'))
-                    <a class="col-auto py-3 h1 btn btn-secondary text-white mx-2"
+                    <a class="col-5 py-3 h1 btn btn-secondary text-white mx-2"
                        href="{{route('track-order.result',['order_id'=>$order['id'],'from_order_details'=>1])}}"
                        style="color: white">
                         {{\App\CPU\Helpers::translate('Track Order')}}
                     </a>
-                    @endif
-                    @if ($order['payment_method'] == 'cash_on_delivery' && $order['order_status'] == 'pending')
-                    <a class="col-auto py-3 h1 btn btn-danger text-white mx-2"
-                        onclick="route_alert('{{ route('order-cancel',['id'=>$order['id']]) }}','{{ Helpers::translate('Are you sure') }}','order-cancel')"
-                        href="javascript:"
-                        style="color: white">
-                        {{\App\CPU\Helpers::translate('Cancel order')}}
-                    </a>
-                    @endif
                 </div>
             </section>
         </div>

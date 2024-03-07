@@ -17,7 +17,7 @@
         <div ></div>
     </div>
 
-    <div class="col-xl-12 col-md-12" style="margin-top: 3px;{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'padding-right:0px;' : 'padding-left:0px;'}}">
+    <div class="col-xl-12 col-md-12" style="margin-top: 3px;{{Session::get('direction') === "rtl" ? 'padding-right:0px;' : 'padding-left:0px;'}}">
         @php($main_banner=\App\Model\Banner::where('banner_type','Main Banner')->where('published',1)->orderBy('id','desc')->get())
         <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
@@ -30,7 +30,7 @@
                 @foreach($main_banner as $key=>$banner)
                 <div class="carousel-item {{$key==0?'active':''}}" style="max-height: 420px;overflow: hidden;">
                     <a href="{{$banner['url']}}">
-                        <img class="d-block w-full"
+                        <img class="d-block w-100"
                         onerror="this.src='{{asset('public/assets/front-end/img/image-place-holder.png')}}'"
                         src="{{asset('storage/app/public/banner')}}/{{\App\CPU\Helpers::get_prop('App\Model\Banner',$banner['id'],'image',session()->get('local')) ?? $banner['photo']}}"
                         alt="">

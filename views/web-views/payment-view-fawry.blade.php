@@ -19,7 +19,7 @@
 
     <link rel="stylesheet" href="{{asset('public/assets/back-end')}}/css/toastr.css"/>
     <!-- Main Theme Styles + Bootstrap-->
-    <link rel="stylesheet" media="screen" href="{{asset('public/assets/front-end')}}/css/theme.min.css?v=1">
+    <link rel="stylesheet" media="screen" href="{{asset('public/assets/front-end')}}/css/theme.min.css">
     <link rel="stylesheet" media="screen" href="{{asset('public/assets/front-end')}}/css/slick.css">
     <link rel="stylesheet" href="{{asset('public/assets/back-end')}}/css/toastr.css"/>
     <style>
@@ -47,7 +47,7 @@
             background: #eee
         }
 
-        .btn.bg-primaryColor {
+        .btn.btn--primary {
             background-color: #ddd;
             color: black;
             box-shadow: none;
@@ -57,7 +57,7 @@
             height: 100%
         }
 
-        .btn.bg-primaryColor:focus {
+        .btn.btn--primary:focus {
             box-shadow: none
         }
 
@@ -75,7 +75,7 @@
             font-size: 24px
         }
 
-        .container .card-body .btn.bg-primaryColor .fab.fa-cc-paypal {
+        .container .card-body .btn.btn--primary .fab.fa-cc-paypal {
             font-size: 32px;
             color: #3333f7
         }
@@ -108,7 +108,7 @@
             background-color: #ddd
         }
 
-        .btn.bg-primaryColor.payment {
+        .btn.btn--primary.payment {
             background-color: #1c6acf;
             color: white;
             border-radius: 0px;
@@ -223,19 +223,19 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="form__div">
-                                                <input type="text" pattern="\d*" t="number" name="card_number" class="form-control" placeholder=" " required>
+                                                <input type="number" name="card_number" class="form-control" placeholder=" " required>
                                                 <label for="" class="form__label">Card Number</label>
                                             </div>
                                         </div>
                                         <div class="col-3">
                                             <div class="form__div">
-                                                <input type="text" pattern="\d*" t="number" name="month" class="form-control" placeholder=" " required>
+                                                <input type="number" name="month" class="form-control" placeholder=" " required>
                                                 <label for="" class="form__label">MM</label>
                                             </div>
                                         </div>
                                         <div class="col-3">
                                             <div class="form__div">
-                                                <input type="text" pattern="\d*" t="number" name="year" class="form-control" placeholder=" " required>
+                                                <input type="number" name="year" class="form-control" placeholder=" " required>
                                                 <label for="" class="form__label">yy</label>
                                             </div>
                                         </div>
@@ -251,7 +251,7 @@
                                                 <label for="" class="form__label">name of the card</label></div>
                                         </div>
                                         <div class="col-12">
-                                            <button type="submit" class="btn bg-primaryColor payment w-full">Sumbit</button>
+                                            <button type="submit" class="btn btn--primary payment w-100">Sumbit</button>
                                         </div>
                                     </div>
                                 </form>

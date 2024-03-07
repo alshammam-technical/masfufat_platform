@@ -29,7 +29,7 @@
         justify-content: space-between;
     }
     .start_address_under_line{
-        {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'width: 344px;' : 'width: 331px;'}}
+        {{Session::get('direction') === "rtl" ? 'width: 344px;' : 'width: 331px;'}}
     }
     .address_under_line{
         width: 299px;
@@ -81,7 +81,7 @@
 
 
 
-<div class="d-flex justify-content-center text-center {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'text-md-right' : 'text-md-left'}} mt-3"
+<div class="d-flex justify-content-center text-center {{Session::get('direction') === "rtl" ? 'text-md-right' : 'text-md-left'}} mt-3"
         style="background: {{$web_config['primary_color']}}10;padding:20px;">
         {{-- <div class="col-md-1">
 
@@ -187,7 +187,7 @@
 
             <!-- Footer links -->
             <div
-                class="row text-center {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'text-md-right' : 'text-md-left'}} mt-3 pb-3 ">
+                class="row text-center {{Session::get('direction') === "rtl" ? 'text-md-right' : 'text-md-left'}} mt-3 pb-3 ">
                 <!-- Grid column -->
                 <div class="col-md-3 d-flex justify-content-start align-items-center footer-web-logo" >
                     <a class="d-inline-block mt-n1" href="{{route('home')}}">
@@ -227,9 +227,9 @@
 
                             </ul>
                         </div>
-                        <div class="col-md-4 footer-padding-bottom" style="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'padding-right:20px;' : ''}}">
+                        <div class="col-md-4 footer-padding-bottom" style="{{Session::get('direction') === "rtl" ? 'padding-right:20px;' : ''}}">
                             <h6 class="text-uppercase mb-4 font-weight-bold footer-heder">{{\App\CPU\Helpers::translate('account_&_shipping_info')}}</h6>
-                            @if((auth('customer')->check() || auth('delegatestore')->check()))
+                            @if(auth('customer')->check())
                                 <ul class="widget-list" style="padding-bottom: 10px">
                                     <li class="widget-list-item"><a class="widget-list-link"
                                                                     href="{{route('user-account')}}">{{\App\CPU\Helpers::translate('profile_info')}}</a>
@@ -281,7 +281,7 @@
 
                                 <div class="store-contents d-flex justify-content-center" >
                                     @if($ios['status'])
-                                        <div class="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-2' : 'mr-2'}} mb-2">
+                                        <div class="{{Session::get('direction') === "rtl" ? 'ml-2' : 'mr-2'}} mb-2">
                                             <a class="" href="{{ $ios['link'] }}" role="button"><img
                                                     src="{{asset("public/assets/front-end/png/apple_app.png")}}"
                                                     alt="" style="height: 51px!important;">
@@ -290,7 +290,7 @@
                                     @endif
 
                                     @if($android['status'])
-                                        <div class="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-2' : 'mr-2'}} mb-2">
+                                        <div class="{{Session::get('direction') === "rtl" ? 'ml-2' : 'mr-2'}} mb-2">
                                             <a href="{{ $android['link'] }}" role="button">
                                                 <img src="{{asset("public/assets/front-end/png/google_app.png")}}"
                                                      alt="" style="height: 51px!important;">
@@ -306,9 +306,9 @@
                                     <form action="{{ route('subscription') }}" method="post">
                                         @csrf
                                         <input type="email" name="subscription_email" class="form-control subscribe-border"
-                                            placeholder="{{\App\CPU\Helpers::translate('Your Email Address')}}" required style="padding: 11px;text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+                                            placeholder="{{\App\CPU\Helpers::translate('Your Email Address')}}" required style="padding: 11px;text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
                                         <button class="subscribe-button" type="submit"
-                                            style="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'float:right;left:0px;border-radius:5px 0px 0px 5px;' : 'float:right;right:0px; border-radius:0px 5px 5px 0px;'}};font-size: .94rem;">
+                                            style="{{Session::get('direction') === "rtl" ? 'float:right;left:0px;border-radius:5px 0px 0px 5px;' : 'float:right;right:0px; border-radius:0px 5px 5px 0px;'}};font-size: .94rem;">
                                             {{\App\CPU\Helpers::translate('subscribe')}}
                                         </button>
                                     </form>
@@ -317,11 +317,11 @@
                     </div>
                     <div class="row">
                         <div class="col-md-7">
-                            <div class="row d-flex align-items-center mobile-view-center-align {{(Session::get('direction') ?? 'rtl') === "rtl" ? ' flex-row-reverse' : ''}}">
-                                <div style="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'margin-right:23px;' : ''}}">
+                            <div class="row d-flex align-items-center mobile-view-center-align {{Session::get('direction') === "rtl" ? ' flex-row-reverse' : ''}}">
+                                <div style="{{Session::get('direction') === "rtl" ? 'margin-right:23px;' : ''}}">
                                     <span class="mb-4 font-weight-bold footer-heder">{{ \App\CPU\Helpers::translate('Start a conversation')}}</span>
                                 </div>
-                                <div class="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'mr-3' : 'ml-3'}}">
+                                <div class="{{Session::get('direction') === "rtl" ? 'mr-3' : 'ml-3'}}">
                                     <hr class="start_address_under_line" style="border: 1px solid #E0E0E0;"/>
                                 </div>
                             </div>
@@ -339,7 +339,7 @@
                                         </a>
                                     </div>
                                     <div style="" class="">
-                                        @if((auth('customer')->check() || auth('delegatestore')->check()))
+                                        @if(auth('customer')->check())
                                             <a class="widget-list-link" href="{{route('account-tickets')}}">
                                                 <span ><i class="fa fa-user-o m-2"></i> {{ \App\CPU\Helpers::translate('Support Ticket')}} </span>
                                             </a><br>
@@ -353,11 +353,11 @@
                             </div>
                         </div>
                         <div class="col-md-5 ">
-                            <div class="row pl-2 d-flex align-items-center mobile-view-center-align {{(Session::get('direction') ?? 'rtl') === "rtl" ? ' flex-row-reverse' : ''}}">
+                            <div class="row pl-2 d-flex align-items-center mobile-view-center-align {{Session::get('direction') === "rtl" ? ' flex-row-reverse' : ''}}">
                                 <div>
                                     <span class="mb-4 font-weight-bold footer-heder">{{ \App\CPU\Helpers::translate('address')}}</span>
                                 </div>
-                                <div class="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'mr-3 ' : 'ml-3'}}">
+                                <div class="{{Session::get('direction') === "rtl" ? 'mr-3 ' : 'ml-3'}}">
                                     <hr class="address_under_line" style="border: 1px solid #E0E0E0;"/>
                                 </div>
                             </div>
@@ -382,14 +382,14 @@
         <div class="container">
             <div class="row end-footer footer-end last-footer-content-align">
                 <div class=" mt-3">
-                    <p class="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'text-right ' : 'text-left'}}" style="font-size: 16px;">{{ $web_config['copyright_text']->value }}</p>
+                    <p class="{{Session::get('direction') === "rtl" ? 'text-right ' : 'text-left'}}" style="font-size: 16px;">{{ $web_config['copyright_text']->value }}</p>
                 </div>
-                <div class="mt-md-3 mt-0 mb-md-3 {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'text-right' : 'text-left'}}">
+                <div class="mt-md-3 mt-0 mb-md-3 {{Session::get('direction') === "rtl" ? 'text-right' : 'text-left'}}">
                     @php($social_media = \App\Model\SocialMedia::where('active_status', 1)->get())
                     @if(isset($social_media))
                         @foreach ($social_media as $item)
                             <span class="social-media ">
-                                    <a class="social-btn sb-light sb-{{$item->name}} {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-2' : 'mr-2'}} mb-2"
+                                    <a class="social-btn sb-light sb-{{$item->name}} {{Session::get('direction') === "rtl" ? 'ml-2' : 'mr-2'}} mb-2"
                                        target="_blank" href="{{$item->link}}" style="color: white!important;">
                                         <i class="{{$item->icon}}" aria-hidden="true"></i>
                                     </a>
@@ -398,7 +398,7 @@
                     @endif
                 </div>
                 <div class="d-flex" style="font-size: 14px;">
-                    <div class="{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'ml-3' : 'mr-3'}}" >
+                    <div class="{{Session::get('direction') === "rtl" ? 'ml-3' : 'mr-3'}}" >
                         <a class="widget-list-link"
                         href="{{route('terms')}}">{{\App\CPU\Helpers::translate('terms_&_conditions')}}</a>
                     </div>

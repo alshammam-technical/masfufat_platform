@@ -20,11 +20,9 @@
 @endpush
 
 @section('content')
-@php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
-@php($user = \App\User::find($storeId))
     <!-- Page Content-->
     <div class="container pb-5 mb-2 mb-md-4 rtl"
-         style="text-align: {{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right' : 'left'}};">
+         style="text-align: {{Session::get('direction') === "rtl" ? 'right' : 'left'}};">
         <div class="row">
             <div class="col-md-12 mb-5 pt-5">
                 <div class="feature_header" style="background: #dcdcdc;line-height: 1px">
@@ -42,7 +40,7 @@
                     @if (($digital_payment['status'] ?? null)==1)
                         <div class="row">
                             @if($myfatoorahS['subs_status'] ?? null)
-                            @foreach ($payment_gateways_list as $pm)
+                            @foreach ($myFatoorahMethods as $pm)
                             @if($pm->ImageUrl == "https://sa.myfatoorah.com/imgs/payment-methods/ap.png" && !$mac_device)
                             @else
                                 <div class="col-md-4 mb-4" style="cursor: pointer">
@@ -67,7 +65,7 @@
                                                                 <label for="cardNumber">
                                                                     {{ Helpers::translate('cardNumber') }}
                                                                 </label>
-                                                                <input class="form-control mx-0 w-full" type="text" name="cardNumber" placeholder="">
+                                                                <input class="form-control mx-0 w-100" type="text" name="cardNumber" placeholder="">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -77,9 +75,6 @@
                                                                 <label for="expiryMonth">
                                                                     {{ Helpers::translate('expiryMonth') }}
                                                                 </label>
-                                                                <strong title="{{ Helpers::translate('(ex: 05)') }}">
-                                                                    <i class="fa fa-info" style="font-size: 14px"></i>
-                                                                </strong>
                                                             </div>
                                                         </div>
                                                         <div class="col-4 border-right border-left pt-1 text-center">
@@ -106,22 +101,22 @@
                                                     <div class="row">
                                                         <div class="col-4">
                                                             <div class="form-group pt-1 text-center">
-                                                                <input class="form-control mx-0 w-full" type="text" pattern="\d*" t="number" max="12" autocomplete="off" name="expiryMonth" placeholder="">
+                                                                <input class="form-control mx-0 w-100" type="number" max="12" autocomplete="off" name="expiryMonth" placeholder="">
                                                             </div>
                                                         </div>
                                                         <div class="col-4 border-right border-left pt-1 text-center">
                                                             <div class="form-group">
-                                                                <input class="form-control mx-0 w-full" max="99" type="text" pattern="\d*" t="number" autocomplete="off" name="expiryYear" placeholder="">
+                                                                <input class="form-control mx-0 w-100" max="99" type="number" autocomplete="off" name="expiryYear" placeholder="">
                                                             </div>
                                                         </div>
                                                         <div class="col-4">
                                                             <div class="form-group pt-1 text-center">
-                                                                <input class="form-control mx-0 w-full" type="text" autocomplete="off" name="securityCode" placeholder="">
+                                                                <input class="form-control mx-0 w-100" type="text" autocomplete="off" name="securityCode" placeholder="">
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="p-0 m-0 w-full">
-                                                        <button class="btn btn-success w-full" type="submit">{{ Helpers::translate('ok') }}</button>
+                                                    <div class="p-0 m-0 w-100">
+                                                        <button class="btn btn-success w-100" type="submit">{{ Helpers::translate('ok') }}</button>
                                                     </div>
                                                 </div>
                                                 @endif
@@ -162,7 +157,7 @@
                                                     @php($conf['environment'] = $conf['environment']??'sandbox')
                                                     @php($banks_=\App\CPU\Helpers::get_user_paymment_methods($customer['id'],'bank_transfer'))
                                                     @php($banksCnt = 0)
-                                                        <div class="w-full text-center p-3 rounded" style="background-color: #f2f2f2;">
+                                                        <div class="w-100 text-center p-3 rounded" style="background-color: #f2f2f2;">
                                                             <div class="form-group">
                                                                 <select name="bank" id="bank" class="form-control"
                                                                 onchange="$('._banks').hide();$('.'+$(this).val()+'_bank').show();"
@@ -206,21 +201,21 @@
                                                             <label for="attachment">
                                                                 {{ Helpers::translate('Please attach the receipt image') }}
                                                             </label>
-                                                            <input class="form-control mx-0 w-full" type="file" accept=".docx,.pdf,.png,.jpg" name="attachment" placeholder="">
+                                                            <input class="form-control mx-0 w-100" type="file" accept=".docx,.pdf,.png,.jpg" name="attachment" placeholder="">
                                                         </div>
 
                                                         <div class="form-group">
                                                             <label for="holder_name">
                                                                 {{ Helpers::translate('Account Holder Name') }}
                                                             </label>
-                                                            <input class="form-control mx-0 w-full" type="text" name="holder_name" placeholder="">
+                                                            <input class="form-control mx-0 w-100" type="text" name="holder_name" placeholder="">
                                                         </div>
 
                                                     @php($item_index++)
                                                     @php($config['environment'] = $config['environment']??'sandbox')
                                                 </div>
-                                                <div class="p-0 m-0 w-full">
-                                                    <button class="btn btn-success w-full" type="submit">Ok</button>
+                                                <div class="p-0 m-0 w-100">
+                                                    <button class="btn btn-success w-100" type="submit">Ok</button>
                                                 </div>
                                             </div>
                                         </form>
@@ -294,8 +289,8 @@
                                                         data-bs-name="{{\App\Model\BusinessSetting::where(['type'=>'company_name'])->first()->value}}"
                                                         data-bs-description=""
                                                         data-bs-image="{{asset('storage/app/public/company/'.\App\Model\BusinessSetting::where(['type'=>'company_web_logo'])->first()->value)}}"
-                                                        data-bs-prefill.name="{{$user->f_name}}"
-                                                        data-bs-prefill.email="{{$user->email}}"
+                                                        data-bs-prefill.name="{{auth('customer')->user()->f_name}}"
+                                                        data-bs-prefill.email="{{auth('customer')->user()->email}}"
                                                         data-bs-theme.color="#ff7529">
                                                 </script>
                                             </form>
@@ -328,7 +323,7 @@
                                                 <div class="row">
                                                     <div class="col-md-8 col-md-offset-2">
                                                         <input type="hidden" name="email"
-                                                            value="{{$user->email}}"> {{-- required --}}
+                                                            value="{{auth('customer')->user()->email}}"> {{-- required --}}
                                                         <input type="hidden" name="orderID"
                                                             value="{{session('cart_group_id')}}">
                                                         <input type="hidden" name="amount"
@@ -366,8 +361,7 @@
                                     <div class="card">
                                         <div class="card-body" style="height: 150px">
                                             @php($config=\App\CPU\Helpers::get_user_paymment_methods(null,'senang_pay'))
-                                            @php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
-                                            @php($user = \App\User::find($storeId))
+                                            @php($user=auth('customer')->user())
                                             @php($secretkey = $config['secret_key'])
                                             @php($data = new \stdClass())
                                             @php($data->merchantId = $config['merchant_id'])
@@ -704,7 +698,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        @php($customer_balance = $user->wallet_balance)
+        @php($customer_balance = auth('customer')->user()->wallet_balance)
         @php($remain_balance = $customer_balance - $amount)
         <form action="{{route('checkout-complete-wallet')}}" method="get" class="needs-validation d-grid text-center">
             @csrf
@@ -735,7 +729,7 @@
             </div>
             <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{\App\CPU\Helpers::translate('close')}}</button>
-            <button type="submit" onclick="alert_wait()" class="btn bg-primaryColor btn-primary bg-primaryColor" {{$remain_balance>0? '':'disabled'}}>{{\App\CPU\Helpers::translate('submit')}}</button>
+            <button type="submit" onclick="alert_wait()" class="btn btn--primary btn-primary" {{$remain_balance>0? '':'disabled'}}>{{\App\CPU\Helpers::translate('submit')}}</button>
             </div>
         </form>
       </div>
@@ -776,7 +770,7 @@
             <div class="modal-footer">
                 <input type="hidden" value="offline_payment" name="payment_method">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{Helpers::translate('close')}}</button>
-            <button type="submit" class="btn bg-primaryColor">{{Helpers::translate('submit')}}</button>
+            <button type="submit" class="btn btn--primary">{{Helpers::translate('submit')}}</button>
             </div>
         </form>
       </div>

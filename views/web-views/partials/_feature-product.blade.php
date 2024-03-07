@@ -1,7 +1,7 @@
 @php($overallRating = \App\CPU\ProductManager::get_overall_rating($product->reviews))
 @php($product->unit_price = Helpers::getProductPrice_pl($product->id)['value'] ?? 0)
-@php($productdiscount = Helpers::getProductPrice_pl($product['id'])['discount_price'] ?? 0)
-@php($productdiscount_type = Helpers::getProductPrice_pl($product['id'])['discount_type'] ?? 0)
+@php($product->discount = Helpers::getProductPrice_pl($product['id'])['discount_price'] ?? 0)
+@php($product->discount_type = Helpers::getProductPrice_pl($product['id'])['discount_type'] ?? 0)
 @php($current_lang = session()->get('local'))
 <style>
     .quick-view{
@@ -13,16 +13,15 @@
         background: #ffffff;
     }
 </style>
-@php($storeId = session('user_type') == 'delegate' ? session('original_store_id') : auth('customer')->id())
-@php($user = \App\User::find($storeId))
-@php($pending_products = $user->pending_products ?? [])
+
+@php($pending_products = auth('customer')->user()->pending_products ?? [])
 @if(!\App\CPU\Helpers::productChoosen($product->id))
 @if((Helpers::getProductPrice_pl($product->id)['display_for'] ?? '') == "add" || (Helpers::getProductPrice_pl($product->id)['display_for'] ?? '') == "both")
 <!-- Checkbox -->
 <div class="form-group" style="position: absolute;top: 0;">
     <div class="custom-control custom-checkbox">
         <input type="checkbox" class="custom-control-input product-checkbox" name="linked[]" value="{{$product->id}}">
-        <label class="custom-control-label c1" for="linked[]" onclick="$(this).prev('input').click()" style="transform: scale(1.5)"></label>
+        <label class="custom-control-label" for="linked[]" onclick="$(this).prev('input').click()" style="transform: scale(1.5)"></label>
     </div>
 </div>
 <!-- End Checkbox -->
@@ -33,13 +32,13 @@
 
     <div class=" inline_product clickable d-flex justify-content-center"
             style="cursor: pointer;background:{{$web_config['primary_color']}}10;">
-        @if($productdiscount > 0)
+        @if($product->discount > 0)
             <div class="d-flex" style="left:7px;top:2px;position: absolute">
                     <span class="for-discoutn-value p-1 pl-2 pr-2">
-                    @if ($productdiscount_type == 'percent')
-                            {{round($productdiscount,(!empty($decimal_point_settings) ? $decimal_point_settings: 0))}}%
-                        @elseif($productdiscount_type =='flat')
-                            {{\App\CPU\Helpers::currency_converter($productdiscount)}}
+                    @if ($product->discount_type == 'percent')
+                            {{round($product->discount,(!empty($decimal_point_settings) ? $decimal_point_settings: 0))}}%
+                        @elseif($product->discount_type =='flat')
+                            {{\App\CPU\Helpers::currency_converter($product->discount)}}
                         @endif
                         {{\App\CPU\Helpers::translate('off')}}
                     </span>
@@ -66,7 +65,7 @@
         </div>
     </div>
     <div class="single-product-details" style="position:relative;height:145px;padding-top:10px;border-radius: 0px 0px 5px 5px; ">
-        <div class="text-{{(Session::get('direction') ?? 'rtl') === "rtl" ? 'right pr-3' : 'left pl-3'}}">
+        <div class="text-{{Session::get('direction') === "rtl" ? 'right pr-3' : 'left pl-3'}}">
             <a href="{{route('product',$product->slug)}}">
                 {{ Str::limit(Helpers::getItemName('products','name',$product->id), 23) }}
             </a>
@@ -90,7 +89,7 @@
         </div>
         <div class="justify-content-between text-center">
             <div class="product-price text-center">
-                @if($productdiscount > 0)
+                @if($product->discount > 0)
                     <strike style="font-size: 12px!important;color: #E96A6A!important;">
                         {{\App\CPU\Helpers::currency_converter($product->unit_price)}}
                     </strike><br>
